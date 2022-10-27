@@ -18,3 +18,4 @@ Fuentes:
 - [PLY (Python Lex-Yacc) - Documentación](https://www.dabeaz.com/ply/ply.html)
 - [Lenguaje de RegEx en python](https://docs.python.org/es/3/library/re.html)
 - [Lenguaje de RegEx - Referencia rápida](https://learn.microsoft.com/es-es/dotnet/standard/base-types/regular-expression-language-quick-reference)
+- [Analizador Lexico en python - Youtube](https://www.youtube.com/watch?v=gWrmCOTrtrs)
