@@ -6,7 +6,9 @@ y arreglos de enteros. Se han omitido características normales de otros lenguaj
 a procedimientos y funciones, tipos de datos compuestos y números punto flotante, con el objetivo de
 simplificar su dise ̃no y hacer factible la elaboración de un interpretador a lo largo de un trimestre.
 
-## Etapa 1
+## Etapa 1: Analisis lexicográfico
+
+Compiar con:
 ```
 python3 lexer.py archivo.gcl
 ```
