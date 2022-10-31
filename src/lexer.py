@@ -5,6 +5,7 @@ import ply.lex as lex
 archivo = sys.argv[1]
 
 try:
+    
     # abrir archivo
     handleFile = codecs.open(archivo, "r")
 
