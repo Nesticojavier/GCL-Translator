@@ -8,7 +8,7 @@ simplificar su dise ̃no y hacer factible la elaboración de un interpretador a 
 
 ## Etapa 1: Analisis lexicográfico
 
-Compiar con:
+Compilar con:
 ```
 python3 lexer.py archivo.gcl
 ```
