@@ -12,8 +12,8 @@ Compilar con:
 ```
 python3 lexer.py archivo.gcl
 ```
-
-Fuentes:
+ 
+Fuentess:
 
 - [PLY (Python Lex-Yacc) - Documentación](https://www.dabeaz.com/ply/ply.html)
 - [Lenguaje de RegEx en python](https://docs.python.org/es/3/library/re.html)
