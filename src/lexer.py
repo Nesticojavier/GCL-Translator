@@ -6,7 +6,7 @@ archivo = sys.argv[1]
 
 try:
     # abrir archivo
-    handleFile = codecs.open("../entradas/"+ archivo, "r", "utf-8")
+    handleFile = codecs.open(archivo, "r")
 
     # comprobar extension file
     if not archivo.endswith(".gcl"):
@@ -27,7 +27,7 @@ finally:
 tokens = ('TkId', 'TkNum', 'TkString', 'TkTrue', 'TkFalse', 'TkOBlock', 
 'TkCBlock', 'TkSoForth', 'TkComma', 'TkOpenPar', 'TkClosePar', 'TkAsig', 
 'TkSemicolon', 'TkArrow', 'TkPlus', 'TkMinus', 'TkMult', 'TkOr',
-'TkAnd', 'TkNot', 'TkLess', 'TkLeq', 'TkGeq', 'TkGreater',
+          'TkAnd', 'TkNot', 'TkLeq', 'TkGeq', 'TkLess', 'TkGreater',
 'TkEqual', 'TkNEqual', 'TkOBracket', 'TkCBracket', 'TkTwoPoints', 'TkConcat')
 
 # TODO: terminar de definir tokens y funciones
@@ -85,6 +85,7 @@ while True:
     if not tok : break
 
     if tok.type == "TkId" or tok.type == "TkNum" or tok.type == "TkString":
-        print(tok.type+"("+str(tok.value)+")", tok.lineno, find_column(data, tok))
+        print(tok.type+"("+str(tok.value)+")",
+              tok.lineno, find_column(data, tok))
     else:
         print(tok.type, tok.lineno, find_column(data, tok))
