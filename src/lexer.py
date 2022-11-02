@@ -1,6 +1,7 @@
 import codecs
 import sys
 import ply.lex as lex
+import Utils.utils as utils
 
 archivo = sys.argv[1]
 
@@ -21,17 +22,31 @@ except FileNotFoundError as e:
 except Exception as e:
     print(e)
     sys.exit(0)
-finally:
-    handleFile.close()
+
+handleFile.close()
+
+# Palabras reservadas
+reservadas = {
+    'declare' : 'TkDeclare',
+    'if' : 'TkIf',
+    'fi' : 'TkFi',
+    'do' : 'TkDo',
+    'od' : 'TkOd',
+    'for' : 'TkFor',
+    'print' : 'TkPrint',
+    'array' : 'TkArray',
+    'int' : 'TkInt'
+}
 
 # defincion de tokens
-tokens = ('TkId', 'TkNum', 'TkString', 'TkTrue', 'TkFalse', 'TkOBlock', 
+tokens = ['TkId', 'TkNum', 'TkString', 'TkTrue', 'TkFalse', 'TkOBlock', 
 'TkCBlock', 'TkSoForth', 'TkComma', 'TkOpenPar', 'TkClosePar', 'TkAsig', 
 'TkSemicolon', 'TkArrow', 'TkPlus', 'TkMinus', 'TkMult', 'TkOr',
-          'TkAnd', 'TkNot', 'TkLeq', 'TkGeq', 'TkLess', 'TkGreater',
-'TkEqual', 'TkNEqual', 'TkOBracket', 'TkCBracket', 'TkTwoPoints', 'TkConcat')
+'TkAnd', 'TkNot', 'TkLeq', 'TkGeq', 'TkLess', 'TkGreater',
+'TkEqual', 'TkNEqual', 'TkOBracket', 'TkCBracket', 'TkTwoPoints', 
+'TkConcat', 'TkGuard'] + list(reservadas.values())
 
-# TODO: terminar de definir tokens y funciones
+t_TkString = r'\".*\"'
 t_TkOBlock = r'\|\['
 t_TkCBlock = r'\]\|'
 t_TkSoForth = r'\.\.'
@@ -42,23 +57,40 @@ t_TkAsig = r':='
 t_TkSemicolon = r';'
 t_TkArrow = r'==>'
 t_TkPlus = r'\+'
+t_TkGuard = r'\[\]'
 t_TkMinus = r'\-'
-
+t_TkMult = r'\*'
+t_TkOr = r'\\\/'
+t_TkAnd = r'\/\\'
+t_TkNot = r'\!'
+t_TkLess = r'\<'
+t_TkLeq = r'\<\='
+t_TkGeq = r'\>\='
+t_TkGreater = r'\>'
+t_TkEqual = r'=='
+t_TkNEqual = r'\!\='
 t_TkOBracket = r'\['
 t_TkCBracket = r'\]'
 t_TkTwoPoints = r':'
+t_TkConcat = r'\.'
 
+
+def t_TkId(t):
+    r'[a-zA-Z_][a-zA-Z_0-9]*'
+    t.type = reservadas.get(t.value,'TkId') # verificar si pertenece a reservadas
+
+    # verificar si el token es de tipo id
+    if t.type == 'TkId' : t.value = "\""+t.value+"\""
+    return t
 
 def t_COMMENT(t):
     r'//.*'
 
 def t_TkNum(t):
-     r'\d+'
-     t.value = int(t.value)    
-     return t
+    r'\d+'
+    t.value = int(t.value)    
+    return t
 
-# por los momentos se ignoraras todos los ID para evitar errores en las pruebas
-t_ignore  = ' \tabcdefghijklmnopqrstuvxyzED'
 
 def t_newline(t):
     r'\n+'
@@ -66,20 +98,14 @@ def t_newline(t):
 
 
 def t_error(t):
-    print("Illegal character '%s'" % t.value[0])
+    print("Error: Unexpected character \"{}\" in row {}, column {}"
+    .format(t.value[0], t.lineno, utils.find_column(data, t)))
     t.lexer.skip(1)
+
+t_ignore  = ' \t'
 
 analizador = lex.lex()
 analizador.input(data)
-
-
-def find_column(input, token):
-    '''
-        Funcion auxiliar usada para encontrar la posicion de la columna del
-        token
-    '''
-    line_start = input.rfind('\n', 0, token.lexpos) + 1
-    return (token.lexpos - line_start) + 1
 
 while True:
     tok = analizador.token()
@@ -87,6 +113,6 @@ while True:
 
     if tok.type == "TkId" or tok.type == "TkNum" or tok.type == "TkString":
         print(tok.type+"("+str(tok.value)+")",
-              tok.lineno, find_column(data, tok))
+              tok.lineno, utils.find_column(data, tok))
     else:
-        print(tok.type, tok.lineno, find_column(data, tok))
+        print(tok.type, tok.lineno, utils.find_column(data, tok))
