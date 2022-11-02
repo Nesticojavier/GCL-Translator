@@ -12,8 +12,6 @@ Compilar con:
 ```
 python3 lexer.py archivo.gcl
 ```
- 
-
 Fuentess:
 
 - [PLY (Python Lex-Yacc) - Documentación](https://www.dabeaz.com/ply/ply.html)
