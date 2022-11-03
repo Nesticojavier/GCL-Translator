@@ -1,12 +1,13 @@
 import codecs
 import sys
 import ply.lex as lex
-import Utils.utils as utils
+from Utils.utils import *
+import re
 
 archivo = sys.argv[1]
 
 try:
-    
+
     # abrir archivo
     handleFile = codecs.open(archivo, "r")
 
@@ -33,20 +34,27 @@ reservadas = {
     'do' : 'TkDo',
     'od' : 'TkOd',
     'for' : 'TkFor',
+    'rof' : 'TkRof',
     'print' : 'TkPrint',
     'array' : 'TkArray',
-    'int' : 'TkInt'
+    'int' : 'TkInt',
+    'bool' : 'TkBool',
+    'false' : 'TkFalse',
+    'true' : 'TkTrue',
+    'in' : 'TkIn',
+    'to' : 'TkTo',
+    'skip' : 'TkSkip'
 }
 
 # defincion de tokens
-tokens = ['TkId', 'TkNum', 'TkString', 'TkTrue', 'TkFalse', 'TkOBlock', 
+tokens = ['TkId', 'TkNum', 'TkString', 'TkOBlock', 
 'TkCBlock', 'TkSoForth', 'TkComma', 'TkOpenPar', 'TkClosePar', 'TkAsig', 
 'TkSemicolon', 'TkArrow', 'TkPlus', 'TkMinus', 'TkMult', 'TkOr',
 'TkAnd', 'TkNot', 'TkLeq', 'TkGeq', 'TkLess', 'TkGreater',
 'TkEqual', 'TkNEqual', 'TkOBracket', 'TkCBracket', 'TkTwoPoints', 
 'TkConcat', 'TkGuard'] + list(reservadas.values())
 
-t_TkString = r'\".*\"'
+t_TkString = r'\"((\\\")|[^\"\n(\\.)]|(\\\\)|(\\n)|(\.))*\"'
 t_TkOBlock = r'\|\['
 t_TkCBlock = r'\]\|'
 t_TkSoForth = r'\.\.'
@@ -55,7 +63,7 @@ t_TkOpenPar = r'\('
 t_TkClosePar = r'\)'
 t_TkAsig = r':='
 t_TkSemicolon = r';'
-t_TkArrow = r'==>'
+t_TkArrow = r'-->'
 t_TkPlus = r'\+'
 t_TkGuard = r'\[\]'
 t_TkMinus = r'\-'
@@ -99,20 +107,33 @@ def t_newline(t):
 
 def t_error(t):
     print("Error: Unexpected character \"{}\" in row {}, column {}"
-    .format(t.value[0], t.lineno, utils.find_column(data, t)))
+    .format(t.value[0], t.lineno, find_column(data, t)))
     t.lexer.skip(1)
+    return t
 
 t_ignore  = ' \t'
 
 analizador = lex.lex()
 analizador.input(data)
+found_error = False
+tokens_storage = []
 
-while True:
-    tok = analizador.token()
+for tok in analizador:
+    # tok = analizador.token()
     if not tok : break
 
-    if tok.type == "TkId" or tok.type == "TkNum" or tok.type == "TkString":
-        print(tok.type+"("+str(tok.value)+")",
-              tok.lineno, utils.find_column(data, tok))
-    else:
-        print(tok.type, tok.lineno, utils.find_column(data, tok))
+    if tok.type == 'error':
+        found_error = True
+
+    if found_error:
+        continue
+
+    tokens_storage += [tok]
+
+if not found_error:
+    for tok in tokens_storage:
+        if tok.type == "TkId" or tok.type == "TkNum" or tok.type == "TkString":
+            print(tok.type+"("+str(tok.value)+")",
+                tok.lineno, find_column(data, tok))
+        else:
+            print(tok.type, tok.lineno, find_column(data, tok))
