@@ -1,11 +1,18 @@
+"""implementacion de un analizador lexicografico para el lenguaje GCL
+
+Copyright (C) 2022 - Nestor Gonzalez - José Pérez
+CI3725 - Traductores e Interpretadores
+"""
+
 import codecs
 import sys
 import ply.lex as lex
 from Utils.utils import *
-import re
 
+# Tomar el archivo 
 archivo = sys.argv[1]
 
+# Intentar leer el archivo con el formato correcto
 try:
 
     # abrir archivo
@@ -26,7 +33,7 @@ except Exception as e:
 
 handleFile.close()
 
-# Palabras reservadas
+# Palabras reservadas del lenguaje
 reservadas = {
     'declare' : 'TkDeclare',
     'if' : 'TkIf',
@@ -46,7 +53,7 @@ reservadas = {
     'skip' : 'TkSkip'
 }
 
-# defincion de tokens
+# Defincion de los tokens
 tokens = ['TkId', 'TkNum', 'TkString', 'TkOBlock', 
 'TkCBlock', 'TkSoForth', 'TkComma', 'TkOpenPar', 'TkClosePar', 'TkAsig', 
 'TkSemicolon', 'TkArrow', 'TkPlus', 'TkMinus', 'TkMult', 'TkOr',
@@ -54,6 +61,7 @@ tokens = ['TkId', 'TkNum', 'TkString', 'TkOBlock',
 'TkEqual', 'TkNEqual', 'TkOBracket', 'TkCBracket', 'TkTwoPoints', 
 'TkConcat', 'TkGuard'] + list(reservadas.values())
 
+# RegEx para obtener para obtener cada token
 t_TkString = r'\"((\\\")|[^\"\n(\\.)]|(\\\\)|(\\n)|(\.))*\"'
 t_TkOBlock = r'\|\['
 t_TkCBlock = r'\]\|'
@@ -82,58 +90,79 @@ t_TkCBracket = r'\]'
 t_TkTwoPoints = r':'
 t_TkConcat = r'\.'
 
-
 def t_TkId(t):
     r'[a-zA-Z_][a-zA-Z_0-9]*'
-    t.type = reservadas.get(t.value,'TkId') # verificar si pertenece a reservadas
+    """ RegEx para obtener el token de las variables del lenguaje
+        
+        Si  esta hace match con alguna palabra reservada, esta
+        no será considerada como un id y retornara el token
+        correspondiente a la palabra reserada.
+    """
 
-    # verificar si el token es de tipo id
+
+    # Verificar si el token pertenece a las palabras reservadas
+    t.type = reservadas.get(t.value,'TkId') 
+
+    # Verificar si el token es de tipo id.
+    # En caso de serlo, obtener el valor del id
     if t.type == 'TkId' : t.value = "\""+t.value+"\""
+
     return t
 
+# Se ignoran toda la linea despues de un //
 def t_COMMENT(t):
     r'//.*'
 
+# RegEx correspondiente al token de un numero decimal
 def t_TkNum(t):
     r'\d+'
     t.value = int(t.value)    
     return t
 
-
+# Se ignoran los saltos de lineas
 def t_newline(t):
     r'\n+'
     t.lexer.lineno += len(t.value)
 
-
+# Manejo de caracteres ilegales
 def t_error(t):
     print("Error: Unexpected character \"{}\" in row {}, column {}"
     .format(t.value[0], t.lineno, find_column(data, t)))
     t.lexer.skip(1)
     return t
 
+# Se debe ignorar espacios en blanco y tabs
 t_ignore  = ' \t'
 
-analizador = lex.lex()
-analizador.input(data)
-found_error = False
-tokens_storage = []
+def repl():
+    # Arreglo para almacenar todos los tokens en caso de no habe
+    # caracteres ilegales.
+    tokens_storage = []
 
-for tok in analizador:
-    # tok = analizador.token()
-    if not tok : break
+    # Construccion del analizador lexicografico a partir de los tokess
+    analizador = lex.lex()
+    analizador.input(data)
 
-    if tok.type == 'error':
-        found_error = True
+    # Variable que indica si se consiguió un error o no
+    found_error = False
 
-    if found_error:
-        continue
+    # Algoritmo para guardar los tokens en caso de no haber errores
+    for tok in analizador:
+        if not tok : break
 
-    tokens_storage += [tok]
+        if tok.type == 'error':
+            found_error = True
 
-if not found_error:
-    for tok in tokens_storage:
-        if tok.type == "TkId" or tok.type == "TkNum" or tok.type == "TkString":
-            print(tok.type+"("+str(tok.value)+")",
-                tok.lineno, find_column(data, tok))
-        else:
-            print(tok.type, tok.lineno, find_column(data, tok))
+        if found_error:
+            continue
+
+        tokens_storage += [tok]
+
+    # Algortimo para imprimir los tokens, en caso de no haber error
+    if not found_error:
+        for tok in tokens_storage:
+            if tok.type == "TkId" or tok.type == "TkNum" or tok.type == "TkString":
+                print(tok.type+"("+str(tok.value)+")",
+                    tok.lineno, find_column(data, tok))
+            else:
+                print(tok.type, tok.lineno, find_column(data, tok))
