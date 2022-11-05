@@ -3,9 +3,7 @@
 Copyright (C) 2022 - Nestor Gonzalez - José Pérez
 CI3725 - Traductores e Interpretadores
 """
-
 from lexer import *
-
 import codecs
 import sys
 
@@ -25,7 +23,7 @@ try:
     data = handleFile.read()
 
     # Ejecutar algoritmo de impresion de tokens
-    repl()
+    repl(data)
 
 except FileNotFoundError as e:
     print("Error, archivo [" + archivo + "] no encontrado")

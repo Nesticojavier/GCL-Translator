@@ -6,7 +6,7 @@ CI3725 - Traductores e Interpretadores
 
 import ply.lex as lex
 from Utils.utils import *
-from main import data
+# from main import data
 
 # Diccionarion con las palabras reservadas del lenguaje
 reservadas = {
@@ -99,17 +99,11 @@ def t_newline(t):
     r'\n+'
     t.lexer.lineno += len(t.value)
 
-# Manejo de caracteres ilegales
-def t_error(t):
-    print("Error: Unexpected character \"{}\" in row {}, column {}"
-    .format(t.value[0], t.lineno, find_column(data, t)))
-    t.lexer.skip(1)
-    return t
 
 # Se debe ignorar espacios en blanco y tabs
 t_ignore  = ' \t'
 
-def repl():
+def repl(data):
     """Funcion de lectura, evaluacion e impresion de los tokens.
 
         Imprime los tokens reconocidos.
@@ -118,6 +112,14 @@ def repl():
 
         return void
     """
+
+    # Manejo de caracteres ilegales
+    def t_error(t):
+        print("Error: Unexpected character \"{}\" in row {}, column {}"
+        .format(t.value[0], t.lineno, find_column(data, t)))
+        t.lexer.skip(1)
+        return t
+        
     # Arreglo para almacenar todos los tokens en caso de no habe
     # caracteres ilegales.
     tokens_storage = []
