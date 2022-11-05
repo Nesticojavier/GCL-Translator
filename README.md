@@ -10,7 +10,7 @@ simplificar su dise ̃no y hacer factible la elaboración de un interpretador a 
 
 Compilar con:
 ```
-python3 lexer.py ../CasosDePrueba/Tests/<Prueba>.gcl
+./run.sh ../CasosDePrueba/Tests/<Prueba>.gcl
 ```
 Fuentess:
 

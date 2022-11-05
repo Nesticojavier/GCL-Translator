@@ -1,39 +1,14 @@
-"""implementacion de un analizador lexicografico para el lenguaje GCL
+"""Implementacion de un analizador lexicografico para el lenguaje GCL
 
 Copyright (C) 2022 - Nestor Gonzalez - José Pérez
 CI3725 - Traductores e Interpretadores
 """
 
-import codecs
-import sys
 import ply.lex as lex
 from Utils.utils import *
+from main import data
 
-# Tomar el archivo 
-archivo = sys.argv[1]
-
-# Intentar leer el archivo con el formato correcto
-try:
-
-    # abrir archivo
-    handleFile = codecs.open(archivo, "r")
-
-    # comprobar extension file
-    if not archivo.endswith(".gcl"):
-        raise Exception("Error, la extension del archivo debe ser .gcl")
-
-    data = handleFile.read()
-    
-except FileNotFoundError as e:
-    print("Error, archivo [" + archivo + "] no encontrado")
-    sys.exit(0)
-except Exception as e:
-    print(e)
-    sys.exit(0)
-
-handleFile.close()
-
-# Palabras reservadas del lenguaje
+# Diccionarion con las palabras reservadas del lenguaje
 reservadas = {
     'declare' : 'TkDeclare',
     'if' : 'TkIf',
@@ -135,6 +110,14 @@ def t_error(t):
 t_ignore  = ' \t'
 
 def repl():
+    """Funcion de lectura, evaluacion e impresion de los tokens.
+
+        Imprime los tokens reconocidos.
+
+        data -- string con el contenido del archivo a analizar
+
+        return void
+    """
     # Arreglo para almacenar todos los tokens en caso de no habe
     # caracteres ilegales.
     tokens_storage = []
