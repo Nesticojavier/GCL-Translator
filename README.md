@@ -20,3 +20,5 @@ Fuentess:
 - [Analizador Lexico en python - Youtube](https://www.youtube.com/watch?v=gWrmCOTrtrs)
 
 ## Etapa 2: Analisisa Sintático con Árbol Sintáctico Abstracto (AST)
+En esta entrega se diseña una [gramática libre de contexto](https://es.wikipedia.org/wiki/Gram%C3%A1tica_libre_de_contexto) para el lenguaje GCL,
+la cual será utilizada para la implementación de un reconocedor, el cual construirá un árbol sintactico abstrato.
