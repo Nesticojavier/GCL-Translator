@@ -80,7 +80,7 @@ def t_TkId(t):
 
     # Verificar si el token es de tipo id.
     # En caso de serlo, obtener el valor del id
-    if t.type == 'TkId' : t.value = "\""+t.value+"\""
+    if t.type == 'TkId' : t.value = t.value
 
     return t
 
@@ -103,51 +103,55 @@ def t_newline(t):
 # Se debe ignorar espacios en blanco y tabs
 t_ignore  = ' \t'
 
-def repl(data):
-    """Funcion de lectura, evaluacion e impresion de los tokens.
+# Manejo de caracteres ilegales
+def t_error(t):
+    print("Error: Unexpected character \"{}\" in row {}, column {}"
+    .format(t.value[0], t.lineno, find_column(data, t)))
+    t.lexer.skip(1)
+    return t
 
-        Imprime los tokens reconocidos.
+analizador = lex.lex()
+# analizador.input(data)
 
-        data -- string con el contenido del archivo a analizar
+# def repl(data):
+#     """Funcion de lectura, evaluacion e impresion de los tokens.
 
-        return void
-    """
+#         Imprime los tokens reconocidos.
 
-    # Manejo de caracteres ilegales
-    def t_error(t):
-        print("Error: Unexpected character \"{}\" in row {}, column {}"
-        .format(t.value[0], t.lineno, find_column(data, t)))
-        t.lexer.skip(1)
-        return t
+#         data -- string con el contenido del archivo a analizar
+
+#         return void
+#     """
+
         
-    # Arreglo para almacenar todos los tokens en caso de no habe
-    # caracteres ilegales.
-    tokens_storage = []
+#     # Arreglo para almacenar todos los tokens en caso de no habe
+#     # caracteres ilegales.
+#     tokens_storage = []
 
-    # Construccion del analizador lexicografico a partir de los tokess
-    analizador = lex.lex()
-    analizador.input(data)
+#     # Construccion del analizador lexicografico a partir de los tokess
+#     analizador = lex.lex()
+#     analizador.input(data)
 
-    # Variable que indica si se consiguió un error o no
-    found_error = False
+#     # Variable que indica si se consiguió un error o no
+#     found_error = False
 
-    # Algoritmo para guardar los tokens en caso de no haber errores
-    for tok in analizador:
-        if not tok : break
+#     # Algoritmo para guardar los tokens en caso de no haber errores
+#     for tok in analizador:
+#         if not tok : break
 
-        if tok.type == 'error':
-            found_error = True
+#         if tok.type == 'error':
+#             found_error = True
 
-        if found_error:
-            continue
+#         if found_error:
+#             continue
 
-        tokens_storage += [tok]
+#         tokens_storage += [tok]
 
     # Algortimo para imprimir los tokens, en caso de no haber error
-    if not found_error:
-        for tok in tokens_storage:
-            if tok.type == "TkId" or tok.type == "TkNum" or tok.type == "TkString":
-                print(tok.type+"("+str(tok.value)+")",
-                    tok.lineno, find_column(data, tok))
-            else:
-                print(tok.type, tok.lineno, find_column(data, tok))
+    # if not found_error:
+    #     for tok in tokens_storage:
+    #         if tok.type == "TkId" or tok.type == "TkNum" or tok.type == "TkString":
+    #             print(tok.type+"("+str(tok.value)+")",
+    #                 tok.lineno, find_column(data, tok))
+    #         else:
+    #             print(tok.type, tok.lineno, find_column(data, tok))

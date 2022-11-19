@@ -1,0 +1,403 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Unused terminals:
+
+    TkAnd
+    TkArrow
+    TkAsig
+    TkCBracket
+    TkClosePar
+    TkConcat
+    TkEqual
+    TkFalse
+    TkFi
+    TkGeq
+    TkGreater
+    TkGuard
+    TkIn
+    TkLeq
+    TkLess
+    TkMinus
+    TkMult
+    TkNEqual
+    TkNot
+    TkNum
+    TkOBracket
+    TkOd
+    TkOpenPar
+    TkOr
+    TkPlus
+    TkRof
+    TkSkip
+    TkSoForth
+    TkString
+    TkTo
+    TkTrue
+
+Grammar
+
+Rule 0     S' -> B
+Rule 1     B -> TkOBlock DECLARE INSTRUCTIONS TkCBlock
+Rule 2     DECLARE -> TkDeclare LIST_DECLARE
+Rule 3     LIST_DECLARE -> VARIABLE_DECLARATION
+Rule 4     LIST_DECLARE -> VARIABLE_DECLARATION TkSemicolon LIST_DECLARE
+Rule 5     VARIABLE_DECLARATION -> TkId TkTwoPoints TYPE
+Rule 6     VARIABLE_DECLARATION -> TkId TkComma VARIABLE_DECLARATION
+Rule 7     TYPE -> TkInt
+Rule 8     TYPE -> TkBool
+Rule 9     TYPE -> TkArray
+Rule 10    INSTRUCTIONS -> INSTRUCTION TkSemicolon INSTRUCTIONS
+Rule 11    INSTRUCTIONS -> INSTRUCTION
+Rule 12    INSTRUCTION -> TkFor
+Rule 13    INSTRUCTION -> TkIf
+Rule 14    INSTRUCTION -> TkDo
+Rule 15    INSTRUCTION -> TkPrint
+Rule 16    INSTRUCTION -> TkId
+
+Terminals, with rules where they appear
+
+TkAnd                : 
+TkArray              : 9
+TkArrow              : 
+TkAsig               : 
+TkBool               : 8
+TkCBlock             : 1
+TkCBracket           : 
+TkClosePar           : 
+TkComma              : 6
+TkConcat             : 
+TkDeclare            : 2
+TkDo                 : 14
+TkEqual              : 
+TkFalse              : 
+TkFi                 : 
+TkFor                : 12
+TkGeq                : 
+TkGreater            : 
+TkGuard              : 
+TkId                 : 5 6 16
+TkIf                 : 13
+TkIn                 : 
+TkInt                : 7
+TkLeq                : 
+TkLess               : 
+TkMinus              : 
+TkMult               : 
+TkNEqual             : 
+TkNot                : 
+TkNum                : 
+TkOBlock             : 1
+TkOBracket           : 
+TkOd                 : 
+TkOpenPar            : 
+TkOr                 : 
+TkPlus               : 
+TkPrint              : 15
+TkRof                : 
+TkSemicolon          : 4 10
+TkSkip               : 
+TkSoForth            : 
+TkString             : 
+TkTo                 : 
+TkTrue               : 
+TkTwoPoints          : 5
+error                : 
+
+Nonterminals, with rules where they appear
+
+B                    : 0
+DECLARE              : 1
+INSTRUCTION          : 10 11
+INSTRUCTIONS         : 1 10
+LIST_DECLARE         : 2 4
+TYPE                 : 5
+VARIABLE_DECLARATION : 3 4 6
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . B
+    (1) B -> . TkOBlock DECLARE INSTRUCTIONS TkCBlock
+
+    TkOBlock        shift and go to state 2
+
+    B                              shift and go to state 1
+
+state 1
+
+    (0) S' -> B .
+
+
+
+state 2
+
+    (1) B -> TkOBlock . DECLARE INSTRUCTIONS TkCBlock
+    (2) DECLARE -> . TkDeclare LIST_DECLARE
+
+    TkDeclare       shift and go to state 4
+
+    DECLARE                        shift and go to state 3
+
+state 3
+
+    (1) B -> TkOBlock DECLARE . INSTRUCTIONS TkCBlock
+    (10) INSTRUCTIONS -> . INSTRUCTION TkSemicolon INSTRUCTIONS
+    (11) INSTRUCTIONS -> . INSTRUCTION
+    (12) INSTRUCTION -> . TkFor
+    (13) INSTRUCTION -> . TkIf
+    (14) INSTRUCTION -> . TkDo
+    (15) INSTRUCTION -> . TkPrint
+    (16) INSTRUCTION -> . TkId
+
+    TkFor           shift and go to state 7
+    TkIf            shift and go to state 8
+    TkDo            shift and go to state 9
+    TkPrint         shift and go to state 10
+    TkId            shift and go to state 11
+
+    INSTRUCTIONS                   shift and go to state 5
+    INSTRUCTION                    shift and go to state 6
+
+state 4
+
+    (2) DECLARE -> TkDeclare . LIST_DECLARE
+    (3) LIST_DECLARE -> . VARIABLE_DECLARATION
+    (4) LIST_DECLARE -> . VARIABLE_DECLARATION TkSemicolon LIST_DECLARE
+    (5) VARIABLE_DECLARATION -> . TkId TkTwoPoints TYPE
+    (6) VARIABLE_DECLARATION -> . TkId TkComma VARIABLE_DECLARATION
+
+    TkId            shift and go to state 14
+
+    LIST_DECLARE                   shift and go to state 12
+    VARIABLE_DECLARATION           shift and go to state 13
+
+state 5
+
+    (1) B -> TkOBlock DECLARE INSTRUCTIONS . TkCBlock
+
+    TkCBlock        shift and go to state 15
+
+
+state 6
+
+    (10) INSTRUCTIONS -> INSTRUCTION . TkSemicolon INSTRUCTIONS
+    (11) INSTRUCTIONS -> INSTRUCTION .
+
+    TkSemicolon     shift and go to state 16
+    TkCBlock        reduce using rule 11 (INSTRUCTIONS -> INSTRUCTION .)
+
+
+state 7
+
+    (12) INSTRUCTION -> TkFor .
+
+    TkSemicolon     reduce using rule 12 (INSTRUCTION -> TkFor .)
+    TkCBlock        reduce using rule 12 (INSTRUCTION -> TkFor .)
+
+
+state 8
+
+    (13) INSTRUCTION -> TkIf .
+
+    TkSemicolon     reduce using rule 13 (INSTRUCTION -> TkIf .)
+    TkCBlock        reduce using rule 13 (INSTRUCTION -> TkIf .)
+
+
+state 9
+
+    (14) INSTRUCTION -> TkDo .
+
+    TkSemicolon     reduce using rule 14 (INSTRUCTION -> TkDo .)
+    TkCBlock        reduce using rule 14 (INSTRUCTION -> TkDo .)
+
+
+state 10
+
+    (15) INSTRUCTION -> TkPrint .
+
+    TkSemicolon     reduce using rule 15 (INSTRUCTION -> TkPrint .)
+    TkCBlock        reduce using rule 15 (INSTRUCTION -> TkPrint .)
+
+
+state 11
+
+    (16) INSTRUCTION -> TkId .
+
+    TkSemicolon     reduce using rule 16 (INSTRUCTION -> TkId .)
+    TkCBlock        reduce using rule 16 (INSTRUCTION -> TkId .)
+
+
+state 12
+
+    (2) DECLARE -> TkDeclare LIST_DECLARE .
+
+    TkFor           reduce using rule 2 (DECLARE -> TkDeclare LIST_DECLARE .)
+    TkIf            reduce using rule 2 (DECLARE -> TkDeclare LIST_DECLARE .)
+    TkDo            reduce using rule 2 (DECLARE -> TkDeclare LIST_DECLARE .)
+    TkPrint         reduce using rule 2 (DECLARE -> TkDeclare LIST_DECLARE .)
+    TkId            reduce using rule 2 (DECLARE -> TkDeclare LIST_DECLARE .)
+
+
+state 13
+
+    (3) LIST_DECLARE -> VARIABLE_DECLARATION .
+    (4) LIST_DECLARE -> VARIABLE_DECLARATION . TkSemicolon LIST_DECLARE
+
+    TkFor           reduce using rule 3 (LIST_DECLARE -> VARIABLE_DECLARATION .)
+    TkIf            reduce using rule 3 (LIST_DECLARE -> VARIABLE_DECLARATION .)
+    TkDo            reduce using rule 3 (LIST_DECLARE -> VARIABLE_DECLARATION .)
+    TkPrint         reduce using rule 3 (LIST_DECLARE -> VARIABLE_DECLARATION .)
+    TkId            reduce using rule 3 (LIST_DECLARE -> VARIABLE_DECLARATION .)
+    TkSemicolon     shift and go to state 17
+
+
+state 14
+
+    (5) VARIABLE_DECLARATION -> TkId . TkTwoPoints TYPE
+    (6) VARIABLE_DECLARATION -> TkId . TkComma VARIABLE_DECLARATION
+
+    TkTwoPoints     shift and go to state 18
+    TkComma         shift and go to state 19
+
+
+state 15
+
+    (1) B -> TkOBlock DECLARE INSTRUCTIONS TkCBlock .
+
+    $end            reduce using rule 1 (B -> TkOBlock DECLARE INSTRUCTIONS TkCBlock .)
+
+
+state 16
+
+    (10) INSTRUCTIONS -> INSTRUCTION TkSemicolon . INSTRUCTIONS
+    (10) INSTRUCTIONS -> . INSTRUCTION TkSemicolon INSTRUCTIONS
+    (11) INSTRUCTIONS -> . INSTRUCTION
+    (12) INSTRUCTION -> . TkFor
+    (13) INSTRUCTION -> . TkIf
+    (14) INSTRUCTION -> . TkDo
+    (15) INSTRUCTION -> . TkPrint
+    (16) INSTRUCTION -> . TkId
+
+    TkFor           shift and go to state 7
+    TkIf            shift and go to state 8
+    TkDo            shift and go to state 9
+    TkPrint         shift and go to state 10
+    TkId            shift and go to state 11
+
+    INSTRUCTION                    shift and go to state 6
+    INSTRUCTIONS                   shift and go to state 20
+
+state 17
+
+    (4) LIST_DECLARE -> VARIABLE_DECLARATION TkSemicolon . LIST_DECLARE
+    (3) LIST_DECLARE -> . VARIABLE_DECLARATION
+    (4) LIST_DECLARE -> . VARIABLE_DECLARATION TkSemicolon LIST_DECLARE
+    (5) VARIABLE_DECLARATION -> . TkId TkTwoPoints TYPE
+    (6) VARIABLE_DECLARATION -> . TkId TkComma VARIABLE_DECLARATION
+
+    TkId            shift and go to state 14
+
+    VARIABLE_DECLARATION           shift and go to state 13
+    LIST_DECLARE                   shift and go to state 21
+
+state 18
+
+    (5) VARIABLE_DECLARATION -> TkId TkTwoPoints . TYPE
+    (7) TYPE -> . TkInt
+    (8) TYPE -> . TkBool
+    (9) TYPE -> . TkArray
+
+    TkInt           shift and go to state 23
+    TkBool          shift and go to state 24
+    TkArray         shift and go to state 25
+
+    TYPE                           shift and go to state 22
+
+state 19
+
+    (6) VARIABLE_DECLARATION -> TkId TkComma . VARIABLE_DECLARATION
+    (5) VARIABLE_DECLARATION -> . TkId TkTwoPoints TYPE
+    (6) VARIABLE_DECLARATION -> . TkId TkComma VARIABLE_DECLARATION
+
+    TkId            shift and go to state 14
+
+    VARIABLE_DECLARATION           shift and go to state 26
+
+state 20
+
+    (10) INSTRUCTIONS -> INSTRUCTION TkSemicolon INSTRUCTIONS .
+
+    TkCBlock        reduce using rule 10 (INSTRUCTIONS -> INSTRUCTION TkSemicolon INSTRUCTIONS .)
+
+
+state 21
+
+    (4) LIST_DECLARE -> VARIABLE_DECLARATION TkSemicolon LIST_DECLARE .
+
+    TkFor           reduce using rule 4 (LIST_DECLARE -> VARIABLE_DECLARATION TkSemicolon LIST_DECLARE .)
+    TkIf            reduce using rule 4 (LIST_DECLARE -> VARIABLE_DECLARATION TkSemicolon LIST_DECLARE .)
+    TkDo            reduce using rule 4 (LIST_DECLARE -> VARIABLE_DECLARATION TkSemicolon LIST_DECLARE .)
+    TkPrint         reduce using rule 4 (LIST_DECLARE -> VARIABLE_DECLARATION TkSemicolon LIST_DECLARE .)
+    TkId            reduce using rule 4 (LIST_DECLARE -> VARIABLE_DECLARATION TkSemicolon LIST_DECLARE .)
+
+
+state 22
+
+    (5) VARIABLE_DECLARATION -> TkId TkTwoPoints TYPE .
+
+    TkSemicolon     reduce using rule 5 (VARIABLE_DECLARATION -> TkId TkTwoPoints TYPE .)
+    TkFor           reduce using rule 5 (VARIABLE_DECLARATION -> TkId TkTwoPoints TYPE .)
+    TkIf            reduce using rule 5 (VARIABLE_DECLARATION -> TkId TkTwoPoints TYPE .)
+    TkDo            reduce using rule 5 (VARIABLE_DECLARATION -> TkId TkTwoPoints TYPE .)
+    TkPrint         reduce using rule 5 (VARIABLE_DECLARATION -> TkId TkTwoPoints TYPE .)
+    TkId            reduce using rule 5 (VARIABLE_DECLARATION -> TkId TkTwoPoints TYPE .)
+
+
+state 23
+
+    (7) TYPE -> TkInt .
+
+    TkSemicolon     reduce using rule 7 (TYPE -> TkInt .)
+    TkFor           reduce using rule 7 (TYPE -> TkInt .)
+    TkIf            reduce using rule 7 (TYPE -> TkInt .)
+    TkDo            reduce using rule 7 (TYPE -> TkInt .)
+    TkPrint         reduce using rule 7 (TYPE -> TkInt .)
+    TkId            reduce using rule 7 (TYPE -> TkInt .)
+
+
+state 24
+
+    (8) TYPE -> TkBool .
+
+    TkSemicolon     reduce using rule 8 (TYPE -> TkBool .)
+    TkFor           reduce using rule 8 (TYPE -> TkBool .)
+    TkIf            reduce using rule 8 (TYPE -> TkBool .)
+    TkDo            reduce using rule 8 (TYPE -> TkBool .)
+    TkPrint         reduce using rule 8 (TYPE -> TkBool .)
+    TkId            reduce using rule 8 (TYPE -> TkBool .)
+
+
+state 25
+
+    (9) TYPE -> TkArray .
+
+    TkSemicolon     reduce using rule 9 (TYPE -> TkArray .)
+    TkFor           reduce using rule 9 (TYPE -> TkArray .)
+    TkIf            reduce using rule 9 (TYPE -> TkArray .)
+    TkDo            reduce using rule 9 (TYPE -> TkArray .)
+    TkPrint         reduce using rule 9 (TYPE -> TkArray .)
+    TkId            reduce using rule 9 (TYPE -> TkArray .)
+
+
+state 26
+
+    (6) VARIABLE_DECLARATION -> TkId TkComma VARIABLE_DECLARATION .
+
+    TkSemicolon     reduce using rule 6 (VARIABLE_DECLARATION -> TkId TkComma VARIABLE_DECLARATION .)
+    TkFor           reduce using rule 6 (VARIABLE_DECLARATION -> TkId TkComma VARIABLE_DECLARATION .)
+    TkIf            reduce using rule 6 (VARIABLE_DECLARATION -> TkId TkComma VARIABLE_DECLARATION .)
+    TkDo            reduce using rule 6 (VARIABLE_DECLARATION -> TkId TkComma VARIABLE_DECLARATION .)
+    TkPrint         reduce using rule 6 (VARIABLE_DECLARATION -> TkId TkComma VARIABLE_DECLARATION .)
+    TkId            reduce using rule 6 (VARIABLE_DECLARATION -> TkId TkComma VARIABLE_DECLARATION .)
+
