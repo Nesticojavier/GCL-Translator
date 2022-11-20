@@ -12,9 +12,10 @@ def p_error(p):
 
 def p_program(p):
     '''
-    B : TkOBlock DECLARE INSTRUCTIONS TkCBlock
+    BLOCK : TkOBlock DECLARE LIST_INSTRUCTIONS TkCBlock
     '''
-    p[0] = Nodo("Block", p[2], p[3])
+    # p[0] = Nodo("Block", p[2], p[3])
+    p[0] = Nodo("Block", p[3])
     print(f'******** Todo bien **********')
 
 def p_declare(p):
@@ -48,6 +49,7 @@ def p_list_variables_declare(p):
     '''
     p[0] = Nodo(f"{p[1]}{p[2]} " + f"{p[3]}")
 
+# TODO: falta completar array completo y no solo array
 def p_type_varible_declare(p):
     '''
     TYPE : TkInt 
@@ -56,22 +58,52 @@ def p_type_varible_declare(p):
     '''
     p[0] = p[1]
     
+################### INSTRUCCIONES #######################
+def p_intruccions_list_base(p):
+    '''
+    LIST_INSTRUCTIONS : INSTRUCTION
+    '''
+    p[0] = p[1]
 
-def p_statements(p):
+def p_intruccions_list(p):
     '''
-    INSTRUCTIONS : INSTRUCTION TkSemicolon INSTRUCTIONS
-                  | INSTRUCTION
+    LIST_INSTRUCTIONS : LIST_INSTRUCTIONS TkSemicolon INSTRUCTION
     '''
-    p[0] = Nodo("Hola")
+    p[0] = Nodo('Sequencing', p[1], p[3])
 
-def p_statement(p):
+def p_instruccion(p):
     '''
-    INSTRUCTION : TkFor
-                | TkIf
-                | TkDo
-                | TkPrint
-                | TkId
+    INSTRUCTION : ASIG
     '''
+    p[0] =  p[1]
+                # | FOR_LOOP
+                # | DO_LOOP
+                # | CONDITIONAL
+                # | PRINT
+
+def p_asig(p):
+    '''
+    ASIG : TkId TkAsig E
+    '''
+    p[0] = Nodo('Asig', Nodo(p[1]), p[3])
+
+# TODO: falata hacer que detecte una expresion compleja y no solo un numero
+def p_expression(p):
+    '''
+    E : TkNum
+    '''
+    p[0] = Nodo(f"Literal: {p[1]}")
+
+# def p_instruccion(p):
+#     '''
+#     INSTRUCTION : TkId
+#                 | TkFor
+#                 | TkDo
+#                 | TkIf
+#                 | TkPrint
+#     '''
+    # p[0] =  Nodo(p[1])
+    # print(f"############### {p[1]}  #############")
 
 parser = yacc.yacc('SLR')
 
@@ -83,18 +115,22 @@ data = '''
         f : int;
         y, x: bool
 
-    print;
-    do;
-    for;
-    if;
-    estoEsUnId
+    a := 1;
+    b := 3;
+    c := 4;
+    d := 5;
+    x := 5;
+    y := 5;
+    z := 5;
+    w := 5;
+    p := 5
 ]|
 '''
 
 ast = parser.parse(data)
 # print(ast)
 
-printArbol(ast)
+print_arbol(ast)
 
 # print(result)
 
