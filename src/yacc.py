@@ -55,6 +55,7 @@ def p_type_varible_declare(p):
     TYPE : TkInt 
          | TkBool 
          | TkArray
+         | TkString
     '''
     p[0] = p[1]
     
@@ -74,12 +75,12 @@ def p_intruccions_list(p):
 def p_instruccion(p):
     '''
     INSTRUCTION : ASIG
+                | PRINT
     '''
     p[0] =  p[1]
                 # | FOR_LOOP
                 # | DO_LOOP
                 # | CONDITIONAL
-                # | PRINT
 
 def p_asig(p):
     '''
@@ -93,6 +94,36 @@ def p_expression(p):
     E : TkNum
     '''
     p[0] = Nodo(f"Literal: {p[1]}")
+
+# Gramática para detectar un print en una secuenciacion
+def p_print(p):
+    '''
+    PRINT : TkPrint TOPRINT  
+    '''
+    p[0] = Nodo("Print" ,p[2])
+
+def p_to_print_base(p):
+    '''
+    TOPRINT : EXPRESSION   
+    '''
+    p[0] = p[1]
+    
+def p_to_print(p):
+    '''
+    TOPRINT : TOPRINT TkConcat EXPRESSION   
+    '''
+    p[0] = Nodo('Concat', p[1], p[3])
+
+def p_expression_print(p):
+    '''
+    EXPRESSION : TkId
+               | TkString
+               | TkNum
+               | TkTrue
+               | TkFalse
+    '''
+    print(f"###########  {type(p[1])}   ############")
+    p[0] = Nodo(str(p[1]))
 
 # def p_instruccion(p):
 #     '''
@@ -116,14 +147,8 @@ data = '''
         y, x: bool
 
     a := 1;
-    b := 3;
-    c := 4;
-    d := 5;
-    x := 5;
-    y := 5;
-    z := 5;
-    w := 5;
-    p := 5
+    print "hola1" . "hola2" . "hola3" . 7
+    
 ]|
 '''
 
