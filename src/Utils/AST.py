@@ -18,7 +18,7 @@ def printArbol(nodo: Nodo, guion = "-"):
 
     if nodo.leftChild :  
         printArbol(nodo.leftChild, guion + "-")
-        guion
+        
     
     if nodo.rigthChild:  
         printArbol(nodo.rigthChild, guion + "-")
