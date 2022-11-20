@@ -13,15 +13,15 @@ class Nodo():
 
 
 
-def printArbol(nodo: Nodo, guion = "-"):
+def print_arbol(nodo: Nodo, guion = "-"):
     print(guion + str(nodo)) 
 
     if nodo.leftChild :  
-        printArbol(nodo.leftChild, guion + "-")
+        print_arbol(nodo.leftChild, guion + "-")
         
     
     if nodo.rigthChild:  
-        printArbol(nodo.rigthChild, guion + "-")
+        print_arbol(nodo.rigthChild, guion + "-")
    
 
 
