@@ -97,19 +97,62 @@ def p_instruccion(p):
     INSTRUCTION : ASIG
                 | PRINT
                 | DO_LOOP
+                | FOR_LOOP
+                | TkSkip
     '''
-    p[0] =  p[1]
-                # | FOR_LOOP
+    if p[1] != 'skip':
+        p[0] =  p[1]
+    else:
+        p[0] = Nodo('Skip')
                 # | CONDITIONAL
 
 # Produccion para detectar asignaciones
 def p_asig(p):
     '''
-    ASIG : TkId TkAsig E
+    ASIG : TkId TkAsig EXPRESSION
     '''
     p[0] = Nodo('Asig', Nodo(f"Ident: {p[1]}"), p[3])
 
-# TODO: detectar parentesis
+def p_asig_expresion(p):
+    '''
+    EXPRESSION : E
+               | ASIG_ARRAY
+    '''
+    p[0] = p[1]
+
+def p_asig_array(p):
+    '''
+    ASIG_ARRAY : CREATE_ARRAY
+               | WRITE_ARRAY
+    '''
+    p[0] = p[1]
+
+def p_create_array(p):
+    '''
+    CREATE_ARRAY : E TkComma E
+    '''
+    p[0] = Nodo('Comma', p[1], p[3])
+
+def p_create_array_base(p):
+    '''
+    CREATE_ARRAY : CREATE_ARRAY TkComma E
+    '''
+    p[0] = Nodo('Comma', p[1], p[3])
+
+def p_write_array_base(p):
+    '''
+    WRITE_ARRAY : TkId TkOpenPar E TkTwoPoints E TkClosePar
+    '''
+    p[0] = Nodo('WriteArray',Nodo(f"Ident: {p[1]}") , Nodo('TwoPoints', p[3], p[5]))
+    # p[0] = Nodo("Holas")
+
+def p_write_array(p):
+    '''
+    WRITE_ARRAY : WRITE_ARRAY TkOpenPar E TkTwoPoints E TkClosePar
+    '''
+    p[0] = Nodo('WriteArray', p[1], Nodo("TwoPoints", p[3], p[5]))
+    # p[0] = Nodo("hola")
+
 def p_expression_op_binary(p):
     '''
     E : E TkMult E
@@ -125,6 +168,12 @@ def p_expression_op_binary(p):
       | E TkNEqual E
     '''
     p[0] = Nodo(trad_op.get(p[2]), p[1], p[3])
+
+def p_expression_par(p):
+    '''
+    E : TkOpenPar E TkClosePar
+    '''
+    p[0] = p[2]
 
 def p_expression_op_unary(p):
     '''
@@ -196,7 +245,7 @@ def p_do_loop(p):
 # Produccion para detectar un for-loop
 def p_for_loop(p):
     '''
-    DO_LOOP : TkFor TkId TkIn E TkTo E TkArrow LIST_INSTRUCTIONS TkRof
+    FOR_LOOP : TkFor TkId TkIn E TkTo E TkArrow LIST_INSTRUCTIONS TkRof
     '''
     p[0] = Nodo('For', Nodo('In', Nodo(f"Ident: {p[2]}"), Nodo('To', p[4], p[6])), p[8])
 
@@ -210,17 +259,7 @@ data = '''
         f : array[2..4];
         y, x: bool
 
-    do i < 10 --> 
-        print "Still here!";
-        i := i + 1
-    od;
-
-    a := 4;
-
-    for j in 2 to 5 -->
-        print i
-    rof
-
+    a := x(1:3)(2:4)
 ]|
 '''
 
