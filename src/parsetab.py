@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'TkAnd TkArray TkArrow TkAsig TkBool TkCBlock TkCBracket TkClosePar TkComma TkConcat TkDeclare TkDo TkEqual TkFalse TkFi TkFor TkGeq TkGreater TkGuard TkId TkIf TkIn TkInt TkLeq TkLess TkMinus TkMult TkNEqual TkNot TkNum TkOBlock TkOBracket TkOd TkOpenPar TkOr TkPlus TkPrint TkRof TkSemicolon TkSkip TkSoForth TkString TkTo TkTrue TkTwoPoints\n    B : TkOBlock DECLARE INSTRUCTIONS TkCBlock\n    \n    DECLARE : TkDeclare LIST_DECLARE\n    \n    LIST_DECLARE : VARIABLE_DECLARATION\n    \n    LIST_DECLARE : VARIABLE_DECLARATION TkSemicolon LIST_DECLARE\n    \n    VARIABLE_DECLARATION : TkId TkTwoPoints TYPE\n    \n    VARIABLE_DECLARATION : TkId TkComma VARIABLE_DECLARATION\n    \n    TYPE : TkInt \n         | TkBool \n         | TkArray\n    \n    INSTRUCTIONS : INSTRUCTION TkSemicolon INSTRUCTIONS\n                  | INSTRUCTION\n    \n    INSTRUCTION : TkFor\n                | TkIf\n                | TkDo\n                | TkPrint\n                | TkId\n    '
+_lr_signature = 'TkAnd TkArray TkArrow TkAsig TkBool TkCBlock TkCBracket TkClosePar TkComma TkConcat TkDeclare TkDo TkEqual TkFalse TkFi TkFor TkGeq TkGreater TkGuard TkId TkIf TkIn TkInt TkLeq TkLess TkMinus TkMult TkNEqual TkNot TkNum TkOBlock TkOBracket TkOd TkOpenPar TkOr TkPlus TkPrint TkRof TkSemicolon TkSkip TkSoForth TkString TkTo TkTrue TkTwoPoints\n    BLOCK : TkOBlock DECLARE LIST_INSTRUCTIONS TkCBlock\n    \n    DECLARE : TkDeclare LIST_DECLARE\n    \n    LIST_DECLARE : VARIABLE_DECLARATION\n    \n    LIST_DECLARE : LIST_DECLARE TkSemicolon VARIABLE_DECLARATION\n    \n    VARIABLE_DECLARATION : TkId TkTwoPoints TYPE\n    \n    VARIABLE_DECLARATION : TkId TkComma VARIABLE_DECLARATION\n    \n    TYPE : TkInt \n         | TkBool \n         | ARRAY_DECLARATION\n    \n    ARRAY_DECLARATION : TkArray TkOBracket TkNum TkSoForth TkNum TkCBracket\n    \n    LIST_INSTRUCTIONS : INSTRUCTION\n    \n    LIST_INSTRUCTIONS : LIST_INSTRUCTIONS TkSemicolon INSTRUCTION\n    \n    INSTRUCTION : ASIG\n                | PRINT\n                | DO_LOOP\n    \n    ASIG : TkId TkAsig E\n    \n    E : E TkMult E\n      | E TkPlus E\n      | E TkMinus E\n      | E TkOr E\n      | E TkAnd E\n      | E TkLess E\n      | E TkLeq E\n      | E TkGeq E\n      | E TkGreater E\n      | E TkEqual E\n      | E TkNEqual E\n    \n    E : TkNot E\n      | TkMinus E\n    \n    E : TkNum\n      | TkId\n      | TkTrue\n      | TkFalse\n    \n    PRINT : TkPrint TOPRINT  \n    \n    TOPRINT : EXPRESSION_TO_PRINT   \n    \n    TOPRINT : TOPRINT TkConcat EXPRESSION_TO_PRINT   \n    \n    EXPRESSION_TO_PRINT : TkId\n               | TkString\n               | TkNum\n               | TkTrue\n               | TkFalse\n               | READ_ARRAY\n    \n    READ_ARRAY : TkId TkOBracket E TkCBracket\n    \n    DO_LOOP : TkDo E TkArrow LIST_INSTRUCTIONS TkOd\n    \n    DO_LOOP : TkFor TkId TkIn E TkTo E TkArrow LIST_INSTRUCTIONS TkRof\n    '
     
-_lr_action_items = {'TkOBlock':([0,],[2,]),'$end':([1,15,],[0,-1,]),'TkDeclare':([2,],[4,]),'TkFor':([3,12,13,16,21,22,23,24,25,26,],[7,-2,-3,7,-4,-5,-7,-8,-9,-6,]),'TkIf':([3,12,13,16,21,22,23,24,25,26,],[8,-2,-3,8,-4,-5,-7,-8,-9,-6,]),'TkDo':([3,12,13,16,21,22,23,24,25,26,],[9,-2,-3,9,-4,-5,-7,-8,-9,-6,]),'TkPrint':([3,12,13,16,21,22,23,24,25,26,],[10,-2,-3,10,-4,-5,-7,-8,-9,-6,]),'TkId':([3,4,12,13,16,17,19,21,22,23,24,25,26,],[11,14,-2,-3,11,14,14,-4,-5,-7,-8,-9,-6,]),'TkCBlock':([5,6,7,8,9,10,11,20,],[15,-11,-12,-13,-14,-15,-16,-10,]),'TkSemicolon':([6,7,8,9,10,11,13,22,23,24,25,26,],[16,-12,-13,-14,-15,-16,17,-5,-7,-8,-9,-6,]),'TkTwoPoints':([14,],[18,]),'TkComma':([14,],[19,]),'TkInt':([18,],[23,]),'TkBool':([18,],[24,]),'TkArray':([18,],[25,]),}
+_lr_action_items = {'TkOBlock':([0,],[2,]),'$end':([1,17,],[0,-1,]),'TkDeclare':([2,],[4,]),'TkId':([3,4,11,12,13,14,15,18,19,29,30,36,38,41,42,43,44,45,46,47,48,49,50,51,52,53,54,57,58,59,60,61,62,64,83,87,90,],[10,16,22,32,35,-2,-3,10,32,32,32,16,16,22,32,10,32,32,32,32,32,32,32,32,32,32,32,32,-4,-5,-7,-8,-9,-6,32,10,-10,]),'TkPrint':([3,14,15,18,43,58,59,60,61,62,64,87,90,],[11,-2,-3,11,11,-4,-5,-7,-8,-9,-6,11,-10,]),'TkDo':([3,14,15,18,43,58,59,60,61,62,64,87,90,],[12,-2,-3,12,12,-4,-5,-7,-8,-9,-6,12,-10,]),'TkFor':([3,14,15,18,43,58,59,60,61,62,64,87,90,],[13,-2,-3,13,13,-4,-5,-7,-8,-9,-6,13,-10,]),'TkCBlock':([5,6,7,8,9,20,21,22,23,24,25,26,27,31,32,33,34,39,40,55,56,65,68,69,70,71,72,73,74,75,76,77,78,81,82,91,],[17,-11,-13,-14,-15,-34,-35,-37,-38,-39,-40,-41,-42,-30,-31,-32,-33,-12,-16,-29,-28,-36,-17,-18,-19,-20,-21,-22,-23,-24,-25,-26,-27,-43,-44,-45,]),'TkSemicolon':([5,6,7,8,9,14,15,20,21,22,23,24,25,26,27,31,32,33,34,39,40,55,56,58,59,60,61,62,64,65,67,68,69,70,71,72,73,74,75,76,77,78,81,82,89,90,91,],[18,-11,-13,-14,-15,36,-3,-34,-35,-37,-38,-39,-40,-41,-42,-30,-31,-32,-33,-12,-16,-29,-28,-4,-5,-7,-8,-9,-6,-36,18,-17,-18,-19,-20,-21,-22,-23,-24,-25,-26,-27,-43,-44,18,-10,-45,]),'TkOd':([6,7,8,9,20,21,22,23,24,25,26,27,31,32,33,34,39,40,55,56,65,67,68,69,70,71,72,73,74,75,76,77,78,81,82,91,],[-11,-13,-14,-15,-34,-35,-37,-38,-39,-40,-41,-42,-30,-31,-32,-33,-12,-16,-29,-28,-36,82,-17,-18,-19,-20,-21,-22,-23,-24,-25,-26,-27,-43,-44,-45,]),'TkRof':([6,7,8,9,20,21,22,23,24,25,26,27,31,32,33,34,39,40,55,56,65,68,69,70,71,72,73,74,75,76,77,78,81,82,89,91,],[-11,-13,-14,-15,-34,-35,-37,-38,-39,-40,-41,-42,-30,-31,-32,-33,-12,-16,-29,-28,-36,-17,-18,-19,-20,-21,-22,-23,-24,-25,-26,-27,-43,-44,91,-45,]),'TkAsig':([10,],[19,]),'TkString':([11,41,],[23,23,]),'TkNum':([11,12,19,29,30,41,42,44,45,46,47,48,49,50,51,52,53,54,57,80,83,86,],[24,31,31,31,31,24,31,31,31,31,31,31,31,31,31,31,31,31,31,84,31,88,]),'TkTrue':([11,12,19,29,30,41,42,44,45,46,47,48,49,50,51,52,53,54,57,83,],[25,33,33,33,33,25,33,33,33,33,33,33,33,33,33,33,33,33,33,33,]),'TkFalse':([11,12,19,29,30,41,42,44,45,46,47,48,49,50,51,52,53,54,57,83,],[26,34,34,34,34,26,34,34,34,34,34,34,34,34,34,34,34,34,34,34,]),'TkNot':([12,19,29,30,42,44,45,46,47,48,49,50,51,52,53,54,57,83,],[30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,]),'TkMinus':([12,19,28,29,30,31,32,33,34,40,42,44,45,46,47,48,49,50,51,52,53,54,55,56,57,66,68,69,70,71,72,73,74,75,76,77,78,79,83,85,],[29,29,46,29,29,-30,-31,-32,-33,46,29,29,29,29,29,29,29,29,29,29,29,29,46,46,29,46,46,46,46,46,46,46,46,46,46,46,46,46,29,46,]),'TkTwoPoints':([16,],[37,]),'TkComma':([16,],[38,]),'TkConcat':([20,21,22,23,24,25,26,27,65,81,],[41,-35,-37,-38,-39,-40,-41,-42,-36,-43,]),'TkOBracket':([22,63,],[42,80,]),'TkArrow':([28,31,32,33,34,55,56,68,69,70,71,72,73,74,75,76,77,78,85,],[43,-30,-31,-32,-33,-29,-28,-17,-18,-19,-20,-21,-22,-23,-24,-25,-26,-27,87,]),'TkMult':([28,31,32,33,34,40,55,56,66,68,69,70,71,72,73,74,75,76,77,78,79,85,],[44,-30,-31,-32,-33,44,44,44,44,44,44,44,44,44,44,44,44,44,44,44,44,44,]),'TkPlus':([28,31,32,33,34,40,55,56,66,68,69,70,71,72,73,74,75,76,77,78,79,85,],[45,-30,-31,-32,-33,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,45,]),'TkOr':([28,31,32,33,34,40,55,56,66,68,69,70,71,72,73,74,75,76,77,78,79,85,],[47,-30,-31,-32,-33,47,47,47,47,47,47,47,47,47,47,47,47,47,47,47,47,47,]),'TkAnd':([28,31,32,33,34,40,55,56,66,68,69,70,71,72,73,74,75,76,77,78,79,85,],[48,-30,-31,-32,-33,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,48,]),'TkLess':([28,31,32,33,34,40,55,56,66,68,69,70,71,72,73,74,75,76,77,78,79,85,],[49,-30,-31,-32,-33,49,49,49,49,49,49,49,49,49,49,49,49,49,49,49,49,49,]),'TkLeq':([28,31,32,33,34,40,55,56,66,68,69,70,71,72,73,74,75,76,77,78,79,85,],[50,-30,-31,-32,-33,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,]),'TkGeq':([28,31,32,33,34,40,55,56,66,68,69,70,71,72,73,74,75,76,77,78,79,85,],[51,-30,-31,-32,-33,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,51,]),'TkGreater':([28,31,32,33,34,40,55,56,66,68,69,70,71,72,73,74,75,76,77,78,79,85,],[52,-30,-31,-32,-33,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,52,]),'TkEqual':([28,31,32,33,34,40,55,56,66,68,69,70,71,72,73,74,75,76,77,78,79,85,],[53,-30,-31,-32,-33,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,]),'TkNEqual':([28,31,32,33,34,40,55,56,66,68,69,70,71,72,73,74,75,76,77,78,79,85,],[54,-30,-31,-32,-33,54,54,54,54,54,54,54,54,54,54,54,54,54,54,54,54,54,]),'TkCBracket':([31,32,33,34,55,56,66,68,69,70,71,72,73,74,75,76,77,78,88,],[-30,-31,-32,-33,-29,-28,81,-17,-18,-19,-20,-21,-22,-23,-24,-25,-26,-27,90,]),'TkTo':([31,32,33,34,55,56,68,69,70,71,72,73,74,75,76,77,78,79,],[-30,-31,-32,-33,-29,-28,-17,-18,-19,-20,-21,-22,-23,-24,-25,-26,-27,83,]),'TkIn':([35,],[57,]),'TkInt':([37,],[60,]),'TkBool':([37,],[61,]),'TkArray':([37,],[63,]),'TkSoForth':([84,],[86,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'B':([0,],[1,]),'DECLARE':([2,],[3,]),'INSTRUCTIONS':([3,16,],[5,20,]),'INSTRUCTION':([3,16,],[6,6,]),'LIST_DECLARE':([4,17,],[12,21,]),'VARIABLE_DECLARATION':([4,17,19,],[13,13,26,]),'TYPE':([18,],[22,]),}
+_lr_goto_items = {'BLOCK':([0,],[1,]),'DECLARE':([2,],[3,]),'LIST_INSTRUCTIONS':([3,43,87,],[5,67,89,]),'INSTRUCTION':([3,18,43,87,],[6,39,6,6,]),'ASIG':([3,18,43,87,],[7,7,7,7,]),'PRINT':([3,18,43,87,],[8,8,8,8,]),'DO_LOOP':([3,18,43,87,],[9,9,9,9,]),'LIST_DECLARE':([4,],[14,]),'VARIABLE_DECLARATION':([4,36,38,],[15,58,64,]),'TOPRINT':([11,],[20,]),'EXPRESSION_TO_PRINT':([11,41,],[21,65,]),'READ_ARRAY':([11,41,],[27,27,]),'E':([12,19,29,30,42,44,45,46,47,48,49,50,51,52,53,54,57,83,],[28,40,55,56,66,68,69,70,71,72,73,74,75,76,77,78,79,85,]),'TYPE':([37,],[59,]),'ARRAY_DECLARATION':([37,],[62,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -26,21 +26,50 @@ for _k, _v in _lr_goto_items.items():
        _lr_goto[_x][_k] = _y
 del _lr_goto_items
 _lr_productions = [
-  ("S' -> B","S'",1,None,None,None),
-  ('B -> TkOBlock DECLARE INSTRUCTIONS TkCBlock','B',4,'p_program','yacc.py',14),
-  ('DECLARE -> TkDeclare LIST_DECLARE','DECLARE',2,'p_declare','yacc.py',21),
-  ('LIST_DECLARE -> VARIABLE_DECLARATION','LIST_DECLARE',1,'p_list_declare_base','yacc.py',27),
-  ('LIST_DECLARE -> VARIABLE_DECLARATION TkSemicolon LIST_DECLARE','LIST_DECLARE',3,'p_list_declare','yacc.py',33),
-  ('VARIABLE_DECLARATION -> TkId TkTwoPoints TYPE','VARIABLE_DECLARATION',3,'p_list_variables_declare_base','yacc.py',40),
-  ('VARIABLE_DECLARATION -> TkId TkComma VARIABLE_DECLARATION','VARIABLE_DECLARATION',3,'p_list_variables_declare','yacc.py',46),
-  ('TYPE -> TkInt','TYPE',1,'p_type_varible_declare','yacc.py',51),
-  ('TYPE -> TkBool','TYPE',1,'p_type_varible_declare','yacc.py',52),
-  ('TYPE -> TkArray','TYPE',1,'p_type_varible_declare','yacc.py',53),
-  ('INSTRUCTIONS -> INSTRUCTION TkSemicolon INSTRUCTIONS','INSTRUCTIONS',3,'p_statements','yacc.py',60),
-  ('INSTRUCTIONS -> INSTRUCTION','INSTRUCTIONS',1,'p_statements','yacc.py',61),
-  ('INSTRUCTION -> TkFor','INSTRUCTION',1,'p_statement','yacc.py',66),
-  ('INSTRUCTION -> TkIf','INSTRUCTION',1,'p_statement','yacc.py',67),
-  ('INSTRUCTION -> TkDo','INSTRUCTION',1,'p_statement','yacc.py',68),
-  ('INSTRUCTION -> TkPrint','INSTRUCTION',1,'p_statement','yacc.py',69),
-  ('INSTRUCTION -> TkId','INSTRUCTION',1,'p_statement','yacc.py',70),
+  ("S' -> BLOCK","S'",1,None,None,None),
+  ('BLOCK -> TkOBlock DECLARE LIST_INSTRUCTIONS TkCBlock','BLOCK',4,'p_program','yacc.py',31),
+  ('DECLARE -> TkDeclare LIST_DECLARE','DECLARE',2,'p_declare','yacc.py',39),
+  ('LIST_DECLARE -> VARIABLE_DECLARATION','LIST_DECLARE',1,'p_list_declare_base','yacc.py',45),
+  ('LIST_DECLARE -> LIST_DECLARE TkSemicolon VARIABLE_DECLARATION','LIST_DECLARE',3,'p_list_declare','yacc.py',51),
+  ('VARIABLE_DECLARATION -> TkId TkTwoPoints TYPE','VARIABLE_DECLARATION',3,'p_list_variables_declare_base','yacc.py',58),
+  ('VARIABLE_DECLARATION -> TkId TkComma VARIABLE_DECLARATION','VARIABLE_DECLARATION',3,'p_list_variables_declare','yacc.py',64),
+  ('TYPE -> TkInt','TYPE',1,'p_type_varible_declare','yacc.py',70),
+  ('TYPE -> TkBool','TYPE',1,'p_type_varible_declare','yacc.py',71),
+  ('TYPE -> ARRAY_DECLARATION','TYPE',1,'p_type_varible_declare','yacc.py',72),
+  ('ARRAY_DECLARATION -> TkArray TkOBracket TkNum TkSoForth TkNum TkCBracket','ARRAY_DECLARATION',6,'p_array_declaration','yacc.py',78),
+  ('LIST_INSTRUCTIONS -> INSTRUCTION','LIST_INSTRUCTIONS',1,'p_intruccions_list_base','yacc.py',85),
+  ('LIST_INSTRUCTIONS -> LIST_INSTRUCTIONS TkSemicolon INSTRUCTION','LIST_INSTRUCTIONS',3,'p_intruccions_list','yacc.py',91),
+  ('INSTRUCTION -> ASIG','INSTRUCTION',1,'p_instruccion','yacc.py',97),
+  ('INSTRUCTION -> PRINT','INSTRUCTION',1,'p_instruccion','yacc.py',98),
+  ('INSTRUCTION -> DO_LOOP','INSTRUCTION',1,'p_instruccion','yacc.py',99),
+  ('ASIG -> TkId TkAsig E','ASIG',3,'p_asig','yacc.py',108),
+  ('E -> E TkMult E','E',3,'p_expression_op_binary','yacc.py',115),
+  ('E -> E TkPlus E','E',3,'p_expression_op_binary','yacc.py',116),
+  ('E -> E TkMinus E','E',3,'p_expression_op_binary','yacc.py',117),
+  ('E -> E TkOr E','E',3,'p_expression_op_binary','yacc.py',118),
+  ('E -> E TkAnd E','E',3,'p_expression_op_binary','yacc.py',119),
+  ('E -> E TkLess E','E',3,'p_expression_op_binary','yacc.py',120),
+  ('E -> E TkLeq E','E',3,'p_expression_op_binary','yacc.py',121),
+  ('E -> E TkGeq E','E',3,'p_expression_op_binary','yacc.py',122),
+  ('E -> E TkGreater E','E',3,'p_expression_op_binary','yacc.py',123),
+  ('E -> E TkEqual E','E',3,'p_expression_op_binary','yacc.py',124),
+  ('E -> E TkNEqual E','E',3,'p_expression_op_binary','yacc.py',125),
+  ('E -> TkNot E','E',2,'p_expression_op_unary','yacc.py',131),
+  ('E -> TkMinus E','E',2,'p_expression_op_unary','yacc.py',132),
+  ('E -> TkNum','E',1,'p_expression_base','yacc.py',138),
+  ('E -> TkId','E',1,'p_expression_base','yacc.py',139),
+  ('E -> TkTrue','E',1,'p_expression_base','yacc.py',140),
+  ('E -> TkFalse','E',1,'p_expression_base','yacc.py',141),
+  ('PRINT -> TkPrint TOPRINT','PRINT',2,'p_print','yacc.py',153),
+  ('TOPRINT -> EXPRESSION_TO_PRINT','TOPRINT',1,'p_to_print_base','yacc.py',159),
+  ('TOPRINT -> TOPRINT TkConcat EXPRESSION_TO_PRINT','TOPRINT',3,'p_to_print','yacc.py',165),
+  ('EXPRESSION_TO_PRINT -> TkId','EXPRESSION_TO_PRINT',1,'p_expression_print','yacc.py',171),
+  ('EXPRESSION_TO_PRINT -> TkString','EXPRESSION_TO_PRINT',1,'p_expression_print','yacc.py',172),
+  ('EXPRESSION_TO_PRINT -> TkNum','EXPRESSION_TO_PRINT',1,'p_expression_print','yacc.py',173),
+  ('EXPRESSION_TO_PRINT -> TkTrue','EXPRESSION_TO_PRINT',1,'p_expression_print','yacc.py',174),
+  ('EXPRESSION_TO_PRINT -> TkFalse','EXPRESSION_TO_PRINT',1,'p_expression_print','yacc.py',175),
+  ('EXPRESSION_TO_PRINT -> READ_ARRAY','EXPRESSION_TO_PRINT',1,'p_expression_print','yacc.py',176),
+  ('READ_ARRAY -> TkId TkOBracket E TkCBracket','READ_ARRAY',4,'p_array_index','yacc.py',185),
+  ('DO_LOOP -> TkDo E TkArrow LIST_INSTRUCTIONS TkOd','DO_LOOP',5,'p_do_loop','yacc.py',192),
+  ('DO_LOOP -> TkFor TkId TkIn E TkTo E TkArrow LIST_INSTRUCTIONS TkRof','DO_LOOP',9,'p_for_loop','yacc.py',199),
 ]

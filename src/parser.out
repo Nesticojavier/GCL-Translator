@@ -2,114 +2,126 @@ Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 
 Unused terminals:
 
-    TkAnd
-    TkArrow
-    TkAsig
-    TkCBracket
     TkClosePar
-    TkConcat
-    TkEqual
-    TkFalse
     TkFi
-    TkGeq
-    TkGreater
     TkGuard
-    TkIn
-    TkLeq
-    TkLess
-    TkMinus
-    TkMult
-    TkNEqual
-    TkNot
-    TkNum
-    TkOBracket
-    TkOd
+    TkIf
     TkOpenPar
-    TkOr
-    TkPlus
-    TkRof
     TkSkip
-    TkSoForth
-    TkString
-    TkTo
-    TkTrue
 
 Grammar
 
-Rule 0     S' -> B
-Rule 1     B -> TkOBlock DECLARE INSTRUCTIONS TkCBlock
+Rule 0     S' -> BLOCK
+Rule 1     BLOCK -> TkOBlock DECLARE LIST_INSTRUCTIONS TkCBlock
 Rule 2     DECLARE -> TkDeclare LIST_DECLARE
 Rule 3     LIST_DECLARE -> VARIABLE_DECLARATION
-Rule 4     LIST_DECLARE -> VARIABLE_DECLARATION TkSemicolon LIST_DECLARE
+Rule 4     LIST_DECLARE -> LIST_DECLARE TkSemicolon VARIABLE_DECLARATION
 Rule 5     VARIABLE_DECLARATION -> TkId TkTwoPoints TYPE
 Rule 6     VARIABLE_DECLARATION -> TkId TkComma VARIABLE_DECLARATION
 Rule 7     TYPE -> TkInt
 Rule 8     TYPE -> TkBool
-Rule 9     TYPE -> TkArray
-Rule 10    INSTRUCTIONS -> INSTRUCTION TkSemicolon INSTRUCTIONS
-Rule 11    INSTRUCTIONS -> INSTRUCTION
-Rule 12    INSTRUCTION -> TkFor
-Rule 13    INSTRUCTION -> TkIf
-Rule 14    INSTRUCTION -> TkDo
-Rule 15    INSTRUCTION -> TkPrint
-Rule 16    INSTRUCTION -> TkId
+Rule 9     TYPE -> ARRAY_DECLARATION
+Rule 10    ARRAY_DECLARATION -> TkArray TkOBracket TkNum TkSoForth TkNum TkCBracket
+Rule 11    LIST_INSTRUCTIONS -> INSTRUCTION
+Rule 12    LIST_INSTRUCTIONS -> LIST_INSTRUCTIONS TkSemicolon INSTRUCTION
+Rule 13    INSTRUCTION -> ASIG
+Rule 14    INSTRUCTION -> PRINT
+Rule 15    INSTRUCTION -> DO_LOOP
+Rule 16    ASIG -> TkId TkAsig E
+Rule 17    E -> E TkMult E
+Rule 18    E -> E TkPlus E
+Rule 19    E -> E TkMinus E
+Rule 20    E -> E TkOr E
+Rule 21    E -> E TkAnd E
+Rule 22    E -> E TkLess E
+Rule 23    E -> E TkLeq E
+Rule 24    E -> E TkGeq E
+Rule 25    E -> E TkGreater E
+Rule 26    E -> E TkEqual E
+Rule 27    E -> E TkNEqual E
+Rule 28    E -> TkNot E
+Rule 29    E -> TkMinus E
+Rule 30    E -> TkNum
+Rule 31    E -> TkId
+Rule 32    E -> TkTrue
+Rule 33    E -> TkFalse
+Rule 34    PRINT -> TkPrint TOPRINT
+Rule 35    TOPRINT -> EXPRESSION_TO_PRINT
+Rule 36    TOPRINT -> TOPRINT TkConcat EXPRESSION_TO_PRINT
+Rule 37    EXPRESSION_TO_PRINT -> TkId
+Rule 38    EXPRESSION_TO_PRINT -> TkString
+Rule 39    EXPRESSION_TO_PRINT -> TkNum
+Rule 40    EXPRESSION_TO_PRINT -> TkTrue
+Rule 41    EXPRESSION_TO_PRINT -> TkFalse
+Rule 42    EXPRESSION_TO_PRINT -> READ_ARRAY
+Rule 43    READ_ARRAY -> TkId TkOBracket E TkCBracket
+Rule 44    DO_LOOP -> TkDo E TkArrow LIST_INSTRUCTIONS TkOd
+Rule 45    DO_LOOP -> TkFor TkId TkIn E TkTo E TkArrow LIST_INSTRUCTIONS TkRof
 
 Terminals, with rules where they appear
 
-TkAnd                : 
-TkArray              : 9
-TkArrow              : 
-TkAsig               : 
+TkAnd                : 21
+TkArray              : 10
+TkArrow              : 44 45
+TkAsig               : 16
 TkBool               : 8
 TkCBlock             : 1
-TkCBracket           : 
+TkCBracket           : 10 43
 TkClosePar           : 
 TkComma              : 6
-TkConcat             : 
+TkConcat             : 36
 TkDeclare            : 2
-TkDo                 : 14
-TkEqual              : 
-TkFalse              : 
+TkDo                 : 44
+TkEqual              : 26
+TkFalse              : 33 41
 TkFi                 : 
-TkFor                : 12
-TkGeq                : 
-TkGreater            : 
+TkFor                : 45
+TkGeq                : 24
+TkGreater            : 25
 TkGuard              : 
-TkId                 : 5 6 16
-TkIf                 : 13
-TkIn                 : 
+TkId                 : 5 6 16 31 37 43 45
+TkIf                 : 
+TkIn                 : 45
 TkInt                : 7
-TkLeq                : 
-TkLess               : 
-TkMinus              : 
-TkMult               : 
-TkNEqual             : 
-TkNot                : 
-TkNum                : 
+TkLeq                : 23
+TkLess               : 22
+TkMinus              : 19 29
+TkMult               : 17
+TkNEqual             : 27
+TkNot                : 28
+TkNum                : 10 10 30 39
 TkOBlock             : 1
-TkOBracket           : 
-TkOd                 : 
+TkOBracket           : 10 43
+TkOd                 : 44
 TkOpenPar            : 
-TkOr                 : 
-TkPlus               : 
-TkPrint              : 15
-TkRof                : 
-TkSemicolon          : 4 10
+TkOr                 : 20
+TkPlus               : 18
+TkPrint              : 34
+TkRof                : 45
+TkSemicolon          : 4 12
 TkSkip               : 
-TkSoForth            : 
-TkString             : 
-TkTo                 : 
-TkTrue               : 
+TkSoForth            : 10
+TkString             : 38
+TkTo                 : 45
+TkTrue               : 32 40
 TkTwoPoints          : 5
 error                : 
 
 Nonterminals, with rules where they appear
 
-B                    : 0
+ARRAY_DECLARATION    : 9
+ASIG                 : 13
+BLOCK                : 0
 DECLARE              : 1
-INSTRUCTION          : 10 11
-INSTRUCTIONS         : 1 10
+DO_LOOP              : 15
+E                    : 16 17 17 18 18 19 19 20 20 21 21 22 22 23 23 24 24 25 25 26 26 27 27 28 29 43 44 45 45
+EXPRESSION_TO_PRINT  : 35 36
+INSTRUCTION          : 11 12
 LIST_DECLARE         : 2 4
+LIST_INSTRUCTIONS    : 1 12 44 45
+PRINT                : 14
+READ_ARRAY           : 42
+TOPRINT              : 34 36
 TYPE                 : 5
 VARIABLE_DECLARATION : 3 4 6
 
@@ -117,22 +129,22 @@ Parsing method: LALR
 
 state 0
 
-    (0) S' -> . B
-    (1) B -> . TkOBlock DECLARE INSTRUCTIONS TkCBlock
+    (0) S' -> . BLOCK
+    (1) BLOCK -> . TkOBlock DECLARE LIST_INSTRUCTIONS TkCBlock
 
     TkOBlock        shift and go to state 2
 
-    B                              shift and go to state 1
+    BLOCK                          shift and go to state 1
 
 state 1
 
-    (0) S' -> B .
+    (0) S' -> BLOCK .
 
 
 
 state 2
 
-    (1) B -> TkOBlock . DECLARE INSTRUCTIONS TkCBlock
+    (1) BLOCK -> TkOBlock . DECLARE LIST_INSTRUCTIONS TkCBlock
     (2) DECLARE -> . TkDeclare LIST_DECLARE
 
     TkDeclare       shift and go to state 4
@@ -141,263 +153,2250 @@ state 2
 
 state 3
 
-    (1) B -> TkOBlock DECLARE . INSTRUCTIONS TkCBlock
-    (10) INSTRUCTIONS -> . INSTRUCTION TkSemicolon INSTRUCTIONS
-    (11) INSTRUCTIONS -> . INSTRUCTION
-    (12) INSTRUCTION -> . TkFor
-    (13) INSTRUCTION -> . TkIf
-    (14) INSTRUCTION -> . TkDo
-    (15) INSTRUCTION -> . TkPrint
-    (16) INSTRUCTION -> . TkId
+    (1) BLOCK -> TkOBlock DECLARE . LIST_INSTRUCTIONS TkCBlock
+    (11) LIST_INSTRUCTIONS -> . INSTRUCTION
+    (12) LIST_INSTRUCTIONS -> . LIST_INSTRUCTIONS TkSemicolon INSTRUCTION
+    (13) INSTRUCTION -> . ASIG
+    (14) INSTRUCTION -> . PRINT
+    (15) INSTRUCTION -> . DO_LOOP
+    (16) ASIG -> . TkId TkAsig E
+    (34) PRINT -> . TkPrint TOPRINT
+    (44) DO_LOOP -> . TkDo E TkArrow LIST_INSTRUCTIONS TkOd
+    (45) DO_LOOP -> . TkFor TkId TkIn E TkTo E TkArrow LIST_INSTRUCTIONS TkRof
 
-    TkFor           shift and go to state 7
-    TkIf            shift and go to state 8
-    TkDo            shift and go to state 9
-    TkPrint         shift and go to state 10
-    TkId            shift and go to state 11
+    TkId            shift and go to state 10
+    TkPrint         shift and go to state 11
+    TkDo            shift and go to state 12
+    TkFor           shift and go to state 13
 
-    INSTRUCTIONS                   shift and go to state 5
+    LIST_INSTRUCTIONS              shift and go to state 5
     INSTRUCTION                    shift and go to state 6
+    ASIG                           shift and go to state 7
+    PRINT                          shift and go to state 8
+    DO_LOOP                        shift and go to state 9
 
 state 4
 
     (2) DECLARE -> TkDeclare . LIST_DECLARE
     (3) LIST_DECLARE -> . VARIABLE_DECLARATION
-    (4) LIST_DECLARE -> . VARIABLE_DECLARATION TkSemicolon LIST_DECLARE
+    (4) LIST_DECLARE -> . LIST_DECLARE TkSemicolon VARIABLE_DECLARATION
     (5) VARIABLE_DECLARATION -> . TkId TkTwoPoints TYPE
     (6) VARIABLE_DECLARATION -> . TkId TkComma VARIABLE_DECLARATION
 
-    TkId            shift and go to state 14
+    TkId            shift and go to state 16
 
-    LIST_DECLARE                   shift and go to state 12
-    VARIABLE_DECLARATION           shift and go to state 13
+    LIST_DECLARE                   shift and go to state 14
+    VARIABLE_DECLARATION           shift and go to state 15
 
 state 5
 
-    (1) B -> TkOBlock DECLARE INSTRUCTIONS . TkCBlock
+    (1) BLOCK -> TkOBlock DECLARE LIST_INSTRUCTIONS . TkCBlock
+    (12) LIST_INSTRUCTIONS -> LIST_INSTRUCTIONS . TkSemicolon INSTRUCTION
 
-    TkCBlock        shift and go to state 15
+    TkCBlock        shift and go to state 17
+    TkSemicolon     shift and go to state 18
 
 
 state 6
 
-    (10) INSTRUCTIONS -> INSTRUCTION . TkSemicolon INSTRUCTIONS
-    (11) INSTRUCTIONS -> INSTRUCTION .
+    (11) LIST_INSTRUCTIONS -> INSTRUCTION .
 
-    TkSemicolon     shift and go to state 16
-    TkCBlock        reduce using rule 11 (INSTRUCTIONS -> INSTRUCTION .)
+    TkCBlock        reduce using rule 11 (LIST_INSTRUCTIONS -> INSTRUCTION .)
+    TkSemicolon     reduce using rule 11 (LIST_INSTRUCTIONS -> INSTRUCTION .)
+    TkOd            reduce using rule 11 (LIST_INSTRUCTIONS -> INSTRUCTION .)
+    TkRof           reduce using rule 11 (LIST_INSTRUCTIONS -> INSTRUCTION .)
 
 
 state 7
 
-    (12) INSTRUCTION -> TkFor .
+    (13) INSTRUCTION -> ASIG .
 
-    TkSemicolon     reduce using rule 12 (INSTRUCTION -> TkFor .)
-    TkCBlock        reduce using rule 12 (INSTRUCTION -> TkFor .)
+    TkCBlock        reduce using rule 13 (INSTRUCTION -> ASIG .)
+    TkSemicolon     reduce using rule 13 (INSTRUCTION -> ASIG .)
+    TkOd            reduce using rule 13 (INSTRUCTION -> ASIG .)
+    TkRof           reduce using rule 13 (INSTRUCTION -> ASIG .)
 
 
 state 8
 
-    (13) INSTRUCTION -> TkIf .
+    (14) INSTRUCTION -> PRINT .
 
-    TkSemicolon     reduce using rule 13 (INSTRUCTION -> TkIf .)
-    TkCBlock        reduce using rule 13 (INSTRUCTION -> TkIf .)
+    TkCBlock        reduce using rule 14 (INSTRUCTION -> PRINT .)
+    TkSemicolon     reduce using rule 14 (INSTRUCTION -> PRINT .)
+    TkOd            reduce using rule 14 (INSTRUCTION -> PRINT .)
+    TkRof           reduce using rule 14 (INSTRUCTION -> PRINT .)
 
 
 state 9
 
-    (14) INSTRUCTION -> TkDo .
+    (15) INSTRUCTION -> DO_LOOP .
 
-    TkSemicolon     reduce using rule 14 (INSTRUCTION -> TkDo .)
-    TkCBlock        reduce using rule 14 (INSTRUCTION -> TkDo .)
+    TkCBlock        reduce using rule 15 (INSTRUCTION -> DO_LOOP .)
+    TkSemicolon     reduce using rule 15 (INSTRUCTION -> DO_LOOP .)
+    TkOd            reduce using rule 15 (INSTRUCTION -> DO_LOOP .)
+    TkRof           reduce using rule 15 (INSTRUCTION -> DO_LOOP .)
 
 
 state 10
 
-    (15) INSTRUCTION -> TkPrint .
+    (16) ASIG -> TkId . TkAsig E
 
-    TkSemicolon     reduce using rule 15 (INSTRUCTION -> TkPrint .)
-    TkCBlock        reduce using rule 15 (INSTRUCTION -> TkPrint .)
+    TkAsig          shift and go to state 19
 
 
 state 11
 
-    (16) INSTRUCTION -> TkId .
+    (34) PRINT -> TkPrint . TOPRINT
+    (35) TOPRINT -> . EXPRESSION_TO_PRINT
+    (36) TOPRINT -> . TOPRINT TkConcat EXPRESSION_TO_PRINT
+    (37) EXPRESSION_TO_PRINT -> . TkId
+    (38) EXPRESSION_TO_PRINT -> . TkString
+    (39) EXPRESSION_TO_PRINT -> . TkNum
+    (40) EXPRESSION_TO_PRINT -> . TkTrue
+    (41) EXPRESSION_TO_PRINT -> . TkFalse
+    (42) EXPRESSION_TO_PRINT -> . READ_ARRAY
+    (43) READ_ARRAY -> . TkId TkOBracket E TkCBracket
 
-    TkSemicolon     reduce using rule 16 (INSTRUCTION -> TkId .)
-    TkCBlock        reduce using rule 16 (INSTRUCTION -> TkId .)
+    TkId            shift and go to state 22
+    TkString        shift and go to state 23
+    TkNum           shift and go to state 24
+    TkTrue          shift and go to state 25
+    TkFalse         shift and go to state 26
 
+    TOPRINT                        shift and go to state 20
+    EXPRESSION_TO_PRINT            shift and go to state 21
+    READ_ARRAY                     shift and go to state 27
 
 state 12
 
-    (2) DECLARE -> TkDeclare LIST_DECLARE .
+    (44) DO_LOOP -> TkDo . E TkArrow LIST_INSTRUCTIONS TkOd
+    (17) E -> . E TkMult E
+    (18) E -> . E TkPlus E
+    (19) E -> . E TkMinus E
+    (20) E -> . E TkOr E
+    (21) E -> . E TkAnd E
+    (22) E -> . E TkLess E
+    (23) E -> . E TkLeq E
+    (24) E -> . E TkGeq E
+    (25) E -> . E TkGreater E
+    (26) E -> . E TkEqual E
+    (27) E -> . E TkNEqual E
+    (28) E -> . TkNot E
+    (29) E -> . TkMinus E
+    (30) E -> . TkNum
+    (31) E -> . TkId
+    (32) E -> . TkTrue
+    (33) E -> . TkFalse
 
-    TkFor           reduce using rule 2 (DECLARE -> TkDeclare LIST_DECLARE .)
-    TkIf            reduce using rule 2 (DECLARE -> TkDeclare LIST_DECLARE .)
-    TkDo            reduce using rule 2 (DECLARE -> TkDeclare LIST_DECLARE .)
-    TkPrint         reduce using rule 2 (DECLARE -> TkDeclare LIST_DECLARE .)
-    TkId            reduce using rule 2 (DECLARE -> TkDeclare LIST_DECLARE .)
+    TkNot           shift and go to state 30
+    TkMinus         shift and go to state 29
+    TkNum           shift and go to state 31
+    TkId            shift and go to state 32
+    TkTrue          shift and go to state 33
+    TkFalse         shift and go to state 34
 
+    E                              shift and go to state 28
 
 state 13
 
-    (3) LIST_DECLARE -> VARIABLE_DECLARATION .
-    (4) LIST_DECLARE -> VARIABLE_DECLARATION . TkSemicolon LIST_DECLARE
+    (45) DO_LOOP -> TkFor . TkId TkIn E TkTo E TkArrow LIST_INSTRUCTIONS TkRof
 
-    TkFor           reduce using rule 3 (LIST_DECLARE -> VARIABLE_DECLARATION .)
-    TkIf            reduce using rule 3 (LIST_DECLARE -> VARIABLE_DECLARATION .)
-    TkDo            reduce using rule 3 (LIST_DECLARE -> VARIABLE_DECLARATION .)
-    TkPrint         reduce using rule 3 (LIST_DECLARE -> VARIABLE_DECLARATION .)
-    TkId            reduce using rule 3 (LIST_DECLARE -> VARIABLE_DECLARATION .)
-    TkSemicolon     shift and go to state 17
+    TkId            shift and go to state 35
 
 
 state 14
 
-    (5) VARIABLE_DECLARATION -> TkId . TkTwoPoints TYPE
-    (6) VARIABLE_DECLARATION -> TkId . TkComma VARIABLE_DECLARATION
+    (2) DECLARE -> TkDeclare LIST_DECLARE .
+    (4) LIST_DECLARE -> LIST_DECLARE . TkSemicolon VARIABLE_DECLARATION
 
-    TkTwoPoints     shift and go to state 18
-    TkComma         shift and go to state 19
+    TkId            reduce using rule 2 (DECLARE -> TkDeclare LIST_DECLARE .)
+    TkPrint         reduce using rule 2 (DECLARE -> TkDeclare LIST_DECLARE .)
+    TkDo            reduce using rule 2 (DECLARE -> TkDeclare LIST_DECLARE .)
+    TkFor           reduce using rule 2 (DECLARE -> TkDeclare LIST_DECLARE .)
+    TkSemicolon     shift and go to state 36
 
 
 state 15
 
-    (1) B -> TkOBlock DECLARE INSTRUCTIONS TkCBlock .
+    (3) LIST_DECLARE -> VARIABLE_DECLARATION .
 
-    $end            reduce using rule 1 (B -> TkOBlock DECLARE INSTRUCTIONS TkCBlock .)
+    TkSemicolon     reduce using rule 3 (LIST_DECLARE -> VARIABLE_DECLARATION .)
+    TkId            reduce using rule 3 (LIST_DECLARE -> VARIABLE_DECLARATION .)
+    TkPrint         reduce using rule 3 (LIST_DECLARE -> VARIABLE_DECLARATION .)
+    TkDo            reduce using rule 3 (LIST_DECLARE -> VARIABLE_DECLARATION .)
+    TkFor           reduce using rule 3 (LIST_DECLARE -> VARIABLE_DECLARATION .)
 
 
 state 16
 
-    (10) INSTRUCTIONS -> INSTRUCTION TkSemicolon . INSTRUCTIONS
-    (10) INSTRUCTIONS -> . INSTRUCTION TkSemicolon INSTRUCTIONS
-    (11) INSTRUCTIONS -> . INSTRUCTION
-    (12) INSTRUCTION -> . TkFor
-    (13) INSTRUCTION -> . TkIf
-    (14) INSTRUCTION -> . TkDo
-    (15) INSTRUCTION -> . TkPrint
-    (16) INSTRUCTION -> . TkId
+    (5) VARIABLE_DECLARATION -> TkId . TkTwoPoints TYPE
+    (6) VARIABLE_DECLARATION -> TkId . TkComma VARIABLE_DECLARATION
 
-    TkFor           shift and go to state 7
-    TkIf            shift and go to state 8
-    TkDo            shift and go to state 9
-    TkPrint         shift and go to state 10
-    TkId            shift and go to state 11
+    TkTwoPoints     shift and go to state 37
+    TkComma         shift and go to state 38
 
-    INSTRUCTION                    shift and go to state 6
-    INSTRUCTIONS                   shift and go to state 20
 
 state 17
 
-    (4) LIST_DECLARE -> VARIABLE_DECLARATION TkSemicolon . LIST_DECLARE
-    (3) LIST_DECLARE -> . VARIABLE_DECLARATION
-    (4) LIST_DECLARE -> . VARIABLE_DECLARATION TkSemicolon LIST_DECLARE
+    (1) BLOCK -> TkOBlock DECLARE LIST_INSTRUCTIONS TkCBlock .
+
+    $end            reduce using rule 1 (BLOCK -> TkOBlock DECLARE LIST_INSTRUCTIONS TkCBlock .)
+
+
+state 18
+
+    (12) LIST_INSTRUCTIONS -> LIST_INSTRUCTIONS TkSemicolon . INSTRUCTION
+    (13) INSTRUCTION -> . ASIG
+    (14) INSTRUCTION -> . PRINT
+    (15) INSTRUCTION -> . DO_LOOP
+    (16) ASIG -> . TkId TkAsig E
+    (34) PRINT -> . TkPrint TOPRINT
+    (44) DO_LOOP -> . TkDo E TkArrow LIST_INSTRUCTIONS TkOd
+    (45) DO_LOOP -> . TkFor TkId TkIn E TkTo E TkArrow LIST_INSTRUCTIONS TkRof
+
+    TkId            shift and go to state 10
+    TkPrint         shift and go to state 11
+    TkDo            shift and go to state 12
+    TkFor           shift and go to state 13
+
+    INSTRUCTION                    shift and go to state 39
+    ASIG                           shift and go to state 7
+    PRINT                          shift and go to state 8
+    DO_LOOP                        shift and go to state 9
+
+state 19
+
+    (16) ASIG -> TkId TkAsig . E
+    (17) E -> . E TkMult E
+    (18) E -> . E TkPlus E
+    (19) E -> . E TkMinus E
+    (20) E -> . E TkOr E
+    (21) E -> . E TkAnd E
+    (22) E -> . E TkLess E
+    (23) E -> . E TkLeq E
+    (24) E -> . E TkGeq E
+    (25) E -> . E TkGreater E
+    (26) E -> . E TkEqual E
+    (27) E -> . E TkNEqual E
+    (28) E -> . TkNot E
+    (29) E -> . TkMinus E
+    (30) E -> . TkNum
+    (31) E -> . TkId
+    (32) E -> . TkTrue
+    (33) E -> . TkFalse
+
+    TkNot           shift and go to state 30
+    TkMinus         shift and go to state 29
+    TkNum           shift and go to state 31
+    TkId            shift and go to state 32
+    TkTrue          shift and go to state 33
+    TkFalse         shift and go to state 34
+
+    E                              shift and go to state 40
+
+state 20
+
+    (34) PRINT -> TkPrint TOPRINT .
+    (36) TOPRINT -> TOPRINT . TkConcat EXPRESSION_TO_PRINT
+
+    TkCBlock        reduce using rule 34 (PRINT -> TkPrint TOPRINT .)
+    TkSemicolon     reduce using rule 34 (PRINT -> TkPrint TOPRINT .)
+    TkOd            reduce using rule 34 (PRINT -> TkPrint TOPRINT .)
+    TkRof           reduce using rule 34 (PRINT -> TkPrint TOPRINT .)
+    TkConcat        shift and go to state 41
+
+
+state 21
+
+    (35) TOPRINT -> EXPRESSION_TO_PRINT .
+
+    TkConcat        reduce using rule 35 (TOPRINT -> EXPRESSION_TO_PRINT .)
+    TkCBlock        reduce using rule 35 (TOPRINT -> EXPRESSION_TO_PRINT .)
+    TkSemicolon     reduce using rule 35 (TOPRINT -> EXPRESSION_TO_PRINT .)
+    TkOd            reduce using rule 35 (TOPRINT -> EXPRESSION_TO_PRINT .)
+    TkRof           reduce using rule 35 (TOPRINT -> EXPRESSION_TO_PRINT .)
+
+
+state 22
+
+    (37) EXPRESSION_TO_PRINT -> TkId .
+    (43) READ_ARRAY -> TkId . TkOBracket E TkCBracket
+
+    TkConcat        reduce using rule 37 (EXPRESSION_TO_PRINT -> TkId .)
+    TkCBlock        reduce using rule 37 (EXPRESSION_TO_PRINT -> TkId .)
+    TkSemicolon     reduce using rule 37 (EXPRESSION_TO_PRINT -> TkId .)
+    TkOd            reduce using rule 37 (EXPRESSION_TO_PRINT -> TkId .)
+    TkRof           reduce using rule 37 (EXPRESSION_TO_PRINT -> TkId .)
+    TkOBracket      shift and go to state 42
+
+
+state 23
+
+    (38) EXPRESSION_TO_PRINT -> TkString .
+
+    TkConcat        reduce using rule 38 (EXPRESSION_TO_PRINT -> TkString .)
+    TkCBlock        reduce using rule 38 (EXPRESSION_TO_PRINT -> TkString .)
+    TkSemicolon     reduce using rule 38 (EXPRESSION_TO_PRINT -> TkString .)
+    TkOd            reduce using rule 38 (EXPRESSION_TO_PRINT -> TkString .)
+    TkRof           reduce using rule 38 (EXPRESSION_TO_PRINT -> TkString .)
+
+
+state 24
+
+    (39) EXPRESSION_TO_PRINT -> TkNum .
+
+    TkConcat        reduce using rule 39 (EXPRESSION_TO_PRINT -> TkNum .)
+    TkCBlock        reduce using rule 39 (EXPRESSION_TO_PRINT -> TkNum .)
+    TkSemicolon     reduce using rule 39 (EXPRESSION_TO_PRINT -> TkNum .)
+    TkOd            reduce using rule 39 (EXPRESSION_TO_PRINT -> TkNum .)
+    TkRof           reduce using rule 39 (EXPRESSION_TO_PRINT -> TkNum .)
+
+
+state 25
+
+    (40) EXPRESSION_TO_PRINT -> TkTrue .
+
+    TkConcat        reduce using rule 40 (EXPRESSION_TO_PRINT -> TkTrue .)
+    TkCBlock        reduce using rule 40 (EXPRESSION_TO_PRINT -> TkTrue .)
+    TkSemicolon     reduce using rule 40 (EXPRESSION_TO_PRINT -> TkTrue .)
+    TkOd            reduce using rule 40 (EXPRESSION_TO_PRINT -> TkTrue .)
+    TkRof           reduce using rule 40 (EXPRESSION_TO_PRINT -> TkTrue .)
+
+
+state 26
+
+    (41) EXPRESSION_TO_PRINT -> TkFalse .
+
+    TkConcat        reduce using rule 41 (EXPRESSION_TO_PRINT -> TkFalse .)
+    TkCBlock        reduce using rule 41 (EXPRESSION_TO_PRINT -> TkFalse .)
+    TkSemicolon     reduce using rule 41 (EXPRESSION_TO_PRINT -> TkFalse .)
+    TkOd            reduce using rule 41 (EXPRESSION_TO_PRINT -> TkFalse .)
+    TkRof           reduce using rule 41 (EXPRESSION_TO_PRINT -> TkFalse .)
+
+
+state 27
+
+    (42) EXPRESSION_TO_PRINT -> READ_ARRAY .
+
+    TkConcat        reduce using rule 42 (EXPRESSION_TO_PRINT -> READ_ARRAY .)
+    TkCBlock        reduce using rule 42 (EXPRESSION_TO_PRINT -> READ_ARRAY .)
+    TkSemicolon     reduce using rule 42 (EXPRESSION_TO_PRINT -> READ_ARRAY .)
+    TkOd            reduce using rule 42 (EXPRESSION_TO_PRINT -> READ_ARRAY .)
+    TkRof           reduce using rule 42 (EXPRESSION_TO_PRINT -> READ_ARRAY .)
+
+
+state 28
+
+    (44) DO_LOOP -> TkDo E . TkArrow LIST_INSTRUCTIONS TkOd
+    (17) E -> E . TkMult E
+    (18) E -> E . TkPlus E
+    (19) E -> E . TkMinus E
+    (20) E -> E . TkOr E
+    (21) E -> E . TkAnd E
+    (22) E -> E . TkLess E
+    (23) E -> E . TkLeq E
+    (24) E -> E . TkGeq E
+    (25) E -> E . TkGreater E
+    (26) E -> E . TkEqual E
+    (27) E -> E . TkNEqual E
+
+    TkArrow         shift and go to state 43
+    TkMult          shift and go to state 44
+    TkPlus          shift and go to state 45
+    TkMinus         shift and go to state 46
+    TkOr            shift and go to state 47
+    TkAnd           shift and go to state 48
+    TkLess          shift and go to state 49
+    TkLeq           shift and go to state 50
+    TkGeq           shift and go to state 51
+    TkGreater       shift and go to state 52
+    TkEqual         shift and go to state 53
+    TkNEqual        shift and go to state 54
+
+
+state 29
+
+    (29) E -> TkMinus . E
+    (17) E -> . E TkMult E
+    (18) E -> . E TkPlus E
+    (19) E -> . E TkMinus E
+    (20) E -> . E TkOr E
+    (21) E -> . E TkAnd E
+    (22) E -> . E TkLess E
+    (23) E -> . E TkLeq E
+    (24) E -> . E TkGeq E
+    (25) E -> . E TkGreater E
+    (26) E -> . E TkEqual E
+    (27) E -> . E TkNEqual E
+    (28) E -> . TkNot E
+    (29) E -> . TkMinus E
+    (30) E -> . TkNum
+    (31) E -> . TkId
+    (32) E -> . TkTrue
+    (33) E -> . TkFalse
+
+    TkNot           shift and go to state 30
+    TkMinus         shift and go to state 29
+    TkNum           shift and go to state 31
+    TkId            shift and go to state 32
+    TkTrue          shift and go to state 33
+    TkFalse         shift and go to state 34
+
+    E                              shift and go to state 55
+
+state 30
+
+    (28) E -> TkNot . E
+    (17) E -> . E TkMult E
+    (18) E -> . E TkPlus E
+    (19) E -> . E TkMinus E
+    (20) E -> . E TkOr E
+    (21) E -> . E TkAnd E
+    (22) E -> . E TkLess E
+    (23) E -> . E TkLeq E
+    (24) E -> . E TkGeq E
+    (25) E -> . E TkGreater E
+    (26) E -> . E TkEqual E
+    (27) E -> . E TkNEqual E
+    (28) E -> . TkNot E
+    (29) E -> . TkMinus E
+    (30) E -> . TkNum
+    (31) E -> . TkId
+    (32) E -> . TkTrue
+    (33) E -> . TkFalse
+
+    TkNot           shift and go to state 30
+    TkMinus         shift and go to state 29
+    TkNum           shift and go to state 31
+    TkId            shift and go to state 32
+    TkTrue          shift and go to state 33
+    TkFalse         shift and go to state 34
+
+    E                              shift and go to state 56
+
+state 31
+
+    (30) E -> TkNum .
+
+    TkArrow         reduce using rule 30 (E -> TkNum .)
+    TkMult          reduce using rule 30 (E -> TkNum .)
+    TkPlus          reduce using rule 30 (E -> TkNum .)
+    TkMinus         reduce using rule 30 (E -> TkNum .)
+    TkOr            reduce using rule 30 (E -> TkNum .)
+    TkAnd           reduce using rule 30 (E -> TkNum .)
+    TkLess          reduce using rule 30 (E -> TkNum .)
+    TkLeq           reduce using rule 30 (E -> TkNum .)
+    TkGeq           reduce using rule 30 (E -> TkNum .)
+    TkGreater       reduce using rule 30 (E -> TkNum .)
+    TkEqual         reduce using rule 30 (E -> TkNum .)
+    TkNEqual        reduce using rule 30 (E -> TkNum .)
+    TkCBlock        reduce using rule 30 (E -> TkNum .)
+    TkSemicolon     reduce using rule 30 (E -> TkNum .)
+    TkOd            reduce using rule 30 (E -> TkNum .)
+    TkRof           reduce using rule 30 (E -> TkNum .)
+    TkCBracket      reduce using rule 30 (E -> TkNum .)
+    TkTo            reduce using rule 30 (E -> TkNum .)
+
+
+state 32
+
+    (31) E -> TkId .
+
+    TkArrow         reduce using rule 31 (E -> TkId .)
+    TkMult          reduce using rule 31 (E -> TkId .)
+    TkPlus          reduce using rule 31 (E -> TkId .)
+    TkMinus         reduce using rule 31 (E -> TkId .)
+    TkOr            reduce using rule 31 (E -> TkId .)
+    TkAnd           reduce using rule 31 (E -> TkId .)
+    TkLess          reduce using rule 31 (E -> TkId .)
+    TkLeq           reduce using rule 31 (E -> TkId .)
+    TkGeq           reduce using rule 31 (E -> TkId .)
+    TkGreater       reduce using rule 31 (E -> TkId .)
+    TkEqual         reduce using rule 31 (E -> TkId .)
+    TkNEqual        reduce using rule 31 (E -> TkId .)
+    TkCBlock        reduce using rule 31 (E -> TkId .)
+    TkSemicolon     reduce using rule 31 (E -> TkId .)
+    TkOd            reduce using rule 31 (E -> TkId .)
+    TkRof           reduce using rule 31 (E -> TkId .)
+    TkCBracket      reduce using rule 31 (E -> TkId .)
+    TkTo            reduce using rule 31 (E -> TkId .)
+
+
+state 33
+
+    (32) E -> TkTrue .
+
+    TkArrow         reduce using rule 32 (E -> TkTrue .)
+    TkMult          reduce using rule 32 (E -> TkTrue .)
+    TkPlus          reduce using rule 32 (E -> TkTrue .)
+    TkMinus         reduce using rule 32 (E -> TkTrue .)
+    TkOr            reduce using rule 32 (E -> TkTrue .)
+    TkAnd           reduce using rule 32 (E -> TkTrue .)
+    TkLess          reduce using rule 32 (E -> TkTrue .)
+    TkLeq           reduce using rule 32 (E -> TkTrue .)
+    TkGeq           reduce using rule 32 (E -> TkTrue .)
+    TkGreater       reduce using rule 32 (E -> TkTrue .)
+    TkEqual         reduce using rule 32 (E -> TkTrue .)
+    TkNEqual        reduce using rule 32 (E -> TkTrue .)
+    TkCBlock        reduce using rule 32 (E -> TkTrue .)
+    TkSemicolon     reduce using rule 32 (E -> TkTrue .)
+    TkOd            reduce using rule 32 (E -> TkTrue .)
+    TkRof           reduce using rule 32 (E -> TkTrue .)
+    TkCBracket      reduce using rule 32 (E -> TkTrue .)
+    TkTo            reduce using rule 32 (E -> TkTrue .)
+
+
+state 34
+
+    (33) E -> TkFalse .
+
+    TkArrow         reduce using rule 33 (E -> TkFalse .)
+    TkMult          reduce using rule 33 (E -> TkFalse .)
+    TkPlus          reduce using rule 33 (E -> TkFalse .)
+    TkMinus         reduce using rule 33 (E -> TkFalse .)
+    TkOr            reduce using rule 33 (E -> TkFalse .)
+    TkAnd           reduce using rule 33 (E -> TkFalse .)
+    TkLess          reduce using rule 33 (E -> TkFalse .)
+    TkLeq           reduce using rule 33 (E -> TkFalse .)
+    TkGeq           reduce using rule 33 (E -> TkFalse .)
+    TkGreater       reduce using rule 33 (E -> TkFalse .)
+    TkEqual         reduce using rule 33 (E -> TkFalse .)
+    TkNEqual        reduce using rule 33 (E -> TkFalse .)
+    TkCBlock        reduce using rule 33 (E -> TkFalse .)
+    TkSemicolon     reduce using rule 33 (E -> TkFalse .)
+    TkOd            reduce using rule 33 (E -> TkFalse .)
+    TkRof           reduce using rule 33 (E -> TkFalse .)
+    TkCBracket      reduce using rule 33 (E -> TkFalse .)
+    TkTo            reduce using rule 33 (E -> TkFalse .)
+
+
+state 35
+
+    (45) DO_LOOP -> TkFor TkId . TkIn E TkTo E TkArrow LIST_INSTRUCTIONS TkRof
+
+    TkIn            shift and go to state 57
+
+
+state 36
+
+    (4) LIST_DECLARE -> LIST_DECLARE TkSemicolon . VARIABLE_DECLARATION
     (5) VARIABLE_DECLARATION -> . TkId TkTwoPoints TYPE
     (6) VARIABLE_DECLARATION -> . TkId TkComma VARIABLE_DECLARATION
 
-    TkId            shift and go to state 14
+    TkId            shift and go to state 16
 
-    VARIABLE_DECLARATION           shift and go to state 13
-    LIST_DECLARE                   shift and go to state 21
+    VARIABLE_DECLARATION           shift and go to state 58
 
-state 18
+state 37
 
     (5) VARIABLE_DECLARATION -> TkId TkTwoPoints . TYPE
     (7) TYPE -> . TkInt
     (8) TYPE -> . TkBool
-    (9) TYPE -> . TkArray
+    (9) TYPE -> . ARRAY_DECLARATION
+    (10) ARRAY_DECLARATION -> . TkArray TkOBracket TkNum TkSoForth TkNum TkCBracket
 
-    TkInt           shift and go to state 23
-    TkBool          shift and go to state 24
-    TkArray         shift and go to state 25
+    TkInt           shift and go to state 60
+    TkBool          shift and go to state 61
+    TkArray         shift and go to state 63
 
-    TYPE                           shift and go to state 22
+    TYPE                           shift and go to state 59
+    ARRAY_DECLARATION              shift and go to state 62
 
-state 19
+state 38
 
     (6) VARIABLE_DECLARATION -> TkId TkComma . VARIABLE_DECLARATION
     (5) VARIABLE_DECLARATION -> . TkId TkTwoPoints TYPE
     (6) VARIABLE_DECLARATION -> . TkId TkComma VARIABLE_DECLARATION
 
-    TkId            shift and go to state 14
+    TkId            shift and go to state 16
 
-    VARIABLE_DECLARATION           shift and go to state 26
+    VARIABLE_DECLARATION           shift and go to state 64
 
-state 20
+state 39
 
-    (10) INSTRUCTIONS -> INSTRUCTION TkSemicolon INSTRUCTIONS .
+    (12) LIST_INSTRUCTIONS -> LIST_INSTRUCTIONS TkSemicolon INSTRUCTION .
 
-    TkCBlock        reduce using rule 10 (INSTRUCTIONS -> INSTRUCTION TkSemicolon INSTRUCTIONS .)
-
-
-state 21
-
-    (4) LIST_DECLARE -> VARIABLE_DECLARATION TkSemicolon LIST_DECLARE .
-
-    TkFor           reduce using rule 4 (LIST_DECLARE -> VARIABLE_DECLARATION TkSemicolon LIST_DECLARE .)
-    TkIf            reduce using rule 4 (LIST_DECLARE -> VARIABLE_DECLARATION TkSemicolon LIST_DECLARE .)
-    TkDo            reduce using rule 4 (LIST_DECLARE -> VARIABLE_DECLARATION TkSemicolon LIST_DECLARE .)
-    TkPrint         reduce using rule 4 (LIST_DECLARE -> VARIABLE_DECLARATION TkSemicolon LIST_DECLARE .)
-    TkId            reduce using rule 4 (LIST_DECLARE -> VARIABLE_DECLARATION TkSemicolon LIST_DECLARE .)
+    TkCBlock        reduce using rule 12 (LIST_INSTRUCTIONS -> LIST_INSTRUCTIONS TkSemicolon INSTRUCTION .)
+    TkSemicolon     reduce using rule 12 (LIST_INSTRUCTIONS -> LIST_INSTRUCTIONS TkSemicolon INSTRUCTION .)
+    TkOd            reduce using rule 12 (LIST_INSTRUCTIONS -> LIST_INSTRUCTIONS TkSemicolon INSTRUCTION .)
+    TkRof           reduce using rule 12 (LIST_INSTRUCTIONS -> LIST_INSTRUCTIONS TkSemicolon INSTRUCTION .)
 
 
-state 22
+state 40
+
+    (16) ASIG -> TkId TkAsig E .
+    (17) E -> E . TkMult E
+    (18) E -> E . TkPlus E
+    (19) E -> E . TkMinus E
+    (20) E -> E . TkOr E
+    (21) E -> E . TkAnd E
+    (22) E -> E . TkLess E
+    (23) E -> E . TkLeq E
+    (24) E -> E . TkGeq E
+    (25) E -> E . TkGreater E
+    (26) E -> E . TkEqual E
+    (27) E -> E . TkNEqual E
+
+    TkCBlock        reduce using rule 16 (ASIG -> TkId TkAsig E .)
+    TkSemicolon     reduce using rule 16 (ASIG -> TkId TkAsig E .)
+    TkOd            reduce using rule 16 (ASIG -> TkId TkAsig E .)
+    TkRof           reduce using rule 16 (ASIG -> TkId TkAsig E .)
+    TkMult          shift and go to state 44
+    TkPlus          shift and go to state 45
+    TkMinus         shift and go to state 46
+    TkOr            shift and go to state 47
+    TkAnd           shift and go to state 48
+    TkLess          shift and go to state 49
+    TkLeq           shift and go to state 50
+    TkGeq           shift and go to state 51
+    TkGreater       shift and go to state 52
+    TkEqual         shift and go to state 53
+    TkNEqual        shift and go to state 54
+
+
+state 41
+
+    (36) TOPRINT -> TOPRINT TkConcat . EXPRESSION_TO_PRINT
+    (37) EXPRESSION_TO_PRINT -> . TkId
+    (38) EXPRESSION_TO_PRINT -> . TkString
+    (39) EXPRESSION_TO_PRINT -> . TkNum
+    (40) EXPRESSION_TO_PRINT -> . TkTrue
+    (41) EXPRESSION_TO_PRINT -> . TkFalse
+    (42) EXPRESSION_TO_PRINT -> . READ_ARRAY
+    (43) READ_ARRAY -> . TkId TkOBracket E TkCBracket
+
+    TkId            shift and go to state 22
+    TkString        shift and go to state 23
+    TkNum           shift and go to state 24
+    TkTrue          shift and go to state 25
+    TkFalse         shift and go to state 26
+
+    EXPRESSION_TO_PRINT            shift and go to state 65
+    READ_ARRAY                     shift and go to state 27
+
+state 42
+
+    (43) READ_ARRAY -> TkId TkOBracket . E TkCBracket
+    (17) E -> . E TkMult E
+    (18) E -> . E TkPlus E
+    (19) E -> . E TkMinus E
+    (20) E -> . E TkOr E
+    (21) E -> . E TkAnd E
+    (22) E -> . E TkLess E
+    (23) E -> . E TkLeq E
+    (24) E -> . E TkGeq E
+    (25) E -> . E TkGreater E
+    (26) E -> . E TkEqual E
+    (27) E -> . E TkNEqual E
+    (28) E -> . TkNot E
+    (29) E -> . TkMinus E
+    (30) E -> . TkNum
+    (31) E -> . TkId
+    (32) E -> . TkTrue
+    (33) E -> . TkFalse
+
+    TkNot           shift and go to state 30
+    TkMinus         shift and go to state 29
+    TkNum           shift and go to state 31
+    TkId            shift and go to state 32
+    TkTrue          shift and go to state 33
+    TkFalse         shift and go to state 34
+
+    E                              shift and go to state 66
+
+state 43
+
+    (44) DO_LOOP -> TkDo E TkArrow . LIST_INSTRUCTIONS TkOd
+    (11) LIST_INSTRUCTIONS -> . INSTRUCTION
+    (12) LIST_INSTRUCTIONS -> . LIST_INSTRUCTIONS TkSemicolon INSTRUCTION
+    (13) INSTRUCTION -> . ASIG
+    (14) INSTRUCTION -> . PRINT
+    (15) INSTRUCTION -> . DO_LOOP
+    (16) ASIG -> . TkId TkAsig E
+    (34) PRINT -> . TkPrint TOPRINT
+    (44) DO_LOOP -> . TkDo E TkArrow LIST_INSTRUCTIONS TkOd
+    (45) DO_LOOP -> . TkFor TkId TkIn E TkTo E TkArrow LIST_INSTRUCTIONS TkRof
+
+    TkId            shift and go to state 10
+    TkPrint         shift and go to state 11
+    TkDo            shift and go to state 12
+    TkFor           shift and go to state 13
+
+    LIST_INSTRUCTIONS              shift and go to state 67
+    INSTRUCTION                    shift and go to state 6
+    ASIG                           shift and go to state 7
+    PRINT                          shift and go to state 8
+    DO_LOOP                        shift and go to state 9
+
+state 44
+
+    (17) E -> E TkMult . E
+    (17) E -> . E TkMult E
+    (18) E -> . E TkPlus E
+    (19) E -> . E TkMinus E
+    (20) E -> . E TkOr E
+    (21) E -> . E TkAnd E
+    (22) E -> . E TkLess E
+    (23) E -> . E TkLeq E
+    (24) E -> . E TkGeq E
+    (25) E -> . E TkGreater E
+    (26) E -> . E TkEqual E
+    (27) E -> . E TkNEqual E
+    (28) E -> . TkNot E
+    (29) E -> . TkMinus E
+    (30) E -> . TkNum
+    (31) E -> . TkId
+    (32) E -> . TkTrue
+    (33) E -> . TkFalse
+
+    TkNot           shift and go to state 30
+    TkMinus         shift and go to state 29
+    TkNum           shift and go to state 31
+    TkId            shift and go to state 32
+    TkTrue          shift and go to state 33
+    TkFalse         shift and go to state 34
+
+    E                              shift and go to state 68
+
+state 45
+
+    (18) E -> E TkPlus . E
+    (17) E -> . E TkMult E
+    (18) E -> . E TkPlus E
+    (19) E -> . E TkMinus E
+    (20) E -> . E TkOr E
+    (21) E -> . E TkAnd E
+    (22) E -> . E TkLess E
+    (23) E -> . E TkLeq E
+    (24) E -> . E TkGeq E
+    (25) E -> . E TkGreater E
+    (26) E -> . E TkEqual E
+    (27) E -> . E TkNEqual E
+    (28) E -> . TkNot E
+    (29) E -> . TkMinus E
+    (30) E -> . TkNum
+    (31) E -> . TkId
+    (32) E -> . TkTrue
+    (33) E -> . TkFalse
+
+    TkNot           shift and go to state 30
+    TkMinus         shift and go to state 29
+    TkNum           shift and go to state 31
+    TkId            shift and go to state 32
+    TkTrue          shift and go to state 33
+    TkFalse         shift and go to state 34
+
+    E                              shift and go to state 69
+
+state 46
+
+    (19) E -> E TkMinus . E
+    (17) E -> . E TkMult E
+    (18) E -> . E TkPlus E
+    (19) E -> . E TkMinus E
+    (20) E -> . E TkOr E
+    (21) E -> . E TkAnd E
+    (22) E -> . E TkLess E
+    (23) E -> . E TkLeq E
+    (24) E -> . E TkGeq E
+    (25) E -> . E TkGreater E
+    (26) E -> . E TkEqual E
+    (27) E -> . E TkNEqual E
+    (28) E -> . TkNot E
+    (29) E -> . TkMinus E
+    (30) E -> . TkNum
+    (31) E -> . TkId
+    (32) E -> . TkTrue
+    (33) E -> . TkFalse
+
+    TkNot           shift and go to state 30
+    TkMinus         shift and go to state 29
+    TkNum           shift and go to state 31
+    TkId            shift and go to state 32
+    TkTrue          shift and go to state 33
+    TkFalse         shift and go to state 34
+
+    E                              shift and go to state 70
+
+state 47
+
+    (20) E -> E TkOr . E
+    (17) E -> . E TkMult E
+    (18) E -> . E TkPlus E
+    (19) E -> . E TkMinus E
+    (20) E -> . E TkOr E
+    (21) E -> . E TkAnd E
+    (22) E -> . E TkLess E
+    (23) E -> . E TkLeq E
+    (24) E -> . E TkGeq E
+    (25) E -> . E TkGreater E
+    (26) E -> . E TkEqual E
+    (27) E -> . E TkNEqual E
+    (28) E -> . TkNot E
+    (29) E -> . TkMinus E
+    (30) E -> . TkNum
+    (31) E -> . TkId
+    (32) E -> . TkTrue
+    (33) E -> . TkFalse
+
+    TkNot           shift and go to state 30
+    TkMinus         shift and go to state 29
+    TkNum           shift and go to state 31
+    TkId            shift and go to state 32
+    TkTrue          shift and go to state 33
+    TkFalse         shift and go to state 34
+
+    E                              shift and go to state 71
+
+state 48
+
+    (21) E -> E TkAnd . E
+    (17) E -> . E TkMult E
+    (18) E -> . E TkPlus E
+    (19) E -> . E TkMinus E
+    (20) E -> . E TkOr E
+    (21) E -> . E TkAnd E
+    (22) E -> . E TkLess E
+    (23) E -> . E TkLeq E
+    (24) E -> . E TkGeq E
+    (25) E -> . E TkGreater E
+    (26) E -> . E TkEqual E
+    (27) E -> . E TkNEqual E
+    (28) E -> . TkNot E
+    (29) E -> . TkMinus E
+    (30) E -> . TkNum
+    (31) E -> . TkId
+    (32) E -> . TkTrue
+    (33) E -> . TkFalse
+
+    TkNot           shift and go to state 30
+    TkMinus         shift and go to state 29
+    TkNum           shift and go to state 31
+    TkId            shift and go to state 32
+    TkTrue          shift and go to state 33
+    TkFalse         shift and go to state 34
+
+    E                              shift and go to state 72
+
+state 49
+
+    (22) E -> E TkLess . E
+    (17) E -> . E TkMult E
+    (18) E -> . E TkPlus E
+    (19) E -> . E TkMinus E
+    (20) E -> . E TkOr E
+    (21) E -> . E TkAnd E
+    (22) E -> . E TkLess E
+    (23) E -> . E TkLeq E
+    (24) E -> . E TkGeq E
+    (25) E -> . E TkGreater E
+    (26) E -> . E TkEqual E
+    (27) E -> . E TkNEqual E
+    (28) E -> . TkNot E
+    (29) E -> . TkMinus E
+    (30) E -> . TkNum
+    (31) E -> . TkId
+    (32) E -> . TkTrue
+    (33) E -> . TkFalse
+
+    TkNot           shift and go to state 30
+    TkMinus         shift and go to state 29
+    TkNum           shift and go to state 31
+    TkId            shift and go to state 32
+    TkTrue          shift and go to state 33
+    TkFalse         shift and go to state 34
+
+    E                              shift and go to state 73
+
+state 50
+
+    (23) E -> E TkLeq . E
+    (17) E -> . E TkMult E
+    (18) E -> . E TkPlus E
+    (19) E -> . E TkMinus E
+    (20) E -> . E TkOr E
+    (21) E -> . E TkAnd E
+    (22) E -> . E TkLess E
+    (23) E -> . E TkLeq E
+    (24) E -> . E TkGeq E
+    (25) E -> . E TkGreater E
+    (26) E -> . E TkEqual E
+    (27) E -> . E TkNEqual E
+    (28) E -> . TkNot E
+    (29) E -> . TkMinus E
+    (30) E -> . TkNum
+    (31) E -> . TkId
+    (32) E -> . TkTrue
+    (33) E -> . TkFalse
+
+    TkNot           shift and go to state 30
+    TkMinus         shift and go to state 29
+    TkNum           shift and go to state 31
+    TkId            shift and go to state 32
+    TkTrue          shift and go to state 33
+    TkFalse         shift and go to state 34
+
+    E                              shift and go to state 74
+
+state 51
+
+    (24) E -> E TkGeq . E
+    (17) E -> . E TkMult E
+    (18) E -> . E TkPlus E
+    (19) E -> . E TkMinus E
+    (20) E -> . E TkOr E
+    (21) E -> . E TkAnd E
+    (22) E -> . E TkLess E
+    (23) E -> . E TkLeq E
+    (24) E -> . E TkGeq E
+    (25) E -> . E TkGreater E
+    (26) E -> . E TkEqual E
+    (27) E -> . E TkNEqual E
+    (28) E -> . TkNot E
+    (29) E -> . TkMinus E
+    (30) E -> . TkNum
+    (31) E -> . TkId
+    (32) E -> . TkTrue
+    (33) E -> . TkFalse
+
+    TkNot           shift and go to state 30
+    TkMinus         shift and go to state 29
+    TkNum           shift and go to state 31
+    TkId            shift and go to state 32
+    TkTrue          shift and go to state 33
+    TkFalse         shift and go to state 34
+
+    E                              shift and go to state 75
+
+state 52
+
+    (25) E -> E TkGreater . E
+    (17) E -> . E TkMult E
+    (18) E -> . E TkPlus E
+    (19) E -> . E TkMinus E
+    (20) E -> . E TkOr E
+    (21) E -> . E TkAnd E
+    (22) E -> . E TkLess E
+    (23) E -> . E TkLeq E
+    (24) E -> . E TkGeq E
+    (25) E -> . E TkGreater E
+    (26) E -> . E TkEqual E
+    (27) E -> . E TkNEqual E
+    (28) E -> . TkNot E
+    (29) E -> . TkMinus E
+    (30) E -> . TkNum
+    (31) E -> . TkId
+    (32) E -> . TkTrue
+    (33) E -> . TkFalse
+
+    TkNot           shift and go to state 30
+    TkMinus         shift and go to state 29
+    TkNum           shift and go to state 31
+    TkId            shift and go to state 32
+    TkTrue          shift and go to state 33
+    TkFalse         shift and go to state 34
+
+    E                              shift and go to state 76
+
+state 53
+
+    (26) E -> E TkEqual . E
+    (17) E -> . E TkMult E
+    (18) E -> . E TkPlus E
+    (19) E -> . E TkMinus E
+    (20) E -> . E TkOr E
+    (21) E -> . E TkAnd E
+    (22) E -> . E TkLess E
+    (23) E -> . E TkLeq E
+    (24) E -> . E TkGeq E
+    (25) E -> . E TkGreater E
+    (26) E -> . E TkEqual E
+    (27) E -> . E TkNEqual E
+    (28) E -> . TkNot E
+    (29) E -> . TkMinus E
+    (30) E -> . TkNum
+    (31) E -> . TkId
+    (32) E -> . TkTrue
+    (33) E -> . TkFalse
+
+    TkNot           shift and go to state 30
+    TkMinus         shift and go to state 29
+    TkNum           shift and go to state 31
+    TkId            shift and go to state 32
+    TkTrue          shift and go to state 33
+    TkFalse         shift and go to state 34
+
+    E                              shift and go to state 77
+
+state 54
+
+    (27) E -> E TkNEqual . E
+    (17) E -> . E TkMult E
+    (18) E -> . E TkPlus E
+    (19) E -> . E TkMinus E
+    (20) E -> . E TkOr E
+    (21) E -> . E TkAnd E
+    (22) E -> . E TkLess E
+    (23) E -> . E TkLeq E
+    (24) E -> . E TkGeq E
+    (25) E -> . E TkGreater E
+    (26) E -> . E TkEqual E
+    (27) E -> . E TkNEqual E
+    (28) E -> . TkNot E
+    (29) E -> . TkMinus E
+    (30) E -> . TkNum
+    (31) E -> . TkId
+    (32) E -> . TkTrue
+    (33) E -> . TkFalse
+
+    TkNot           shift and go to state 30
+    TkMinus         shift and go to state 29
+    TkNum           shift and go to state 31
+    TkId            shift and go to state 32
+    TkTrue          shift and go to state 33
+    TkFalse         shift and go to state 34
+
+    E                              shift and go to state 78
+
+state 55
+
+    (29) E -> TkMinus E .
+    (17) E -> E . TkMult E
+    (18) E -> E . TkPlus E
+    (19) E -> E . TkMinus E
+    (20) E -> E . TkOr E
+    (21) E -> E . TkAnd E
+    (22) E -> E . TkLess E
+    (23) E -> E . TkLeq E
+    (24) E -> E . TkGeq E
+    (25) E -> E . TkGreater E
+    (26) E -> E . TkEqual E
+    (27) E -> E . TkNEqual E
+
+  ! shift/reduce conflict for TkMult resolved as shift
+  ! shift/reduce conflict for TkPlus resolved as shift
+  ! shift/reduce conflict for TkMinus resolved as shift
+  ! shift/reduce conflict for TkOr resolved as shift
+  ! shift/reduce conflict for TkAnd resolved as shift
+  ! shift/reduce conflict for TkLess resolved as shift
+  ! shift/reduce conflict for TkLeq resolved as shift
+  ! shift/reduce conflict for TkGeq resolved as shift
+  ! shift/reduce conflict for TkGreater resolved as shift
+  ! shift/reduce conflict for TkEqual resolved as shift
+  ! shift/reduce conflict for TkNEqual resolved as shift
+    TkArrow         reduce using rule 29 (E -> TkMinus E .)
+    TkCBlock        reduce using rule 29 (E -> TkMinus E .)
+    TkSemicolon     reduce using rule 29 (E -> TkMinus E .)
+    TkOd            reduce using rule 29 (E -> TkMinus E .)
+    TkRof           reduce using rule 29 (E -> TkMinus E .)
+    TkCBracket      reduce using rule 29 (E -> TkMinus E .)
+    TkTo            reduce using rule 29 (E -> TkMinus E .)
+    TkMult          shift and go to state 44
+    TkPlus          shift and go to state 45
+    TkMinus         shift and go to state 46
+    TkOr            shift and go to state 47
+    TkAnd           shift and go to state 48
+    TkLess          shift and go to state 49
+    TkLeq           shift and go to state 50
+    TkGeq           shift and go to state 51
+    TkGreater       shift and go to state 52
+    TkEqual         shift and go to state 53
+    TkNEqual        shift and go to state 54
+
+  ! TkMult          [ reduce using rule 29 (E -> TkMinus E .) ]
+  ! TkPlus          [ reduce using rule 29 (E -> TkMinus E .) ]
+  ! TkMinus         [ reduce using rule 29 (E -> TkMinus E .) ]
+  ! TkOr            [ reduce using rule 29 (E -> TkMinus E .) ]
+  ! TkAnd           [ reduce using rule 29 (E -> TkMinus E .) ]
+  ! TkLess          [ reduce using rule 29 (E -> TkMinus E .) ]
+  ! TkLeq           [ reduce using rule 29 (E -> TkMinus E .) ]
+  ! TkGeq           [ reduce using rule 29 (E -> TkMinus E .) ]
+  ! TkGreater       [ reduce using rule 29 (E -> TkMinus E .) ]
+  ! TkEqual         [ reduce using rule 29 (E -> TkMinus E .) ]
+  ! TkNEqual        [ reduce using rule 29 (E -> TkMinus E .) ]
+
+
+state 56
+
+    (28) E -> TkNot E .
+    (17) E -> E . TkMult E
+    (18) E -> E . TkPlus E
+    (19) E -> E . TkMinus E
+    (20) E -> E . TkOr E
+    (21) E -> E . TkAnd E
+    (22) E -> E . TkLess E
+    (23) E -> E . TkLeq E
+    (24) E -> E . TkGeq E
+    (25) E -> E . TkGreater E
+    (26) E -> E . TkEqual E
+    (27) E -> E . TkNEqual E
+
+  ! shift/reduce conflict for TkMult resolved as shift
+  ! shift/reduce conflict for TkPlus resolved as shift
+  ! shift/reduce conflict for TkMinus resolved as shift
+  ! shift/reduce conflict for TkOr resolved as shift
+  ! shift/reduce conflict for TkAnd resolved as shift
+  ! shift/reduce conflict for TkLess resolved as shift
+  ! shift/reduce conflict for TkLeq resolved as shift
+  ! shift/reduce conflict for TkGeq resolved as shift
+  ! shift/reduce conflict for TkGreater resolved as shift
+  ! shift/reduce conflict for TkEqual resolved as shift
+  ! shift/reduce conflict for TkNEqual resolved as shift
+    TkArrow         reduce using rule 28 (E -> TkNot E .)
+    TkCBlock        reduce using rule 28 (E -> TkNot E .)
+    TkSemicolon     reduce using rule 28 (E -> TkNot E .)
+    TkOd            reduce using rule 28 (E -> TkNot E .)
+    TkRof           reduce using rule 28 (E -> TkNot E .)
+    TkCBracket      reduce using rule 28 (E -> TkNot E .)
+    TkTo            reduce using rule 28 (E -> TkNot E .)
+    TkMult          shift and go to state 44
+    TkPlus          shift and go to state 45
+    TkMinus         shift and go to state 46
+    TkOr            shift and go to state 47
+    TkAnd           shift and go to state 48
+    TkLess          shift and go to state 49
+    TkLeq           shift and go to state 50
+    TkGeq           shift and go to state 51
+    TkGreater       shift and go to state 52
+    TkEqual         shift and go to state 53
+    TkNEqual        shift and go to state 54
+
+  ! TkMult          [ reduce using rule 28 (E -> TkNot E .) ]
+  ! TkPlus          [ reduce using rule 28 (E -> TkNot E .) ]
+  ! TkMinus         [ reduce using rule 28 (E -> TkNot E .) ]
+  ! TkOr            [ reduce using rule 28 (E -> TkNot E .) ]
+  ! TkAnd           [ reduce using rule 28 (E -> TkNot E .) ]
+  ! TkLess          [ reduce using rule 28 (E -> TkNot E .) ]
+  ! TkLeq           [ reduce using rule 28 (E -> TkNot E .) ]
+  ! TkGeq           [ reduce using rule 28 (E -> TkNot E .) ]
+  ! TkGreater       [ reduce using rule 28 (E -> TkNot E .) ]
+  ! TkEqual         [ reduce using rule 28 (E -> TkNot E .) ]
+  ! TkNEqual        [ reduce using rule 28 (E -> TkNot E .) ]
+
+
+state 57
+
+    (45) DO_LOOP -> TkFor TkId TkIn . E TkTo E TkArrow LIST_INSTRUCTIONS TkRof
+    (17) E -> . E TkMult E
+    (18) E -> . E TkPlus E
+    (19) E -> . E TkMinus E
+    (20) E -> . E TkOr E
+    (21) E -> . E TkAnd E
+    (22) E -> . E TkLess E
+    (23) E -> . E TkLeq E
+    (24) E -> . E TkGeq E
+    (25) E -> . E TkGreater E
+    (26) E -> . E TkEqual E
+    (27) E -> . E TkNEqual E
+    (28) E -> . TkNot E
+    (29) E -> . TkMinus E
+    (30) E -> . TkNum
+    (31) E -> . TkId
+    (32) E -> . TkTrue
+    (33) E -> . TkFalse
+
+    TkNot           shift and go to state 30
+    TkMinus         shift and go to state 29
+    TkNum           shift and go to state 31
+    TkId            shift and go to state 32
+    TkTrue          shift and go to state 33
+    TkFalse         shift and go to state 34
+
+    E                              shift and go to state 79
+
+state 58
+
+    (4) LIST_DECLARE -> LIST_DECLARE TkSemicolon VARIABLE_DECLARATION .
+
+    TkSemicolon     reduce using rule 4 (LIST_DECLARE -> LIST_DECLARE TkSemicolon VARIABLE_DECLARATION .)
+    TkId            reduce using rule 4 (LIST_DECLARE -> LIST_DECLARE TkSemicolon VARIABLE_DECLARATION .)
+    TkPrint         reduce using rule 4 (LIST_DECLARE -> LIST_DECLARE TkSemicolon VARIABLE_DECLARATION .)
+    TkDo            reduce using rule 4 (LIST_DECLARE -> LIST_DECLARE TkSemicolon VARIABLE_DECLARATION .)
+    TkFor           reduce using rule 4 (LIST_DECLARE -> LIST_DECLARE TkSemicolon VARIABLE_DECLARATION .)
+
+
+state 59
 
     (5) VARIABLE_DECLARATION -> TkId TkTwoPoints TYPE .
 
     TkSemicolon     reduce using rule 5 (VARIABLE_DECLARATION -> TkId TkTwoPoints TYPE .)
-    TkFor           reduce using rule 5 (VARIABLE_DECLARATION -> TkId TkTwoPoints TYPE .)
-    TkIf            reduce using rule 5 (VARIABLE_DECLARATION -> TkId TkTwoPoints TYPE .)
-    TkDo            reduce using rule 5 (VARIABLE_DECLARATION -> TkId TkTwoPoints TYPE .)
-    TkPrint         reduce using rule 5 (VARIABLE_DECLARATION -> TkId TkTwoPoints TYPE .)
     TkId            reduce using rule 5 (VARIABLE_DECLARATION -> TkId TkTwoPoints TYPE .)
+    TkPrint         reduce using rule 5 (VARIABLE_DECLARATION -> TkId TkTwoPoints TYPE .)
+    TkDo            reduce using rule 5 (VARIABLE_DECLARATION -> TkId TkTwoPoints TYPE .)
+    TkFor           reduce using rule 5 (VARIABLE_DECLARATION -> TkId TkTwoPoints TYPE .)
 
 
-state 23
+state 60
 
     (7) TYPE -> TkInt .
 
     TkSemicolon     reduce using rule 7 (TYPE -> TkInt .)
-    TkFor           reduce using rule 7 (TYPE -> TkInt .)
-    TkIf            reduce using rule 7 (TYPE -> TkInt .)
-    TkDo            reduce using rule 7 (TYPE -> TkInt .)
-    TkPrint         reduce using rule 7 (TYPE -> TkInt .)
     TkId            reduce using rule 7 (TYPE -> TkInt .)
+    TkPrint         reduce using rule 7 (TYPE -> TkInt .)
+    TkDo            reduce using rule 7 (TYPE -> TkInt .)
+    TkFor           reduce using rule 7 (TYPE -> TkInt .)
 
 
-state 24
+state 61
 
     (8) TYPE -> TkBool .
 
     TkSemicolon     reduce using rule 8 (TYPE -> TkBool .)
-    TkFor           reduce using rule 8 (TYPE -> TkBool .)
-    TkIf            reduce using rule 8 (TYPE -> TkBool .)
-    TkDo            reduce using rule 8 (TYPE -> TkBool .)
-    TkPrint         reduce using rule 8 (TYPE -> TkBool .)
     TkId            reduce using rule 8 (TYPE -> TkBool .)
+    TkPrint         reduce using rule 8 (TYPE -> TkBool .)
+    TkDo            reduce using rule 8 (TYPE -> TkBool .)
+    TkFor           reduce using rule 8 (TYPE -> TkBool .)
 
 
-state 25
+state 62
 
-    (9) TYPE -> TkArray .
+    (9) TYPE -> ARRAY_DECLARATION .
 
-    TkSemicolon     reduce using rule 9 (TYPE -> TkArray .)
-    TkFor           reduce using rule 9 (TYPE -> TkArray .)
-    TkIf            reduce using rule 9 (TYPE -> TkArray .)
-    TkDo            reduce using rule 9 (TYPE -> TkArray .)
-    TkPrint         reduce using rule 9 (TYPE -> TkArray .)
-    TkId            reduce using rule 9 (TYPE -> TkArray .)
+    TkSemicolon     reduce using rule 9 (TYPE -> ARRAY_DECLARATION .)
+    TkId            reduce using rule 9 (TYPE -> ARRAY_DECLARATION .)
+    TkPrint         reduce using rule 9 (TYPE -> ARRAY_DECLARATION .)
+    TkDo            reduce using rule 9 (TYPE -> ARRAY_DECLARATION .)
+    TkFor           reduce using rule 9 (TYPE -> ARRAY_DECLARATION .)
 
 
-state 26
+state 63
+
+    (10) ARRAY_DECLARATION -> TkArray . TkOBracket TkNum TkSoForth TkNum TkCBracket
+
+    TkOBracket      shift and go to state 80
+
+
+state 64
 
     (6) VARIABLE_DECLARATION -> TkId TkComma VARIABLE_DECLARATION .
 
     TkSemicolon     reduce using rule 6 (VARIABLE_DECLARATION -> TkId TkComma VARIABLE_DECLARATION .)
-    TkFor           reduce using rule 6 (VARIABLE_DECLARATION -> TkId TkComma VARIABLE_DECLARATION .)
-    TkIf            reduce using rule 6 (VARIABLE_DECLARATION -> TkId TkComma VARIABLE_DECLARATION .)
-    TkDo            reduce using rule 6 (VARIABLE_DECLARATION -> TkId TkComma VARIABLE_DECLARATION .)
-    TkPrint         reduce using rule 6 (VARIABLE_DECLARATION -> TkId TkComma VARIABLE_DECLARATION .)
     TkId            reduce using rule 6 (VARIABLE_DECLARATION -> TkId TkComma VARIABLE_DECLARATION .)
+    TkPrint         reduce using rule 6 (VARIABLE_DECLARATION -> TkId TkComma VARIABLE_DECLARATION .)
+    TkDo            reduce using rule 6 (VARIABLE_DECLARATION -> TkId TkComma VARIABLE_DECLARATION .)
+    TkFor           reduce using rule 6 (VARIABLE_DECLARATION -> TkId TkComma VARIABLE_DECLARATION .)
 
+
+state 65
+
+    (36) TOPRINT -> TOPRINT TkConcat EXPRESSION_TO_PRINT .
+
+    TkConcat        reduce using rule 36 (TOPRINT -> TOPRINT TkConcat EXPRESSION_TO_PRINT .)
+    TkCBlock        reduce using rule 36 (TOPRINT -> TOPRINT TkConcat EXPRESSION_TO_PRINT .)
+    TkSemicolon     reduce using rule 36 (TOPRINT -> TOPRINT TkConcat EXPRESSION_TO_PRINT .)
+    TkOd            reduce using rule 36 (TOPRINT -> TOPRINT TkConcat EXPRESSION_TO_PRINT .)
+    TkRof           reduce using rule 36 (TOPRINT -> TOPRINT TkConcat EXPRESSION_TO_PRINT .)
+
+
+state 66
+
+    (43) READ_ARRAY -> TkId TkOBracket E . TkCBracket
+    (17) E -> E . TkMult E
+    (18) E -> E . TkPlus E
+    (19) E -> E . TkMinus E
+    (20) E -> E . TkOr E
+    (21) E -> E . TkAnd E
+    (22) E -> E . TkLess E
+    (23) E -> E . TkLeq E
+    (24) E -> E . TkGeq E
+    (25) E -> E . TkGreater E
+    (26) E -> E . TkEqual E
+    (27) E -> E . TkNEqual E
+
+    TkCBracket      shift and go to state 81
+    TkMult          shift and go to state 44
+    TkPlus          shift and go to state 45
+    TkMinus         shift and go to state 46
+    TkOr            shift and go to state 47
+    TkAnd           shift and go to state 48
+    TkLess          shift and go to state 49
+    TkLeq           shift and go to state 50
+    TkGeq           shift and go to state 51
+    TkGreater       shift and go to state 52
+    TkEqual         shift and go to state 53
+    TkNEqual        shift and go to state 54
+
+
+state 67
+
+    (44) DO_LOOP -> TkDo E TkArrow LIST_INSTRUCTIONS . TkOd
+    (12) LIST_INSTRUCTIONS -> LIST_INSTRUCTIONS . TkSemicolon INSTRUCTION
+
+    TkOd            shift and go to state 82
+    TkSemicolon     shift and go to state 18
+
+
+state 68
+
+    (17) E -> E TkMult E .
+    (17) E -> E . TkMult E
+    (18) E -> E . TkPlus E
+    (19) E -> E . TkMinus E
+    (20) E -> E . TkOr E
+    (21) E -> E . TkAnd E
+    (22) E -> E . TkLess E
+    (23) E -> E . TkLeq E
+    (24) E -> E . TkGeq E
+    (25) E -> E . TkGreater E
+    (26) E -> E . TkEqual E
+    (27) E -> E . TkNEqual E
+
+  ! shift/reduce conflict for TkMult resolved as shift
+  ! shift/reduce conflict for TkPlus resolved as shift
+  ! shift/reduce conflict for TkMinus resolved as shift
+  ! shift/reduce conflict for TkOr resolved as shift
+  ! shift/reduce conflict for TkAnd resolved as shift
+  ! shift/reduce conflict for TkLess resolved as shift
+  ! shift/reduce conflict for TkLeq resolved as shift
+  ! shift/reduce conflict for TkGeq resolved as shift
+  ! shift/reduce conflict for TkGreater resolved as shift
+  ! shift/reduce conflict for TkEqual resolved as shift
+  ! shift/reduce conflict for TkNEqual resolved as shift
+    TkArrow         reduce using rule 17 (E -> E TkMult E .)
+    TkCBlock        reduce using rule 17 (E -> E TkMult E .)
+    TkSemicolon     reduce using rule 17 (E -> E TkMult E .)
+    TkOd            reduce using rule 17 (E -> E TkMult E .)
+    TkRof           reduce using rule 17 (E -> E TkMult E .)
+    TkCBracket      reduce using rule 17 (E -> E TkMult E .)
+    TkTo            reduce using rule 17 (E -> E TkMult E .)
+    TkMult          shift and go to state 44
+    TkPlus          shift and go to state 45
+    TkMinus         shift and go to state 46
+    TkOr            shift and go to state 47
+    TkAnd           shift and go to state 48
+    TkLess          shift and go to state 49
+    TkLeq           shift and go to state 50
+    TkGeq           shift and go to state 51
+    TkGreater       shift and go to state 52
+    TkEqual         shift and go to state 53
+    TkNEqual        shift and go to state 54
+
+  ! TkMult          [ reduce using rule 17 (E -> E TkMult E .) ]
+  ! TkPlus          [ reduce using rule 17 (E -> E TkMult E .) ]
+  ! TkMinus         [ reduce using rule 17 (E -> E TkMult E .) ]
+  ! TkOr            [ reduce using rule 17 (E -> E TkMult E .) ]
+  ! TkAnd           [ reduce using rule 17 (E -> E TkMult E .) ]
+  ! TkLess          [ reduce using rule 17 (E -> E TkMult E .) ]
+  ! TkLeq           [ reduce using rule 17 (E -> E TkMult E .) ]
+  ! TkGeq           [ reduce using rule 17 (E -> E TkMult E .) ]
+  ! TkGreater       [ reduce using rule 17 (E -> E TkMult E .) ]
+  ! TkEqual         [ reduce using rule 17 (E -> E TkMult E .) ]
+  ! TkNEqual        [ reduce using rule 17 (E -> E TkMult E .) ]
+
+
+state 69
+
+    (18) E -> E TkPlus E .
+    (17) E -> E . TkMult E
+    (18) E -> E . TkPlus E
+    (19) E -> E . TkMinus E
+    (20) E -> E . TkOr E
+    (21) E -> E . TkAnd E
+    (22) E -> E . TkLess E
+    (23) E -> E . TkLeq E
+    (24) E -> E . TkGeq E
+    (25) E -> E . TkGreater E
+    (26) E -> E . TkEqual E
+    (27) E -> E . TkNEqual E
+
+  ! shift/reduce conflict for TkMult resolved as shift
+  ! shift/reduce conflict for TkPlus resolved as shift
+  ! shift/reduce conflict for TkMinus resolved as shift
+  ! shift/reduce conflict for TkOr resolved as shift
+  ! shift/reduce conflict for TkAnd resolved as shift
+  ! shift/reduce conflict for TkLess resolved as shift
+  ! shift/reduce conflict for TkLeq resolved as shift
+  ! shift/reduce conflict for TkGeq resolved as shift
+  ! shift/reduce conflict for TkGreater resolved as shift
+  ! shift/reduce conflict for TkEqual resolved as shift
+  ! shift/reduce conflict for TkNEqual resolved as shift
+    TkArrow         reduce using rule 18 (E -> E TkPlus E .)
+    TkCBlock        reduce using rule 18 (E -> E TkPlus E .)
+    TkSemicolon     reduce using rule 18 (E -> E TkPlus E .)
+    TkOd            reduce using rule 18 (E -> E TkPlus E .)
+    TkRof           reduce using rule 18 (E -> E TkPlus E .)
+    TkCBracket      reduce using rule 18 (E -> E TkPlus E .)
+    TkTo            reduce using rule 18 (E -> E TkPlus E .)
+    TkMult          shift and go to state 44
+    TkPlus          shift and go to state 45
+    TkMinus         shift and go to state 46
+    TkOr            shift and go to state 47
+    TkAnd           shift and go to state 48
+    TkLess          shift and go to state 49
+    TkLeq           shift and go to state 50
+    TkGeq           shift and go to state 51
+    TkGreater       shift and go to state 52
+    TkEqual         shift and go to state 53
+    TkNEqual        shift and go to state 54
+
+  ! TkMult          [ reduce using rule 18 (E -> E TkPlus E .) ]
+  ! TkPlus          [ reduce using rule 18 (E -> E TkPlus E .) ]
+  ! TkMinus         [ reduce using rule 18 (E -> E TkPlus E .) ]
+  ! TkOr            [ reduce using rule 18 (E -> E TkPlus E .) ]
+  ! TkAnd           [ reduce using rule 18 (E -> E TkPlus E .) ]
+  ! TkLess          [ reduce using rule 18 (E -> E TkPlus E .) ]
+  ! TkLeq           [ reduce using rule 18 (E -> E TkPlus E .) ]
+  ! TkGeq           [ reduce using rule 18 (E -> E TkPlus E .) ]
+  ! TkGreater       [ reduce using rule 18 (E -> E TkPlus E .) ]
+  ! TkEqual         [ reduce using rule 18 (E -> E TkPlus E .) ]
+  ! TkNEqual        [ reduce using rule 18 (E -> E TkPlus E .) ]
+
+
+state 70
+
+    (19) E -> E TkMinus E .
+    (17) E -> E . TkMult E
+    (18) E -> E . TkPlus E
+    (19) E -> E . TkMinus E
+    (20) E -> E . TkOr E
+    (21) E -> E . TkAnd E
+    (22) E -> E . TkLess E
+    (23) E -> E . TkLeq E
+    (24) E -> E . TkGeq E
+    (25) E -> E . TkGreater E
+    (26) E -> E . TkEqual E
+    (27) E -> E . TkNEqual E
+
+  ! shift/reduce conflict for TkMult resolved as shift
+  ! shift/reduce conflict for TkPlus resolved as shift
+  ! shift/reduce conflict for TkMinus resolved as shift
+  ! shift/reduce conflict for TkOr resolved as shift
+  ! shift/reduce conflict for TkAnd resolved as shift
+  ! shift/reduce conflict for TkLess resolved as shift
+  ! shift/reduce conflict for TkLeq resolved as shift
+  ! shift/reduce conflict for TkGeq resolved as shift
+  ! shift/reduce conflict for TkGreater resolved as shift
+  ! shift/reduce conflict for TkEqual resolved as shift
+  ! shift/reduce conflict for TkNEqual resolved as shift
+    TkArrow         reduce using rule 19 (E -> E TkMinus E .)
+    TkCBlock        reduce using rule 19 (E -> E TkMinus E .)
+    TkSemicolon     reduce using rule 19 (E -> E TkMinus E .)
+    TkOd            reduce using rule 19 (E -> E TkMinus E .)
+    TkRof           reduce using rule 19 (E -> E TkMinus E .)
+    TkCBracket      reduce using rule 19 (E -> E TkMinus E .)
+    TkTo            reduce using rule 19 (E -> E TkMinus E .)
+    TkMult          shift and go to state 44
+    TkPlus          shift and go to state 45
+    TkMinus         shift and go to state 46
+    TkOr            shift and go to state 47
+    TkAnd           shift and go to state 48
+    TkLess          shift and go to state 49
+    TkLeq           shift and go to state 50
+    TkGeq           shift and go to state 51
+    TkGreater       shift and go to state 52
+    TkEqual         shift and go to state 53
+    TkNEqual        shift and go to state 54
+
+  ! TkMult          [ reduce using rule 19 (E -> E TkMinus E .) ]
+  ! TkPlus          [ reduce using rule 19 (E -> E TkMinus E .) ]
+  ! TkMinus         [ reduce using rule 19 (E -> E TkMinus E .) ]
+  ! TkOr            [ reduce using rule 19 (E -> E TkMinus E .) ]
+  ! TkAnd           [ reduce using rule 19 (E -> E TkMinus E .) ]
+  ! TkLess          [ reduce using rule 19 (E -> E TkMinus E .) ]
+  ! TkLeq           [ reduce using rule 19 (E -> E TkMinus E .) ]
+  ! TkGeq           [ reduce using rule 19 (E -> E TkMinus E .) ]
+  ! TkGreater       [ reduce using rule 19 (E -> E TkMinus E .) ]
+  ! TkEqual         [ reduce using rule 19 (E -> E TkMinus E .) ]
+  ! TkNEqual        [ reduce using rule 19 (E -> E TkMinus E .) ]
+
+
+state 71
+
+    (20) E -> E TkOr E .
+    (17) E -> E . TkMult E
+    (18) E -> E . TkPlus E
+    (19) E -> E . TkMinus E
+    (20) E -> E . TkOr E
+    (21) E -> E . TkAnd E
+    (22) E -> E . TkLess E
+    (23) E -> E . TkLeq E
+    (24) E -> E . TkGeq E
+    (25) E -> E . TkGreater E
+    (26) E -> E . TkEqual E
+    (27) E -> E . TkNEqual E
+
+  ! shift/reduce conflict for TkMult resolved as shift
+  ! shift/reduce conflict for TkPlus resolved as shift
+  ! shift/reduce conflict for TkMinus resolved as shift
+  ! shift/reduce conflict for TkOr resolved as shift
+  ! shift/reduce conflict for TkAnd resolved as shift
+  ! shift/reduce conflict for TkLess resolved as shift
+  ! shift/reduce conflict for TkLeq resolved as shift
+  ! shift/reduce conflict for TkGeq resolved as shift
+  ! shift/reduce conflict for TkGreater resolved as shift
+  ! shift/reduce conflict for TkEqual resolved as shift
+  ! shift/reduce conflict for TkNEqual resolved as shift
+    TkArrow         reduce using rule 20 (E -> E TkOr E .)
+    TkCBlock        reduce using rule 20 (E -> E TkOr E .)
+    TkSemicolon     reduce using rule 20 (E -> E TkOr E .)
+    TkOd            reduce using rule 20 (E -> E TkOr E .)
+    TkRof           reduce using rule 20 (E -> E TkOr E .)
+    TkCBracket      reduce using rule 20 (E -> E TkOr E .)
+    TkTo            reduce using rule 20 (E -> E TkOr E .)
+    TkMult          shift and go to state 44
+    TkPlus          shift and go to state 45
+    TkMinus         shift and go to state 46
+    TkOr            shift and go to state 47
+    TkAnd           shift and go to state 48
+    TkLess          shift and go to state 49
+    TkLeq           shift and go to state 50
+    TkGeq           shift and go to state 51
+    TkGreater       shift and go to state 52
+    TkEqual         shift and go to state 53
+    TkNEqual        shift and go to state 54
+
+  ! TkMult          [ reduce using rule 20 (E -> E TkOr E .) ]
+  ! TkPlus          [ reduce using rule 20 (E -> E TkOr E .) ]
+  ! TkMinus         [ reduce using rule 20 (E -> E TkOr E .) ]
+  ! TkOr            [ reduce using rule 20 (E -> E TkOr E .) ]
+  ! TkAnd           [ reduce using rule 20 (E -> E TkOr E .) ]
+  ! TkLess          [ reduce using rule 20 (E -> E TkOr E .) ]
+  ! TkLeq           [ reduce using rule 20 (E -> E TkOr E .) ]
+  ! TkGeq           [ reduce using rule 20 (E -> E TkOr E .) ]
+  ! TkGreater       [ reduce using rule 20 (E -> E TkOr E .) ]
+  ! TkEqual         [ reduce using rule 20 (E -> E TkOr E .) ]
+  ! TkNEqual        [ reduce using rule 20 (E -> E TkOr E .) ]
+
+
+state 72
+
+    (21) E -> E TkAnd E .
+    (17) E -> E . TkMult E
+    (18) E -> E . TkPlus E
+    (19) E -> E . TkMinus E
+    (20) E -> E . TkOr E
+    (21) E -> E . TkAnd E
+    (22) E -> E . TkLess E
+    (23) E -> E . TkLeq E
+    (24) E -> E . TkGeq E
+    (25) E -> E . TkGreater E
+    (26) E -> E . TkEqual E
+    (27) E -> E . TkNEqual E
+
+  ! shift/reduce conflict for TkMult resolved as shift
+  ! shift/reduce conflict for TkPlus resolved as shift
+  ! shift/reduce conflict for TkMinus resolved as shift
+  ! shift/reduce conflict for TkOr resolved as shift
+  ! shift/reduce conflict for TkAnd resolved as shift
+  ! shift/reduce conflict for TkLess resolved as shift
+  ! shift/reduce conflict for TkLeq resolved as shift
+  ! shift/reduce conflict for TkGeq resolved as shift
+  ! shift/reduce conflict for TkGreater resolved as shift
+  ! shift/reduce conflict for TkEqual resolved as shift
+  ! shift/reduce conflict for TkNEqual resolved as shift
+    TkArrow         reduce using rule 21 (E -> E TkAnd E .)
+    TkCBlock        reduce using rule 21 (E -> E TkAnd E .)
+    TkSemicolon     reduce using rule 21 (E -> E TkAnd E .)
+    TkOd            reduce using rule 21 (E -> E TkAnd E .)
+    TkRof           reduce using rule 21 (E -> E TkAnd E .)
+    TkCBracket      reduce using rule 21 (E -> E TkAnd E .)
+    TkTo            reduce using rule 21 (E -> E TkAnd E .)
+    TkMult          shift and go to state 44
+    TkPlus          shift and go to state 45
+    TkMinus         shift and go to state 46
+    TkOr            shift and go to state 47
+    TkAnd           shift and go to state 48
+    TkLess          shift and go to state 49
+    TkLeq           shift and go to state 50
+    TkGeq           shift and go to state 51
+    TkGreater       shift and go to state 52
+    TkEqual         shift and go to state 53
+    TkNEqual        shift and go to state 54
+
+  ! TkMult          [ reduce using rule 21 (E -> E TkAnd E .) ]
+  ! TkPlus          [ reduce using rule 21 (E -> E TkAnd E .) ]
+  ! TkMinus         [ reduce using rule 21 (E -> E TkAnd E .) ]
+  ! TkOr            [ reduce using rule 21 (E -> E TkAnd E .) ]
+  ! TkAnd           [ reduce using rule 21 (E -> E TkAnd E .) ]
+  ! TkLess          [ reduce using rule 21 (E -> E TkAnd E .) ]
+  ! TkLeq           [ reduce using rule 21 (E -> E TkAnd E .) ]
+  ! TkGeq           [ reduce using rule 21 (E -> E TkAnd E .) ]
+  ! TkGreater       [ reduce using rule 21 (E -> E TkAnd E .) ]
+  ! TkEqual         [ reduce using rule 21 (E -> E TkAnd E .) ]
+  ! TkNEqual        [ reduce using rule 21 (E -> E TkAnd E .) ]
+
+
+state 73
+
+    (22) E -> E TkLess E .
+    (17) E -> E . TkMult E
+    (18) E -> E . TkPlus E
+    (19) E -> E . TkMinus E
+    (20) E -> E . TkOr E
+    (21) E -> E . TkAnd E
+    (22) E -> E . TkLess E
+    (23) E -> E . TkLeq E
+    (24) E -> E . TkGeq E
+    (25) E -> E . TkGreater E
+    (26) E -> E . TkEqual E
+    (27) E -> E . TkNEqual E
+
+  ! shift/reduce conflict for TkMult resolved as shift
+  ! shift/reduce conflict for TkPlus resolved as shift
+  ! shift/reduce conflict for TkMinus resolved as shift
+  ! shift/reduce conflict for TkOr resolved as shift
+  ! shift/reduce conflict for TkAnd resolved as shift
+  ! shift/reduce conflict for TkLess resolved as shift
+  ! shift/reduce conflict for TkLeq resolved as shift
+  ! shift/reduce conflict for TkGeq resolved as shift
+  ! shift/reduce conflict for TkGreater resolved as shift
+  ! shift/reduce conflict for TkEqual resolved as shift
+  ! shift/reduce conflict for TkNEqual resolved as shift
+    TkArrow         reduce using rule 22 (E -> E TkLess E .)
+    TkCBlock        reduce using rule 22 (E -> E TkLess E .)
+    TkSemicolon     reduce using rule 22 (E -> E TkLess E .)
+    TkOd            reduce using rule 22 (E -> E TkLess E .)
+    TkRof           reduce using rule 22 (E -> E TkLess E .)
+    TkCBracket      reduce using rule 22 (E -> E TkLess E .)
+    TkTo            reduce using rule 22 (E -> E TkLess E .)
+    TkMult          shift and go to state 44
+    TkPlus          shift and go to state 45
+    TkMinus         shift and go to state 46
+    TkOr            shift and go to state 47
+    TkAnd           shift and go to state 48
+    TkLess          shift and go to state 49
+    TkLeq           shift and go to state 50
+    TkGeq           shift and go to state 51
+    TkGreater       shift and go to state 52
+    TkEqual         shift and go to state 53
+    TkNEqual        shift and go to state 54
+
+  ! TkMult          [ reduce using rule 22 (E -> E TkLess E .) ]
+  ! TkPlus          [ reduce using rule 22 (E -> E TkLess E .) ]
+  ! TkMinus         [ reduce using rule 22 (E -> E TkLess E .) ]
+  ! TkOr            [ reduce using rule 22 (E -> E TkLess E .) ]
+  ! TkAnd           [ reduce using rule 22 (E -> E TkLess E .) ]
+  ! TkLess          [ reduce using rule 22 (E -> E TkLess E .) ]
+  ! TkLeq           [ reduce using rule 22 (E -> E TkLess E .) ]
+  ! TkGeq           [ reduce using rule 22 (E -> E TkLess E .) ]
+  ! TkGreater       [ reduce using rule 22 (E -> E TkLess E .) ]
+  ! TkEqual         [ reduce using rule 22 (E -> E TkLess E .) ]
+  ! TkNEqual        [ reduce using rule 22 (E -> E TkLess E .) ]
+
+
+state 74
+
+    (23) E -> E TkLeq E .
+    (17) E -> E . TkMult E
+    (18) E -> E . TkPlus E
+    (19) E -> E . TkMinus E
+    (20) E -> E . TkOr E
+    (21) E -> E . TkAnd E
+    (22) E -> E . TkLess E
+    (23) E -> E . TkLeq E
+    (24) E -> E . TkGeq E
+    (25) E -> E . TkGreater E
+    (26) E -> E . TkEqual E
+    (27) E -> E . TkNEqual E
+
+  ! shift/reduce conflict for TkMult resolved as shift
+  ! shift/reduce conflict for TkPlus resolved as shift
+  ! shift/reduce conflict for TkMinus resolved as shift
+  ! shift/reduce conflict for TkOr resolved as shift
+  ! shift/reduce conflict for TkAnd resolved as shift
+  ! shift/reduce conflict for TkLess resolved as shift
+  ! shift/reduce conflict for TkLeq resolved as shift
+  ! shift/reduce conflict for TkGeq resolved as shift
+  ! shift/reduce conflict for TkGreater resolved as shift
+  ! shift/reduce conflict for TkEqual resolved as shift
+  ! shift/reduce conflict for TkNEqual resolved as shift
+    TkArrow         reduce using rule 23 (E -> E TkLeq E .)
+    TkCBlock        reduce using rule 23 (E -> E TkLeq E .)
+    TkSemicolon     reduce using rule 23 (E -> E TkLeq E .)
+    TkOd            reduce using rule 23 (E -> E TkLeq E .)
+    TkRof           reduce using rule 23 (E -> E TkLeq E .)
+    TkCBracket      reduce using rule 23 (E -> E TkLeq E .)
+    TkTo            reduce using rule 23 (E -> E TkLeq E .)
+    TkMult          shift and go to state 44
+    TkPlus          shift and go to state 45
+    TkMinus         shift and go to state 46
+    TkOr            shift and go to state 47
+    TkAnd           shift and go to state 48
+    TkLess          shift and go to state 49
+    TkLeq           shift and go to state 50
+    TkGeq           shift and go to state 51
+    TkGreater       shift and go to state 52
+    TkEqual         shift and go to state 53
+    TkNEqual        shift and go to state 54
+
+  ! TkMult          [ reduce using rule 23 (E -> E TkLeq E .) ]
+  ! TkPlus          [ reduce using rule 23 (E -> E TkLeq E .) ]
+  ! TkMinus         [ reduce using rule 23 (E -> E TkLeq E .) ]
+  ! TkOr            [ reduce using rule 23 (E -> E TkLeq E .) ]
+  ! TkAnd           [ reduce using rule 23 (E -> E TkLeq E .) ]
+  ! TkLess          [ reduce using rule 23 (E -> E TkLeq E .) ]
+  ! TkLeq           [ reduce using rule 23 (E -> E TkLeq E .) ]
+  ! TkGeq           [ reduce using rule 23 (E -> E TkLeq E .) ]
+  ! TkGreater       [ reduce using rule 23 (E -> E TkLeq E .) ]
+  ! TkEqual         [ reduce using rule 23 (E -> E TkLeq E .) ]
+  ! TkNEqual        [ reduce using rule 23 (E -> E TkLeq E .) ]
+
+
+state 75
+
+    (24) E -> E TkGeq E .
+    (17) E -> E . TkMult E
+    (18) E -> E . TkPlus E
+    (19) E -> E . TkMinus E
+    (20) E -> E . TkOr E
+    (21) E -> E . TkAnd E
+    (22) E -> E . TkLess E
+    (23) E -> E . TkLeq E
+    (24) E -> E . TkGeq E
+    (25) E -> E . TkGreater E
+    (26) E -> E . TkEqual E
+    (27) E -> E . TkNEqual E
+
+  ! shift/reduce conflict for TkMult resolved as shift
+  ! shift/reduce conflict for TkPlus resolved as shift
+  ! shift/reduce conflict for TkMinus resolved as shift
+  ! shift/reduce conflict for TkOr resolved as shift
+  ! shift/reduce conflict for TkAnd resolved as shift
+  ! shift/reduce conflict for TkLess resolved as shift
+  ! shift/reduce conflict for TkLeq resolved as shift
+  ! shift/reduce conflict for TkGeq resolved as shift
+  ! shift/reduce conflict for TkGreater resolved as shift
+  ! shift/reduce conflict for TkEqual resolved as shift
+  ! shift/reduce conflict for TkNEqual resolved as shift
+    TkArrow         reduce using rule 24 (E -> E TkGeq E .)
+    TkCBlock        reduce using rule 24 (E -> E TkGeq E .)
+    TkSemicolon     reduce using rule 24 (E -> E TkGeq E .)
+    TkOd            reduce using rule 24 (E -> E TkGeq E .)
+    TkRof           reduce using rule 24 (E -> E TkGeq E .)
+    TkCBracket      reduce using rule 24 (E -> E TkGeq E .)
+    TkTo            reduce using rule 24 (E -> E TkGeq E .)
+    TkMult          shift and go to state 44
+    TkPlus          shift and go to state 45
+    TkMinus         shift and go to state 46
+    TkOr            shift and go to state 47
+    TkAnd           shift and go to state 48
+    TkLess          shift and go to state 49
+    TkLeq           shift and go to state 50
+    TkGeq           shift and go to state 51
+    TkGreater       shift and go to state 52
+    TkEqual         shift and go to state 53
+    TkNEqual        shift and go to state 54
+
+  ! TkMult          [ reduce using rule 24 (E -> E TkGeq E .) ]
+  ! TkPlus          [ reduce using rule 24 (E -> E TkGeq E .) ]
+  ! TkMinus         [ reduce using rule 24 (E -> E TkGeq E .) ]
+  ! TkOr            [ reduce using rule 24 (E -> E TkGeq E .) ]
+  ! TkAnd           [ reduce using rule 24 (E -> E TkGeq E .) ]
+  ! TkLess          [ reduce using rule 24 (E -> E TkGeq E .) ]
+  ! TkLeq           [ reduce using rule 24 (E -> E TkGeq E .) ]
+  ! TkGeq           [ reduce using rule 24 (E -> E TkGeq E .) ]
+  ! TkGreater       [ reduce using rule 24 (E -> E TkGeq E .) ]
+  ! TkEqual         [ reduce using rule 24 (E -> E TkGeq E .) ]
+  ! TkNEqual        [ reduce using rule 24 (E -> E TkGeq E .) ]
+
+
+state 76
+
+    (25) E -> E TkGreater E .
+    (17) E -> E . TkMult E
+    (18) E -> E . TkPlus E
+    (19) E -> E . TkMinus E
+    (20) E -> E . TkOr E
+    (21) E -> E . TkAnd E
+    (22) E -> E . TkLess E
+    (23) E -> E . TkLeq E
+    (24) E -> E . TkGeq E
+    (25) E -> E . TkGreater E
+    (26) E -> E . TkEqual E
+    (27) E -> E . TkNEqual E
+
+  ! shift/reduce conflict for TkMult resolved as shift
+  ! shift/reduce conflict for TkPlus resolved as shift
+  ! shift/reduce conflict for TkMinus resolved as shift
+  ! shift/reduce conflict for TkOr resolved as shift
+  ! shift/reduce conflict for TkAnd resolved as shift
+  ! shift/reduce conflict for TkLess resolved as shift
+  ! shift/reduce conflict for TkLeq resolved as shift
+  ! shift/reduce conflict for TkGeq resolved as shift
+  ! shift/reduce conflict for TkGreater resolved as shift
+  ! shift/reduce conflict for TkEqual resolved as shift
+  ! shift/reduce conflict for TkNEqual resolved as shift
+    TkArrow         reduce using rule 25 (E -> E TkGreater E .)
+    TkCBlock        reduce using rule 25 (E -> E TkGreater E .)
+    TkSemicolon     reduce using rule 25 (E -> E TkGreater E .)
+    TkOd            reduce using rule 25 (E -> E TkGreater E .)
+    TkRof           reduce using rule 25 (E -> E TkGreater E .)
+    TkCBracket      reduce using rule 25 (E -> E TkGreater E .)
+    TkTo            reduce using rule 25 (E -> E TkGreater E .)
+    TkMult          shift and go to state 44
+    TkPlus          shift and go to state 45
+    TkMinus         shift and go to state 46
+    TkOr            shift and go to state 47
+    TkAnd           shift and go to state 48
+    TkLess          shift and go to state 49
+    TkLeq           shift and go to state 50
+    TkGeq           shift and go to state 51
+    TkGreater       shift and go to state 52
+    TkEqual         shift and go to state 53
+    TkNEqual        shift and go to state 54
+
+  ! TkMult          [ reduce using rule 25 (E -> E TkGreater E .) ]
+  ! TkPlus          [ reduce using rule 25 (E -> E TkGreater E .) ]
+  ! TkMinus         [ reduce using rule 25 (E -> E TkGreater E .) ]
+  ! TkOr            [ reduce using rule 25 (E -> E TkGreater E .) ]
+  ! TkAnd           [ reduce using rule 25 (E -> E TkGreater E .) ]
+  ! TkLess          [ reduce using rule 25 (E -> E TkGreater E .) ]
+  ! TkLeq           [ reduce using rule 25 (E -> E TkGreater E .) ]
+  ! TkGeq           [ reduce using rule 25 (E -> E TkGreater E .) ]
+  ! TkGreater       [ reduce using rule 25 (E -> E TkGreater E .) ]
+  ! TkEqual         [ reduce using rule 25 (E -> E TkGreater E .) ]
+  ! TkNEqual        [ reduce using rule 25 (E -> E TkGreater E .) ]
+
+
+state 77
+
+    (26) E -> E TkEqual E .
+    (17) E -> E . TkMult E
+    (18) E -> E . TkPlus E
+    (19) E -> E . TkMinus E
+    (20) E -> E . TkOr E
+    (21) E -> E . TkAnd E
+    (22) E -> E . TkLess E
+    (23) E -> E . TkLeq E
+    (24) E -> E . TkGeq E
+    (25) E -> E . TkGreater E
+    (26) E -> E . TkEqual E
+    (27) E -> E . TkNEqual E
+
+  ! shift/reduce conflict for TkMult resolved as shift
+  ! shift/reduce conflict for TkPlus resolved as shift
+  ! shift/reduce conflict for TkMinus resolved as shift
+  ! shift/reduce conflict for TkOr resolved as shift
+  ! shift/reduce conflict for TkAnd resolved as shift
+  ! shift/reduce conflict for TkLess resolved as shift
+  ! shift/reduce conflict for TkLeq resolved as shift
+  ! shift/reduce conflict for TkGeq resolved as shift
+  ! shift/reduce conflict for TkGreater resolved as shift
+  ! shift/reduce conflict for TkEqual resolved as shift
+  ! shift/reduce conflict for TkNEqual resolved as shift
+    TkArrow         reduce using rule 26 (E -> E TkEqual E .)
+    TkCBlock        reduce using rule 26 (E -> E TkEqual E .)
+    TkSemicolon     reduce using rule 26 (E -> E TkEqual E .)
+    TkOd            reduce using rule 26 (E -> E TkEqual E .)
+    TkRof           reduce using rule 26 (E -> E TkEqual E .)
+    TkCBracket      reduce using rule 26 (E -> E TkEqual E .)
+    TkTo            reduce using rule 26 (E -> E TkEqual E .)
+    TkMult          shift and go to state 44
+    TkPlus          shift and go to state 45
+    TkMinus         shift and go to state 46
+    TkOr            shift and go to state 47
+    TkAnd           shift and go to state 48
+    TkLess          shift and go to state 49
+    TkLeq           shift and go to state 50
+    TkGeq           shift and go to state 51
+    TkGreater       shift and go to state 52
+    TkEqual         shift and go to state 53
+    TkNEqual        shift and go to state 54
+
+  ! TkMult          [ reduce using rule 26 (E -> E TkEqual E .) ]
+  ! TkPlus          [ reduce using rule 26 (E -> E TkEqual E .) ]
+  ! TkMinus         [ reduce using rule 26 (E -> E TkEqual E .) ]
+  ! TkOr            [ reduce using rule 26 (E -> E TkEqual E .) ]
+  ! TkAnd           [ reduce using rule 26 (E -> E TkEqual E .) ]
+  ! TkLess          [ reduce using rule 26 (E -> E TkEqual E .) ]
+  ! TkLeq           [ reduce using rule 26 (E -> E TkEqual E .) ]
+  ! TkGeq           [ reduce using rule 26 (E -> E TkEqual E .) ]
+  ! TkGreater       [ reduce using rule 26 (E -> E TkEqual E .) ]
+  ! TkEqual         [ reduce using rule 26 (E -> E TkEqual E .) ]
+  ! TkNEqual        [ reduce using rule 26 (E -> E TkEqual E .) ]
+
+
+state 78
+
+    (27) E -> E TkNEqual E .
+    (17) E -> E . TkMult E
+    (18) E -> E . TkPlus E
+    (19) E -> E . TkMinus E
+    (20) E -> E . TkOr E
+    (21) E -> E . TkAnd E
+    (22) E -> E . TkLess E
+    (23) E -> E . TkLeq E
+    (24) E -> E . TkGeq E
+    (25) E -> E . TkGreater E
+    (26) E -> E . TkEqual E
+    (27) E -> E . TkNEqual E
+
+  ! shift/reduce conflict for TkMult resolved as shift
+  ! shift/reduce conflict for TkPlus resolved as shift
+  ! shift/reduce conflict for TkMinus resolved as shift
+  ! shift/reduce conflict for TkOr resolved as shift
+  ! shift/reduce conflict for TkAnd resolved as shift
+  ! shift/reduce conflict for TkLess resolved as shift
+  ! shift/reduce conflict for TkLeq resolved as shift
+  ! shift/reduce conflict for TkGeq resolved as shift
+  ! shift/reduce conflict for TkGreater resolved as shift
+  ! shift/reduce conflict for TkEqual resolved as shift
+  ! shift/reduce conflict for TkNEqual resolved as shift
+    TkArrow         reduce using rule 27 (E -> E TkNEqual E .)
+    TkCBlock        reduce using rule 27 (E -> E TkNEqual E .)
+    TkSemicolon     reduce using rule 27 (E -> E TkNEqual E .)
+    TkOd            reduce using rule 27 (E -> E TkNEqual E .)
+    TkRof           reduce using rule 27 (E -> E TkNEqual E .)
+    TkCBracket      reduce using rule 27 (E -> E TkNEqual E .)
+    TkTo            reduce using rule 27 (E -> E TkNEqual E .)
+    TkMult          shift and go to state 44
+    TkPlus          shift and go to state 45
+    TkMinus         shift and go to state 46
+    TkOr            shift and go to state 47
+    TkAnd           shift and go to state 48
+    TkLess          shift and go to state 49
+    TkLeq           shift and go to state 50
+    TkGeq           shift and go to state 51
+    TkGreater       shift and go to state 52
+    TkEqual         shift and go to state 53
+    TkNEqual        shift and go to state 54
+
+  ! TkMult          [ reduce using rule 27 (E -> E TkNEqual E .) ]
+  ! TkPlus          [ reduce using rule 27 (E -> E TkNEqual E .) ]
+  ! TkMinus         [ reduce using rule 27 (E -> E TkNEqual E .) ]
+  ! TkOr            [ reduce using rule 27 (E -> E TkNEqual E .) ]
+  ! TkAnd           [ reduce using rule 27 (E -> E TkNEqual E .) ]
+  ! TkLess          [ reduce using rule 27 (E -> E TkNEqual E .) ]
+  ! TkLeq           [ reduce using rule 27 (E -> E TkNEqual E .) ]
+  ! TkGeq           [ reduce using rule 27 (E -> E TkNEqual E .) ]
+  ! TkGreater       [ reduce using rule 27 (E -> E TkNEqual E .) ]
+  ! TkEqual         [ reduce using rule 27 (E -> E TkNEqual E .) ]
+  ! TkNEqual        [ reduce using rule 27 (E -> E TkNEqual E .) ]
+
+
+state 79
+
+    (45) DO_LOOP -> TkFor TkId TkIn E . TkTo E TkArrow LIST_INSTRUCTIONS TkRof
+    (17) E -> E . TkMult E
+    (18) E -> E . TkPlus E
+    (19) E -> E . TkMinus E
+    (20) E -> E . TkOr E
+    (21) E -> E . TkAnd E
+    (22) E -> E . TkLess E
+    (23) E -> E . TkLeq E
+    (24) E -> E . TkGeq E
+    (25) E -> E . TkGreater E
+    (26) E -> E . TkEqual E
+    (27) E -> E . TkNEqual E
+
+    TkTo            shift and go to state 83
+    TkMult          shift and go to state 44
+    TkPlus          shift and go to state 45
+    TkMinus         shift and go to state 46
+    TkOr            shift and go to state 47
+    TkAnd           shift and go to state 48
+    TkLess          shift and go to state 49
+    TkLeq           shift and go to state 50
+    TkGeq           shift and go to state 51
+    TkGreater       shift and go to state 52
+    TkEqual         shift and go to state 53
+    TkNEqual        shift and go to state 54
+
+
+state 80
+
+    (10) ARRAY_DECLARATION -> TkArray TkOBracket . TkNum TkSoForth TkNum TkCBracket
+
+    TkNum           shift and go to state 84
+
+
+state 81
+
+    (43) READ_ARRAY -> TkId TkOBracket E TkCBracket .
+
+    TkConcat        reduce using rule 43 (READ_ARRAY -> TkId TkOBracket E TkCBracket .)
+    TkCBlock        reduce using rule 43 (READ_ARRAY -> TkId TkOBracket E TkCBracket .)
+    TkSemicolon     reduce using rule 43 (READ_ARRAY -> TkId TkOBracket E TkCBracket .)
+    TkOd            reduce using rule 43 (READ_ARRAY -> TkId TkOBracket E TkCBracket .)
+    TkRof           reduce using rule 43 (READ_ARRAY -> TkId TkOBracket E TkCBracket .)
+
+
+state 82
+
+    (44) DO_LOOP -> TkDo E TkArrow LIST_INSTRUCTIONS TkOd .
+
+    TkCBlock        reduce using rule 44 (DO_LOOP -> TkDo E TkArrow LIST_INSTRUCTIONS TkOd .)
+    TkSemicolon     reduce using rule 44 (DO_LOOP -> TkDo E TkArrow LIST_INSTRUCTIONS TkOd .)
+    TkOd            reduce using rule 44 (DO_LOOP -> TkDo E TkArrow LIST_INSTRUCTIONS TkOd .)
+    TkRof           reduce using rule 44 (DO_LOOP -> TkDo E TkArrow LIST_INSTRUCTIONS TkOd .)
+
+
+state 83
+
+    (45) DO_LOOP -> TkFor TkId TkIn E TkTo . E TkArrow LIST_INSTRUCTIONS TkRof
+    (17) E -> . E TkMult E
+    (18) E -> . E TkPlus E
+    (19) E -> . E TkMinus E
+    (20) E -> . E TkOr E
+    (21) E -> . E TkAnd E
+    (22) E -> . E TkLess E
+    (23) E -> . E TkLeq E
+    (24) E -> . E TkGeq E
+    (25) E -> . E TkGreater E
+    (26) E -> . E TkEqual E
+    (27) E -> . E TkNEqual E
+    (28) E -> . TkNot E
+    (29) E -> . TkMinus E
+    (30) E -> . TkNum
+    (31) E -> . TkId
+    (32) E -> . TkTrue
+    (33) E -> . TkFalse
+
+    TkNot           shift and go to state 30
+    TkMinus         shift and go to state 29
+    TkNum           shift and go to state 31
+    TkId            shift and go to state 32
+    TkTrue          shift and go to state 33
+    TkFalse         shift and go to state 34
+
+    E                              shift and go to state 85
+
+state 84
+
+    (10) ARRAY_DECLARATION -> TkArray TkOBracket TkNum . TkSoForth TkNum TkCBracket
+
+    TkSoForth       shift and go to state 86
+
+
+state 85
+
+    (45) DO_LOOP -> TkFor TkId TkIn E TkTo E . TkArrow LIST_INSTRUCTIONS TkRof
+    (17) E -> E . TkMult E
+    (18) E -> E . TkPlus E
+    (19) E -> E . TkMinus E
+    (20) E -> E . TkOr E
+    (21) E -> E . TkAnd E
+    (22) E -> E . TkLess E
+    (23) E -> E . TkLeq E
+    (24) E -> E . TkGeq E
+    (25) E -> E . TkGreater E
+    (26) E -> E . TkEqual E
+    (27) E -> E . TkNEqual E
+
+    TkArrow         shift and go to state 87
+    TkMult          shift and go to state 44
+    TkPlus          shift and go to state 45
+    TkMinus         shift and go to state 46
+    TkOr            shift and go to state 47
+    TkAnd           shift and go to state 48
+    TkLess          shift and go to state 49
+    TkLeq           shift and go to state 50
+    TkGeq           shift and go to state 51
+    TkGreater       shift and go to state 52
+    TkEqual         shift and go to state 53
+    TkNEqual        shift and go to state 54
+
+
+state 86
+
+    (10) ARRAY_DECLARATION -> TkArray TkOBracket TkNum TkSoForth . TkNum TkCBracket
+
+    TkNum           shift and go to state 88
+
+
+state 87
+
+    (45) DO_LOOP -> TkFor TkId TkIn E TkTo E TkArrow . LIST_INSTRUCTIONS TkRof
+    (11) LIST_INSTRUCTIONS -> . INSTRUCTION
+    (12) LIST_INSTRUCTIONS -> . LIST_INSTRUCTIONS TkSemicolon INSTRUCTION
+    (13) INSTRUCTION -> . ASIG
+    (14) INSTRUCTION -> . PRINT
+    (15) INSTRUCTION -> . DO_LOOP
+    (16) ASIG -> . TkId TkAsig E
+    (34) PRINT -> . TkPrint TOPRINT
+    (44) DO_LOOP -> . TkDo E TkArrow LIST_INSTRUCTIONS TkOd
+    (45) DO_LOOP -> . TkFor TkId TkIn E TkTo E TkArrow LIST_INSTRUCTIONS TkRof
+
+    TkId            shift and go to state 10
+    TkPrint         shift and go to state 11
+    TkDo            shift and go to state 12
+    TkFor           shift and go to state 13
+
+    LIST_INSTRUCTIONS              shift and go to state 89
+    INSTRUCTION                    shift and go to state 6
+    ASIG                           shift and go to state 7
+    PRINT                          shift and go to state 8
+    DO_LOOP                        shift and go to state 9
+
+state 88
+
+    (10) ARRAY_DECLARATION -> TkArray TkOBracket TkNum TkSoForth TkNum . TkCBracket
+
+    TkCBracket      shift and go to state 90
+
+
+state 89
+
+    (45) DO_LOOP -> TkFor TkId TkIn E TkTo E TkArrow LIST_INSTRUCTIONS . TkRof
+    (12) LIST_INSTRUCTIONS -> LIST_INSTRUCTIONS . TkSemicolon INSTRUCTION
+
+    TkRof           shift and go to state 91
+    TkSemicolon     shift and go to state 18
+
+
+state 90
+
+    (10) ARRAY_DECLARATION -> TkArray TkOBracket TkNum TkSoForth TkNum TkCBracket .
+
+    TkSemicolon     reduce using rule 10 (ARRAY_DECLARATION -> TkArray TkOBracket TkNum TkSoForth TkNum TkCBracket .)
+    TkId            reduce using rule 10 (ARRAY_DECLARATION -> TkArray TkOBracket TkNum TkSoForth TkNum TkCBracket .)
+    TkPrint         reduce using rule 10 (ARRAY_DECLARATION -> TkArray TkOBracket TkNum TkSoForth TkNum TkCBracket .)
+    TkDo            reduce using rule 10 (ARRAY_DECLARATION -> TkArray TkOBracket TkNum TkSoForth TkNum TkCBracket .)
+    TkFor           reduce using rule 10 (ARRAY_DECLARATION -> TkArray TkOBracket TkNum TkSoForth TkNum TkCBracket .)
+
+
+state 91
+
+    (45) DO_LOOP -> TkFor TkId TkIn E TkTo E TkArrow LIST_INSTRUCTIONS TkRof .
+
+    TkCBlock        reduce using rule 45 (DO_LOOP -> TkFor TkId TkIn E TkTo E TkArrow LIST_INSTRUCTIONS TkRof .)
+    TkSemicolon     reduce using rule 45 (DO_LOOP -> TkFor TkId TkIn E TkTo E TkArrow LIST_INSTRUCTIONS TkRof .)
+    TkOd            reduce using rule 45 (DO_LOOP -> TkFor TkId TkIn E TkTo E TkArrow LIST_INSTRUCTIONS TkRof .)
+    TkRof           reduce using rule 45 (DO_LOOP -> TkFor TkId TkIn E TkTo E TkArrow LIST_INSTRUCTIONS TkRof .)
+
+WARNING: 
+WARNING: Conflicts:
+WARNING: 
+WARNING: shift/reduce conflict for TkMult in state 55 resolved as shift
+WARNING: shift/reduce conflict for TkPlus in state 55 resolved as shift
+WARNING: shift/reduce conflict for TkMinus in state 55 resolved as shift
+WARNING: shift/reduce conflict for TkOr in state 55 resolved as shift
+WARNING: shift/reduce conflict for TkAnd in state 55 resolved as shift
+WARNING: shift/reduce conflict for TkLess in state 55 resolved as shift
+WARNING: shift/reduce conflict for TkLeq in state 55 resolved as shift
+WARNING: shift/reduce conflict for TkGeq in state 55 resolved as shift
+WARNING: shift/reduce conflict for TkGreater in state 55 resolved as shift
+WARNING: shift/reduce conflict for TkEqual in state 55 resolved as shift
+WARNING: shift/reduce conflict for TkNEqual in state 55 resolved as shift
+WARNING: shift/reduce conflict for TkMult in state 56 resolved as shift
+WARNING: shift/reduce conflict for TkPlus in state 56 resolved as shift
+WARNING: shift/reduce conflict for TkMinus in state 56 resolved as shift
+WARNING: shift/reduce conflict for TkOr in state 56 resolved as shift
+WARNING: shift/reduce conflict for TkAnd in state 56 resolved as shift
+WARNING: shift/reduce conflict for TkLess in state 56 resolved as shift
+WARNING: shift/reduce conflict for TkLeq in state 56 resolved as shift
+WARNING: shift/reduce conflict for TkGeq in state 56 resolved as shift
+WARNING: shift/reduce conflict for TkGreater in state 56 resolved as shift
+WARNING: shift/reduce conflict for TkEqual in state 56 resolved as shift
+WARNING: shift/reduce conflict for TkNEqual in state 56 resolved as shift
+WARNING: shift/reduce conflict for TkMult in state 68 resolved as shift
+WARNING: shift/reduce conflict for TkPlus in state 68 resolved as shift
+WARNING: shift/reduce conflict for TkMinus in state 68 resolved as shift
+WARNING: shift/reduce conflict for TkOr in state 68 resolved as shift
+WARNING: shift/reduce conflict for TkAnd in state 68 resolved as shift
+WARNING: shift/reduce conflict for TkLess in state 68 resolved as shift
+WARNING: shift/reduce conflict for TkLeq in state 68 resolved as shift
+WARNING: shift/reduce conflict for TkGeq in state 68 resolved as shift
+WARNING: shift/reduce conflict for TkGreater in state 68 resolved as shift
+WARNING: shift/reduce conflict for TkEqual in state 68 resolved as shift
+WARNING: shift/reduce conflict for TkNEqual in state 68 resolved as shift
+WARNING: shift/reduce conflict for TkMult in state 69 resolved as shift
+WARNING: shift/reduce conflict for TkPlus in state 69 resolved as shift
+WARNING: shift/reduce conflict for TkMinus in state 69 resolved as shift
+WARNING: shift/reduce conflict for TkOr in state 69 resolved as shift
+WARNING: shift/reduce conflict for TkAnd in state 69 resolved as shift
+WARNING: shift/reduce conflict for TkLess in state 69 resolved as shift
+WARNING: shift/reduce conflict for TkLeq in state 69 resolved as shift
+WARNING: shift/reduce conflict for TkGeq in state 69 resolved as shift
+WARNING: shift/reduce conflict for TkGreater in state 69 resolved as shift
+WARNING: shift/reduce conflict for TkEqual in state 69 resolved as shift
+WARNING: shift/reduce conflict for TkNEqual in state 69 resolved as shift
+WARNING: shift/reduce conflict for TkMult in state 70 resolved as shift
+WARNING: shift/reduce conflict for TkPlus in state 70 resolved as shift
+WARNING: shift/reduce conflict for TkMinus in state 70 resolved as shift
+WARNING: shift/reduce conflict for TkOr in state 70 resolved as shift
+WARNING: shift/reduce conflict for TkAnd in state 70 resolved as shift
+WARNING: shift/reduce conflict for TkLess in state 70 resolved as shift
+WARNING: shift/reduce conflict for TkLeq in state 70 resolved as shift
+WARNING: shift/reduce conflict for TkGeq in state 70 resolved as shift
+WARNING: shift/reduce conflict for TkGreater in state 70 resolved as shift
+WARNING: shift/reduce conflict for TkEqual in state 70 resolved as shift
+WARNING: shift/reduce conflict for TkNEqual in state 70 resolved as shift
+WARNING: shift/reduce conflict for TkMult in state 71 resolved as shift
+WARNING: shift/reduce conflict for TkPlus in state 71 resolved as shift
+WARNING: shift/reduce conflict for TkMinus in state 71 resolved as shift
+WARNING: shift/reduce conflict for TkOr in state 71 resolved as shift
+WARNING: shift/reduce conflict for TkAnd in state 71 resolved as shift
+WARNING: shift/reduce conflict for TkLess in state 71 resolved as shift
+WARNING: shift/reduce conflict for TkLeq in state 71 resolved as shift
+WARNING: shift/reduce conflict for TkGeq in state 71 resolved as shift
+WARNING: shift/reduce conflict for TkGreater in state 71 resolved as shift
+WARNING: shift/reduce conflict for TkEqual in state 71 resolved as shift
+WARNING: shift/reduce conflict for TkNEqual in state 71 resolved as shift
+WARNING: shift/reduce conflict for TkMult in state 72 resolved as shift
+WARNING: shift/reduce conflict for TkPlus in state 72 resolved as shift
+WARNING: shift/reduce conflict for TkMinus in state 72 resolved as shift
+WARNING: shift/reduce conflict for TkOr in state 72 resolved as shift
+WARNING: shift/reduce conflict for TkAnd in state 72 resolved as shift
+WARNING: shift/reduce conflict for TkLess in state 72 resolved as shift
+WARNING: shift/reduce conflict for TkLeq in state 72 resolved as shift
+WARNING: shift/reduce conflict for TkGeq in state 72 resolved as shift
+WARNING: shift/reduce conflict for TkGreater in state 72 resolved as shift
+WARNING: shift/reduce conflict for TkEqual in state 72 resolved as shift
+WARNING: shift/reduce conflict for TkNEqual in state 72 resolved as shift
+WARNING: shift/reduce conflict for TkMult in state 73 resolved as shift
+WARNING: shift/reduce conflict for TkPlus in state 73 resolved as shift
+WARNING: shift/reduce conflict for TkMinus in state 73 resolved as shift
+WARNING: shift/reduce conflict for TkOr in state 73 resolved as shift
+WARNING: shift/reduce conflict for TkAnd in state 73 resolved as shift
+WARNING: shift/reduce conflict for TkLess in state 73 resolved as shift
+WARNING: shift/reduce conflict for TkLeq in state 73 resolved as shift
+WARNING: shift/reduce conflict for TkGeq in state 73 resolved as shift
+WARNING: shift/reduce conflict for TkGreater in state 73 resolved as shift
+WARNING: shift/reduce conflict for TkEqual in state 73 resolved as shift
+WARNING: shift/reduce conflict for TkNEqual in state 73 resolved as shift
+WARNING: shift/reduce conflict for TkMult in state 74 resolved as shift
+WARNING: shift/reduce conflict for TkPlus in state 74 resolved as shift
+WARNING: shift/reduce conflict for TkMinus in state 74 resolved as shift
+WARNING: shift/reduce conflict for TkOr in state 74 resolved as shift
+WARNING: shift/reduce conflict for TkAnd in state 74 resolved as shift
+WARNING: shift/reduce conflict for TkLess in state 74 resolved as shift
+WARNING: shift/reduce conflict for TkLeq in state 74 resolved as shift
+WARNING: shift/reduce conflict for TkGeq in state 74 resolved as shift
+WARNING: shift/reduce conflict for TkGreater in state 74 resolved as shift
+WARNING: shift/reduce conflict for TkEqual in state 74 resolved as shift
+WARNING: shift/reduce conflict for TkNEqual in state 74 resolved as shift
+WARNING: shift/reduce conflict for TkMult in state 75 resolved as shift
+WARNING: shift/reduce conflict for TkPlus in state 75 resolved as shift
+WARNING: shift/reduce conflict for TkMinus in state 75 resolved as shift
+WARNING: shift/reduce conflict for TkOr in state 75 resolved as shift
+WARNING: shift/reduce conflict for TkAnd in state 75 resolved as shift
+WARNING: shift/reduce conflict for TkLess in state 75 resolved as shift
+WARNING: shift/reduce conflict for TkLeq in state 75 resolved as shift
+WARNING: shift/reduce conflict for TkGeq in state 75 resolved as shift
+WARNING: shift/reduce conflict for TkGreater in state 75 resolved as shift
+WARNING: shift/reduce conflict for TkEqual in state 75 resolved as shift
+WARNING: shift/reduce conflict for TkNEqual in state 75 resolved as shift
+WARNING: shift/reduce conflict for TkMult in state 76 resolved as shift
+WARNING: shift/reduce conflict for TkPlus in state 76 resolved as shift
+WARNING: shift/reduce conflict for TkMinus in state 76 resolved as shift
+WARNING: shift/reduce conflict for TkOr in state 76 resolved as shift
+WARNING: shift/reduce conflict for TkAnd in state 76 resolved as shift
+WARNING: shift/reduce conflict for TkLess in state 76 resolved as shift
+WARNING: shift/reduce conflict for TkLeq in state 76 resolved as shift
+WARNING: shift/reduce conflict for TkGeq in state 76 resolved as shift
+WARNING: shift/reduce conflict for TkGreater in state 76 resolved as shift
+WARNING: shift/reduce conflict for TkEqual in state 76 resolved as shift
+WARNING: shift/reduce conflict for TkNEqual in state 76 resolved as shift
+WARNING: shift/reduce conflict for TkMult in state 77 resolved as shift
+WARNING: shift/reduce conflict for TkPlus in state 77 resolved as shift
+WARNING: shift/reduce conflict for TkMinus in state 77 resolved as shift
+WARNING: shift/reduce conflict for TkOr in state 77 resolved as shift
+WARNING: shift/reduce conflict for TkAnd in state 77 resolved as shift
+WARNING: shift/reduce conflict for TkLess in state 77 resolved as shift
+WARNING: shift/reduce conflict for TkLeq in state 77 resolved as shift
+WARNING: shift/reduce conflict for TkGeq in state 77 resolved as shift
+WARNING: shift/reduce conflict for TkGreater in state 77 resolved as shift
+WARNING: shift/reduce conflict for TkEqual in state 77 resolved as shift
+WARNING: shift/reduce conflict for TkNEqual in state 77 resolved as shift
+WARNING: shift/reduce conflict for TkMult in state 78 resolved as shift
+WARNING: shift/reduce conflict for TkPlus in state 78 resolved as shift
+WARNING: shift/reduce conflict for TkMinus in state 78 resolved as shift
+WARNING: shift/reduce conflict for TkOr in state 78 resolved as shift
+WARNING: shift/reduce conflict for TkAnd in state 78 resolved as shift
+WARNING: shift/reduce conflict for TkLess in state 78 resolved as shift
+WARNING: shift/reduce conflict for TkLeq in state 78 resolved as shift
+WARNING: shift/reduce conflict for TkGeq in state 78 resolved as shift
+WARNING: shift/reduce conflict for TkGreater in state 78 resolved as shift
+WARNING: shift/reduce conflict for TkEqual in state 78 resolved as shift
+WARNING: shift/reduce conflict for TkNEqual in state 78 resolved as shift
