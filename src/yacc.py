@@ -98,13 +98,13 @@ def p_instruccion(p):
                 | PRINT
                 | DO_LOOP
                 | FOR_LOOP
+                | CONDITIONAL
                 | TkSkip
     '''
     if p[1] != 'skip':
         p[0] =  p[1]
     else:
         p[0] = Nodo('Skip')
-                # | CONDITIONAL
 
 # Produccion para detectar asignaciones
 def p_asig(p):
@@ -235,7 +235,7 @@ def p_array_index(p):
     '''
     p[0] = Nodo("ReadArray", Nodo(f"Ident: {p[1]}"), p[3])
 
-# Produccion para detectar un do-loop
+# Produccion para detectar un do-loop TODO: multiples guardias
 def p_do_loop(p):
     '''
     DO_LOOP : TkDo E TkArrow LIST_INSTRUCTIONS TkOd
@@ -249,6 +249,26 @@ def p_for_loop(p):
     '''
     p[0] = Nodo('For', Nodo('In', Nodo(f"Ident: {p[2]}"), Nodo('To', p[4], p[6])), p[8])
 
+# Produccion para detectar If/Guard
+def p_if_conditional(p):
+    '''
+    CONDITIONAL : TkIf GUARD TkFi
+    '''
+    p[0] = Nodo('If', p[2])
+
+def p_if_guard_base(p):
+    '''
+    GUARD : E TkArrow LIST_INSTRUCTIONS
+    '''
+    p[0] = Nodo('Then', p[1], p[3])
+
+def p_if_guard(p):
+    '''
+    GUARD : GUARD TkGuard E TkArrow LIST_INSTRUCTIONS
+    '''
+    p[0] = Nodo("Guard", p[1], Nodo('Then', p[3], p[5])) 
+    
+
 parser = yacc.yacc()
 
 data = '''
@@ -259,7 +279,9 @@ data = '''
         f : array[2..4];
         y, x: bool
 
-    a := x(1:3)(2:4)
+    if max_ < t -->
+          max_ := r
+    fi
 ]|
 '''
 
