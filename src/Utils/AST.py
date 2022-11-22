@@ -13,7 +13,7 @@ class Nodo():
 
 
 
-def print_arbol(nodo: Nodo, guion = "-"):
+def print_arbol(nodo: Nodo, guion = ""):
     print(guion + str(nodo)) 
 
     if nodo.leftChild :  

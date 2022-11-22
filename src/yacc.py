@@ -1,6 +1,8 @@
 import ply.yacc as yacc
 from lexer import tokens
 from Utils.AST import *
+import sys
+import codecs
 
 trad_op = {
     '+' : 'Plus',
@@ -18,9 +20,15 @@ trad_op = {
     'in' : 'In'
 }
 
-# precedence = (
-#     ('rigth', 'TkAsig')
-# )
+precedence = (
+    ('left', 'TkOr'),
+    ('left', 'TkAnd'),
+    ('right', 'TkNot'),
+    ('left', 'TkEqual', 'TkNEqual'),
+    ('left','TkLess', 'TkLeq', 'TkGeq', 'TkGreater'), 
+    ('left', 'TkPlus', 'TkMinus'),
+    ('right', 'TkMult')
+)
 
 def p_error(p):
     print("error")
@@ -30,15 +38,20 @@ def p_program(p):
     '''
     BLOCK : TkOBlock DECLARE LIST_INSTRUCTIONS TkCBlock
     '''
-    # p[0] = Nodo("Block", p[2], p[3])
-    p[0] = Nodo("Block", p[3])
+    p[0] = Nodo("Block", p[2], p[3])
+    # p[0] = Nodo("Block", p[3])
+    # p[0] = Nodo("Block", p[2])
     print(f'******** Todo bien **********')
 
 def p_declare(p):
     '''
     DECLARE : TkDeclare LIST_DECLARE
+            | 
     '''
-    p[0] = Nodo("Declare", p[2])
+    if len(p) == 1:
+        p[0] = None
+    else:
+        p[0] = Nodo("Declare", p[2])
 
 def p_list_declare_base(p):
     '''
@@ -104,7 +117,7 @@ def p_instruccion(p):
     if p[1] != 'skip':
         p[0] =  p[1]
     else:
-        p[0] = Nodo('Skip')
+        p[0] = Nodo('skip')
 
 # Produccion para detectar asignaciones
 def p_asig(p):
@@ -188,10 +201,13 @@ def p_expression_base(p):
       | TkId
       | TkTrue
       | TkFalse
+      | READ_ARRAY
     '''
     if isinstance(p[1], int) or p[1] == 'true' or p[1] == 'false':
         p[0] = Nodo(f"Literal: {p[1]}")
     
+    elif isinstance(p[1], Nodo):
+        p[0] = p[1]
     else:
         p[0] = Nodo(f"Ident: {p[1]}")
         
@@ -227,7 +243,7 @@ def p_expression_print(p):
     if isinstance(p[1], Nodo):
         p[0] = p[1]
     else:
-        p[0] = Nodo(str(p[1]))
+        p[0] = Nodo(f"String: {p[1]}")
 
 def p_array_index(p):
     '''
@@ -268,27 +284,51 @@ def p_if_guard(p):
     '''
     p[0] = Nodo("Guard", p[1], Nodo('Then', p[3], p[5])) 
     
+archivo = sys.argv[1]
+# abrir archivo
+handleFile = codecs.open(archivo)
+data = handleFile.read()
 
+
+
+# data = '''
+# |[
+#     declare
+#         a : int
+    
+#     a := A[0]
+
+
+# ]|
+# '''
 parser = yacc.yacc()
-
-data = '''
-|[ 
-    declare
-        h : int;
-        g, h, k : int;
-        f : array[2..4];
-        y, x: bool
-
-    if max_ < t -->
-          max_ := r
-    fi
-]|
-'''
-
 ast = parser.parse(data)
-# print(ast)
 
 print_arbol(ast)
 
-# print(result)
 
+
+
+
+
+
+################### TEST ######################
+arch = sys.argv[2]
+f = open(f"../CasosDePrueba/MyOuts/{arch}", "w")
+
+def write_arbol(nodo: Nodo, guion = ""):
+    f.write(guion + str(nodo))
+    f.write("\n")
+
+    if nodo.leftChild :  
+        write_arbol(nodo.leftChild, guion + "-")
+        
+    
+    if nodo.rigthChild:  
+        write_arbol(nodo.rigthChild, guion + "-")
+
+write_arbol(ast)
+
+# f.truncate(f.tell()-1)
+
+f.close()
