@@ -10,7 +10,6 @@ BLOCK -> TkOBlock DECLARE LIST_INSTRUCTIONS TkCBlock
 SUBPROGRAM -> BLOCK
             | LIST_INSTRUCTIONS
 
-
 // Produccion para detectar un Bloque de declaracion de variables
 
 DECLARE -> TkDeclare LIST_DECLARE
