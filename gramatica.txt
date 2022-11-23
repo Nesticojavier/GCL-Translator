@@ -1,0 +1,126 @@
+// Proyecto Etapa II: Analisis Sintactico con Arbol Sintactico Abstracto (AST)
+// Producciones:
+// Simbolo inicial: BLOCK
+
+
+// Produccion para detectar un Programa
+
+BLOCK -> TkOBlock DECLARE LIST_INSTRUCTIONS TkCBlock
+    
+SUBPROGRAM -> BLOCK
+            | LIST_INSTRUCTIONS
+
+
+// Produccion para detectar un Bloque de declaracion de variables
+
+DECLARE -> TkDeclare LIST_DECLARE
+        | lambda
+
+LIST_DECLARE -> VARIABLE_DECLARATION
+
+LIST_DECLARE -> LIST_DECLARE TkSemicolon VARIABLE_DECLARATION
+
+VARIABLE_DECLARATION -> TkId TkTwoPoints TYPE
+
+VARIABLE_DECLARATION -> TkId TkComma VARIABLE_DECLARATION
+
+TYPE -> TkInt 
+        | TkBool 
+        | ARRAY_DECLARATION
+
+ARRAY_DECLARATION -> TkArray TkOBracket NUM TkSoForth NUM TkCBracket
+
+NUM -> TkNum
+    | TkMinus TkNum
+
+// Produccion para detectar un Bloque de instrucciones
+
+LIST_INSTRUCTIONS -> INSTRUCTION
+
+LIST_INSTRUCTIONS -> LIST_INSTRUCTIONS TkSemicolon INSTRUCTION
+
+INSTRUCTION -> ASIG
+            | PRINT
+            | FOR_LOOP
+            | DO_LOOP
+            | CONDITIONAL
+            | TkSkip
+
+// Produccion para detectar Asignaciones
+
+ASIG -> TkId TkAsig EXPRESSION
+    
+EXPRESSION -> E
+            | ASIG_ARRAY
+
+ASIG_ARRAY -> CREATE_ARRAY
+            | WRITE_ARRAY
+
+CREATE_ARRAY -> E TkComma E
+
+CREATE_ARRAY -> CREATE_ARRAY TkComma E
+
+WRITE_ARRAY -> TkId TkOpenPar E TkTwoPoints E TkClosePar
+
+WRITE_ARRAY -> WRITE_ARRAY TkOpenPar E TkTwoPoints E TkClosePar
+
+E -> E TkMult E
+    | E TkPlus E
+    | E TkMinus E
+    | E TkOr E
+    | E TkAnd E
+    | E TkLess E
+    | E TkLeq E
+    | E TkGeq E
+    | E TkGreater E
+    | E TkEqual E
+    | E TkNEqual E
+
+E -> TkOpenPar E TkClosePar
+
+E -> TkNot E 
+    | TkMinus E 
+        
+E -> TkNum
+    | TkId
+    | TkTrue
+    | TkFalse
+    | READ_ARRAY
+
+// Produccion para detectar un Print
+
+PRINT -> TkPrint TOPRINT  
+    
+TOPRINT -> EXPRESSION_TO_PRINT   
+
+TOPRINT -> TOPRINT TkConcat EXPRESSION_TO_PRINT   
+
+EXPRESSION_TO_PRINT -> TkId
+            | STRING
+            | TkNum
+            | TkTrue
+            | TkFalse
+            | READ_ARRAY
+
+STRING -> TkString
+
+READ_ARRAY -> ARRAY TkOBracket E TkCBracket
+
+ARRAY -> TkId
+        | WRITE_ARRAY
+
+// Produccion para detectar un for-loop
+
+FOR_LOOP -> TkFor TkId TkIn E TkTo E TkArrow SUBPROGRAM TkRof
+
+// Produccion para detectar un do-loop
+
+DO_LOOP -> TkDo GUARD TkOd
+
+// Produccion para detectar If/Guard
+
+CONDITIONAL -> TkIf GUARD TkFi
+    
+GUARD -> E TkArrow SUBPROGRAM
+
+GUARD -> GUARD TkGuard E TkArrow SUBPROGRAM
