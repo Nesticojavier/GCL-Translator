@@ -96,9 +96,19 @@ def p_type_varible_declare(p):
     
 def p_array_declaration(p):
     '''
-    ARRAY_DECLARATION : TkArray TkOBracket TkNum TkSoForth TkNum TkCBracket
+    ARRAY_DECLARATION : TkArray TkOBracket NUM TkSoForth NUM TkCBracket
     '''
     p[0] = f"array[Literal: {p[3]}..Literal: {p[5]}]"
+
+def p_num_integer(p):
+    '''
+    NUM : TkNum
+        | TkMinus TkNum
+    '''
+    if len(p) == 3:
+        p[0] = -p[2]
+    else:
+        p[0] = p[1]
 
 ################### BLOQUE DE INSTRUCCIONES #######################
 def p_intruccions_list_base(p):
@@ -248,7 +258,7 @@ def p_to_print(p):
 def p_expression_print(p):
     '''
     EXPRESSION_TO_PRINT : TkId
-               | TkString
+               | STRING
                | TkNum
                | TkTrue
                | TkFalse
@@ -261,7 +271,13 @@ def p_expression_print(p):
         p[0] = Nodo(f"Literal: {p[1]}")
 
     else:
-        p[0] = Nodo(f"String: {p[1]}")
+        p[0] = Nodo(f"Ident: {p[1]}")
+
+def p_string(p):
+    '''
+    STRING : TkString
+    '''
+    p[0] = Nodo(f"String: {p[1]}")
 
 def p_array_index(p):
     '''
@@ -302,13 +318,13 @@ def p_if_conditional(p):
 
 def p_guard_base(p):
     '''
-    GUARD : E TkArrow LIST_INSTRUCTIONS
+    GUARD : E TkArrow SUBPROGRAM
     '''
     p[0] = Nodo('Then', p[1], p[3])
 
 def p_guard(p):
     '''
-    GUARD : GUARD TkGuard E TkArrow LIST_INSTRUCTIONS
+    GUARD : GUARD TkGuard E TkArrow SUBPROGRAM
     '''
     p[0] = Nodo("Guard", p[1], Nodo('Then', p[3], p[5])) 
     
@@ -318,7 +334,7 @@ handleFile = codecs.open(archivo)
 data = handleFile.read()
 
 
-parser = yacc.yacc()
+parser = yacc.yacc('SLR')
 ast = parser.parse(data)
 
 print_arbol(ast)
