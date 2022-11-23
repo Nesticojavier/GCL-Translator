@@ -27,7 +27,8 @@ precedence = (
     ('left', 'TkEqual', 'TkNEqual'),
     ('left','TkLess', 'TkLeq', 'TkGeq', 'TkGreater'), 
     ('left', 'TkPlus', 'TkMinus'),
-    ('right', 'TkMult')
+    ('right', 'TkMult'),
+    ('right', 'UNARY')
 )
 
 def p_error(p):
@@ -42,6 +43,13 @@ def p_program(p):
     # p[0] = Nodo("Block", p[3])
     # p[0] = Nodo("Block", p[2])
     print(f'******** Todo bien **********')
+
+def p_subprogram(p):
+    '''
+    SUBPROGRAM : BLOCK
+               | LIST_INSTRUCTIONS
+    '''
+    p[0] = p[1]
 
 def p_declare(p):
     '''
@@ -109,8 +117,8 @@ def p_instruccion(p):
     '''
     INSTRUCTION : ASIG
                 | PRINT
-                | DO_LOOP
                 | FOR_LOOP
+                | DO_LOOP
                 | CONDITIONAL
                 | TkSkip
     '''
@@ -190,10 +198,16 @@ def p_expression_par(p):
 
 def p_expression_op_unary(p):
     '''
-    E : TkNot E
-      | TkMinus E
+    E : TkNot E %prec UNARY
+      | TkMinus E %prec UNARY
     '''
     p[0] = Nodo(trad_op.get(p[1]), p[2])
+
+# def p_unary_minus(p):
+#     '''
+#     UMINUS : TkMinus
+#     '''
+#     p[0] = p[1]
 
 def p_expression_base(p):
     '''
@@ -242,28 +256,42 @@ def p_expression_print(p):
     '''
     if isinstance(p[1], Nodo):
         p[0] = p[1]
+
+    elif isinstance(p[1], int) or p[1] == 'true' or p[1] == 'false':
+        p[0] = Nodo(f"Literal: {p[1]}")
+
     else:
         p[0] = Nodo(f"String: {p[1]}")
 
 def p_array_index(p):
     '''
-    READ_ARRAY : TkId TkOBracket E TkCBracket
+    READ_ARRAY : ARRAY TkOBracket E TkCBracket
     '''
-    p[0] = Nodo("ReadArray", Nodo(f"Ident: {p[1]}"), p[3])
+    p[0] = Nodo("ReadArray", p[1], p[3])
 
-# Produccion para detectar un do-loop TODO: multiples guardias
-def p_do_loop(p):
+def p_array_index_id_or_read(p):
     '''
-    DO_LOOP : TkDo E TkArrow LIST_INSTRUCTIONS TkOd
+    ARRAY : TkId
+          | WRITE_ARRAY
     '''
-    p[0] = Nodo("Do", Nodo("Then", p[2], p[4]))
+    if isinstance(p[1], Nodo):
+        p[0] = p[1]
+    else:
+        p[0] = Nodo(f"Ident: {p[1]}")
 
 # Produccion para detectar un for-loop
 def p_for_loop(p):
     '''
-    FOR_LOOP : TkFor TkId TkIn E TkTo E TkArrow LIST_INSTRUCTIONS TkRof
+    FOR_LOOP : TkFor TkId TkIn E TkTo E TkArrow SUBPROGRAM TkRof
     '''
     p[0] = Nodo('For', Nodo('In', Nodo(f"Ident: {p[2]}"), Nodo('To', p[4], p[6])), p[8])
+
+# Produccion para detectar un do-loop TODO: multiples guardias
+def p_do_loop(p):
+    '''
+    DO_LOOP : TkDo GUARD TkOd
+    '''
+    p[0] = Nodo('Do', p[2])
 
 # Produccion para detectar If/Guard
 def p_if_conditional(p):
@@ -272,13 +300,13 @@ def p_if_conditional(p):
     '''
     p[0] = Nodo('If', p[2])
 
-def p_if_guard_base(p):
+def p_guard_base(p):
     '''
     GUARD : E TkArrow LIST_INSTRUCTIONS
     '''
     p[0] = Nodo('Then', p[1], p[3])
 
-def p_if_guard(p):
+def p_guard(p):
     '''
     GUARD : GUARD TkGuard E TkArrow LIST_INSTRUCTIONS
     '''
@@ -290,17 +318,6 @@ handleFile = codecs.open(archivo)
 data = handleFile.read()
 
 
-
-# data = '''
-# |[
-#     declare
-#         a : int
-    
-#     a := A[0]
-
-
-# ]|
-# '''
 parser = yacc.yacc()
 ast = parser.parse(data)
 
