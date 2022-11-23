@@ -1970,12 +1970,16 @@ state 76
     TkTwoPoints     reduce using rule 46 (E -> TkMinus E .)
     TkClosePar      reduce using rule 46 (E -> TkMinus E .)
     TkMult          reduce using rule 46 (E -> TkMinus E .)
+    TkPlus          reduce using rule 46 (E -> TkMinus E .)
+    TkMinus         reduce using rule 46 (E -> TkMinus E .)
     TkOr            reduce using rule 46 (E -> TkMinus E .)
     TkAnd           reduce using rule 46 (E -> TkMinus E .)
     TkLess          reduce using rule 46 (E -> TkMinus E .)
     TkLeq           reduce using rule 46 (E -> TkMinus E .)
     TkGeq           reduce using rule 46 (E -> TkMinus E .)
     TkGreater       reduce using rule 46 (E -> TkMinus E .)
+    TkEqual         reduce using rule 46 (E -> TkMinus E .)
+    TkNEqual        reduce using rule 46 (E -> TkMinus E .)
     TkCBracket      reduce using rule 46 (E -> TkMinus E .)
     TkTo            reduce using rule 46 (E -> TkMinus E .)
     TkArrow         reduce using rule 46 (E -> TkMinus E .)
@@ -1983,22 +1987,18 @@ state 76
     TkOd            reduce using rule 46 (E -> TkMinus E .)
     TkFi            reduce using rule 46 (E -> TkMinus E .)
     TkGuard         reduce using rule 46 (E -> TkMinus E .)
-    TkPlus          shift and go to state 66
-    TkMinus         shift and go to state 67
-    TkEqual         shift and go to state 74
-    TkNEqual        shift and go to state 75
 
-  ! TkPlus          [ reduce using rule 46 (E -> TkMinus E .) ]
-  ! TkMinus         [ reduce using rule 46 (E -> TkMinus E .) ]
-  ! TkEqual         [ reduce using rule 46 (E -> TkMinus E .) ]
-  ! TkNEqual        [ reduce using rule 46 (E -> TkMinus E .) ]
   ! TkMult          [ shift and go to state 65 ]
+  ! TkPlus          [ shift and go to state 66 ]
+  ! TkMinus         [ shift and go to state 67 ]
   ! TkOr            [ shift and go to state 68 ]
   ! TkAnd           [ shift and go to state 69 ]
   ! TkLess          [ shift and go to state 70 ]
   ! TkLeq           [ shift and go to state 71 ]
   ! TkGeq           [ shift and go to state 72 ]
   ! TkGreater       [ shift and go to state 73 ]
+  ! TkEqual         [ shift and go to state 74 ]
+  ! TkNEqual        [ shift and go to state 75 ]
 
 
 state 77
@@ -2050,13 +2050,8 @@ state 78
     TkComma         reduce using rule 45 (E -> TkNot E .)
     TkTwoPoints     reduce using rule 45 (E -> TkNot E .)
     TkClosePar      reduce using rule 45 (E -> TkNot E .)
-    TkMult          reduce using rule 45 (E -> TkNot E .)
     TkOr            reduce using rule 45 (E -> TkNot E .)
     TkAnd           reduce using rule 45 (E -> TkNot E .)
-    TkLess          reduce using rule 45 (E -> TkNot E .)
-    TkLeq           reduce using rule 45 (E -> TkNot E .)
-    TkGeq           reduce using rule 45 (E -> TkNot E .)
-    TkGreater       reduce using rule 45 (E -> TkNot E .)
     TkCBracket      reduce using rule 45 (E -> TkNot E .)
     TkTo            reduce using rule 45 (E -> TkNot E .)
     TkArrow         reduce using rule 45 (E -> TkNot E .)
@@ -2064,22 +2059,27 @@ state 78
     TkOd            reduce using rule 45 (E -> TkNot E .)
     TkFi            reduce using rule 45 (E -> TkNot E .)
     TkGuard         reduce using rule 45 (E -> TkNot E .)
+    TkMult          shift and go to state 65
     TkPlus          shift and go to state 66
     TkMinus         shift and go to state 67
+    TkLess          shift and go to state 70
+    TkLeq           shift and go to state 71
+    TkGeq           shift and go to state 72
+    TkGreater       shift and go to state 73
     TkEqual         shift and go to state 74
     TkNEqual        shift and go to state 75
 
+  ! TkMult          [ reduce using rule 45 (E -> TkNot E .) ]
   ! TkPlus          [ reduce using rule 45 (E -> TkNot E .) ]
   ! TkMinus         [ reduce using rule 45 (E -> TkNot E .) ]
+  ! TkLess          [ reduce using rule 45 (E -> TkNot E .) ]
+  ! TkLeq           [ reduce using rule 45 (E -> TkNot E .) ]
+  ! TkGeq           [ reduce using rule 45 (E -> TkNot E .) ]
+  ! TkGreater       [ reduce using rule 45 (E -> TkNot E .) ]
   ! TkEqual         [ reduce using rule 45 (E -> TkNot E .) ]
   ! TkNEqual        [ reduce using rule 45 (E -> TkNot E .) ]
-  ! TkMult          [ shift and go to state 65 ]
   ! TkOr            [ shift and go to state 68 ]
   ! TkAnd           [ shift and go to state 69 ]
-  ! TkLess          [ shift and go to state 70 ]
-  ! TkLeq           [ shift and go to state 71 ]
-  ! TkGeq           [ shift and go to state 72 ]
-  ! TkGreater       [ shift and go to state 73 ]
 
 
 state 79
@@ -2471,12 +2471,16 @@ state 98
     TkTwoPoints     reduce using rule 33 (E -> E TkMult E .)
     TkClosePar      reduce using rule 33 (E -> E TkMult E .)
     TkMult          reduce using rule 33 (E -> E TkMult E .)
+    TkPlus          reduce using rule 33 (E -> E TkMult E .)
+    TkMinus         reduce using rule 33 (E -> E TkMult E .)
     TkOr            reduce using rule 33 (E -> E TkMult E .)
     TkAnd           reduce using rule 33 (E -> E TkMult E .)
     TkLess          reduce using rule 33 (E -> E TkMult E .)
     TkLeq           reduce using rule 33 (E -> E TkMult E .)
     TkGeq           reduce using rule 33 (E -> E TkMult E .)
     TkGreater       reduce using rule 33 (E -> E TkMult E .)
+    TkEqual         reduce using rule 33 (E -> E TkMult E .)
+    TkNEqual        reduce using rule 33 (E -> E TkMult E .)
     TkCBracket      reduce using rule 33 (E -> E TkMult E .)
     TkTo            reduce using rule 33 (E -> E TkMult E .)
     TkArrow         reduce using rule 33 (E -> E TkMult E .)
@@ -2484,22 +2488,18 @@ state 98
     TkOd            reduce using rule 33 (E -> E TkMult E .)
     TkFi            reduce using rule 33 (E -> E TkMult E .)
     TkGuard         reduce using rule 33 (E -> E TkMult E .)
-    TkPlus          shift and go to state 66
-    TkMinus         shift and go to state 67
-    TkEqual         shift and go to state 74
-    TkNEqual        shift and go to state 75
 
-  ! TkPlus          [ reduce using rule 33 (E -> E TkMult E .) ]
-  ! TkMinus         [ reduce using rule 33 (E -> E TkMult E .) ]
-  ! TkEqual         [ reduce using rule 33 (E -> E TkMult E .) ]
-  ! TkNEqual        [ reduce using rule 33 (E -> E TkMult E .) ]
   ! TkMult          [ shift and go to state 65 ]
+  ! TkPlus          [ shift and go to state 66 ]
+  ! TkMinus         [ shift and go to state 67 ]
   ! TkOr            [ shift and go to state 68 ]
   ! TkAnd           [ shift and go to state 69 ]
   ! TkLess          [ shift and go to state 70 ]
   ! TkLeq           [ shift and go to state 71 ]
   ! TkGeq           [ shift and go to state 72 ]
   ! TkGreater       [ shift and go to state 73 ]
+  ! TkEqual         [ shift and go to state 74 ]
+  ! TkNEqual        [ shift and go to state 75 ]
 
 
 state 99
@@ -2522,7 +2522,6 @@ state 99
     TkComma         reduce using rule 34 (E -> E TkPlus E .)
     TkTwoPoints     reduce using rule 34 (E -> E TkPlus E .)
     TkClosePar      reduce using rule 34 (E -> E TkPlus E .)
-    TkMult          reduce using rule 34 (E -> E TkPlus E .)
     TkPlus          reduce using rule 34 (E -> E TkPlus E .)
     TkMinus         reduce using rule 34 (E -> E TkPlus E .)
     TkOr            reduce using rule 34 (E -> E TkPlus E .)
@@ -2540,8 +2539,9 @@ state 99
     TkOd            reduce using rule 34 (E -> E TkPlus E .)
     TkFi            reduce using rule 34 (E -> E TkPlus E .)
     TkGuard         reduce using rule 34 (E -> E TkPlus E .)
+    TkMult          shift and go to state 65
 
-  ! TkMult          [ shift and go to state 65 ]
+  ! TkMult          [ reduce using rule 34 (E -> E TkPlus E .) ]
   ! TkPlus          [ shift and go to state 66 ]
   ! TkMinus         [ shift and go to state 67 ]
   ! TkOr            [ shift and go to state 68 ]
@@ -2574,7 +2574,6 @@ state 100
     TkComma         reduce using rule 35 (E -> E TkMinus E .)
     TkTwoPoints     reduce using rule 35 (E -> E TkMinus E .)
     TkClosePar      reduce using rule 35 (E -> E TkMinus E .)
-    TkMult          reduce using rule 35 (E -> E TkMinus E .)
     TkPlus          reduce using rule 35 (E -> E TkMinus E .)
     TkMinus         reduce using rule 35 (E -> E TkMinus E .)
     TkOr            reduce using rule 35 (E -> E TkMinus E .)
@@ -2592,8 +2591,9 @@ state 100
     TkOd            reduce using rule 35 (E -> E TkMinus E .)
     TkFi            reduce using rule 35 (E -> E TkMinus E .)
     TkGuard         reduce using rule 35 (E -> E TkMinus E .)
+    TkMult          shift and go to state 65
 
-  ! TkMult          [ shift and go to state 65 ]
+  ! TkMult          [ reduce using rule 35 (E -> E TkMinus E .) ]
   ! TkPlus          [ shift and go to state 66 ]
   ! TkMinus         [ shift and go to state 67 ]
   ! TkOr            [ shift and go to state 68 ]
@@ -2736,6 +2736,8 @@ state 103
     TkLeq           reduce using rule 38 (E -> E TkLess E .)
     TkGeq           reduce using rule 38 (E -> E TkLess E .)
     TkGreater       reduce using rule 38 (E -> E TkLess E .)
+    TkEqual         reduce using rule 38 (E -> E TkLess E .)
+    TkNEqual        reduce using rule 38 (E -> E TkLess E .)
     TkCBracket      reduce using rule 38 (E -> E TkLess E .)
     TkTo            reduce using rule 38 (E -> E TkLess E .)
     TkArrow         reduce using rule 38 (E -> E TkLess E .)
@@ -2746,20 +2748,18 @@ state 103
     TkMult          shift and go to state 65
     TkPlus          shift and go to state 66
     TkMinus         shift and go to state 67
-    TkEqual         shift and go to state 74
-    TkNEqual        shift and go to state 75
 
   ! TkMult          [ reduce using rule 38 (E -> E TkLess E .) ]
   ! TkPlus          [ reduce using rule 38 (E -> E TkLess E .) ]
   ! TkMinus         [ reduce using rule 38 (E -> E TkLess E .) ]
-  ! TkEqual         [ reduce using rule 38 (E -> E TkLess E .) ]
-  ! TkNEqual        [ reduce using rule 38 (E -> E TkLess E .) ]
   ! TkOr            [ shift and go to state 68 ]
   ! TkAnd           [ shift and go to state 69 ]
   ! TkLess          [ shift and go to state 70 ]
   ! TkLeq           [ shift and go to state 71 ]
   ! TkGeq           [ shift and go to state 72 ]
   ! TkGreater       [ shift and go to state 73 ]
+  ! TkEqual         [ shift and go to state 74 ]
+  ! TkNEqual        [ shift and go to state 75 ]
 
 
 state 104
@@ -2788,6 +2788,8 @@ state 104
     TkLeq           reduce using rule 39 (E -> E TkLeq E .)
     TkGeq           reduce using rule 39 (E -> E TkLeq E .)
     TkGreater       reduce using rule 39 (E -> E TkLeq E .)
+    TkEqual         reduce using rule 39 (E -> E TkLeq E .)
+    TkNEqual        reduce using rule 39 (E -> E TkLeq E .)
     TkCBracket      reduce using rule 39 (E -> E TkLeq E .)
     TkTo            reduce using rule 39 (E -> E TkLeq E .)
     TkArrow         reduce using rule 39 (E -> E TkLeq E .)
@@ -2798,20 +2800,18 @@ state 104
     TkMult          shift and go to state 65
     TkPlus          shift and go to state 66
     TkMinus         shift and go to state 67
-    TkEqual         shift and go to state 74
-    TkNEqual        shift and go to state 75
 
   ! TkMult          [ reduce using rule 39 (E -> E TkLeq E .) ]
   ! TkPlus          [ reduce using rule 39 (E -> E TkLeq E .) ]
   ! TkMinus         [ reduce using rule 39 (E -> E TkLeq E .) ]
-  ! TkEqual         [ reduce using rule 39 (E -> E TkLeq E .) ]
-  ! TkNEqual        [ reduce using rule 39 (E -> E TkLeq E .) ]
   ! TkOr            [ shift and go to state 68 ]
   ! TkAnd           [ shift and go to state 69 ]
   ! TkLess          [ shift and go to state 70 ]
   ! TkLeq           [ shift and go to state 71 ]
   ! TkGeq           [ shift and go to state 72 ]
   ! TkGreater       [ shift and go to state 73 ]
+  ! TkEqual         [ shift and go to state 74 ]
+  ! TkNEqual        [ shift and go to state 75 ]
 
 
 state 105
@@ -2840,6 +2840,8 @@ state 105
     TkLeq           reduce using rule 40 (E -> E TkGeq E .)
     TkGeq           reduce using rule 40 (E -> E TkGeq E .)
     TkGreater       reduce using rule 40 (E -> E TkGeq E .)
+    TkEqual         reduce using rule 40 (E -> E TkGeq E .)
+    TkNEqual        reduce using rule 40 (E -> E TkGeq E .)
     TkCBracket      reduce using rule 40 (E -> E TkGeq E .)
     TkTo            reduce using rule 40 (E -> E TkGeq E .)
     TkArrow         reduce using rule 40 (E -> E TkGeq E .)
@@ -2850,20 +2852,18 @@ state 105
     TkMult          shift and go to state 65
     TkPlus          shift and go to state 66
     TkMinus         shift and go to state 67
-    TkEqual         shift and go to state 74
-    TkNEqual        shift and go to state 75
 
   ! TkMult          [ reduce using rule 40 (E -> E TkGeq E .) ]
   ! TkPlus          [ reduce using rule 40 (E -> E TkGeq E .) ]
   ! TkMinus         [ reduce using rule 40 (E -> E TkGeq E .) ]
-  ! TkEqual         [ reduce using rule 40 (E -> E TkGeq E .) ]
-  ! TkNEqual        [ reduce using rule 40 (E -> E TkGeq E .) ]
   ! TkOr            [ shift and go to state 68 ]
   ! TkAnd           [ shift and go to state 69 ]
   ! TkLess          [ shift and go to state 70 ]
   ! TkLeq           [ shift and go to state 71 ]
   ! TkGeq           [ shift and go to state 72 ]
   ! TkGreater       [ shift and go to state 73 ]
+  ! TkEqual         [ shift and go to state 74 ]
+  ! TkNEqual        [ shift and go to state 75 ]
 
 
 state 106
@@ -2892,6 +2892,8 @@ state 106
     TkLeq           reduce using rule 41 (E -> E TkGreater E .)
     TkGeq           reduce using rule 41 (E -> E TkGreater E .)
     TkGreater       reduce using rule 41 (E -> E TkGreater E .)
+    TkEqual         reduce using rule 41 (E -> E TkGreater E .)
+    TkNEqual        reduce using rule 41 (E -> E TkGreater E .)
     TkCBracket      reduce using rule 41 (E -> E TkGreater E .)
     TkTo            reduce using rule 41 (E -> E TkGreater E .)
     TkArrow         reduce using rule 41 (E -> E TkGreater E .)
@@ -2902,20 +2904,18 @@ state 106
     TkMult          shift and go to state 65
     TkPlus          shift and go to state 66
     TkMinus         shift and go to state 67
-    TkEqual         shift and go to state 74
-    TkNEqual        shift and go to state 75
 
   ! TkMult          [ reduce using rule 41 (E -> E TkGreater E .) ]
   ! TkPlus          [ reduce using rule 41 (E -> E TkGreater E .) ]
   ! TkMinus         [ reduce using rule 41 (E -> E TkGreater E .) ]
-  ! TkEqual         [ reduce using rule 41 (E -> E TkGreater E .) ]
-  ! TkNEqual        [ reduce using rule 41 (E -> E TkGreater E .) ]
   ! TkOr            [ shift and go to state 68 ]
   ! TkAnd           [ shift and go to state 69 ]
   ! TkLess          [ shift and go to state 70 ]
   ! TkLeq           [ shift and go to state 71 ]
   ! TkGeq           [ shift and go to state 72 ]
   ! TkGreater       [ shift and go to state 73 ]
+  ! TkEqual         [ shift and go to state 74 ]
+  ! TkNEqual        [ shift and go to state 75 ]
 
 
 state 107
@@ -2938,13 +2938,8 @@ state 107
     TkComma         reduce using rule 42 (E -> E TkEqual E .)
     TkTwoPoints     reduce using rule 42 (E -> E TkEqual E .)
     TkClosePar      reduce using rule 42 (E -> E TkEqual E .)
-    TkMult          reduce using rule 42 (E -> E TkEqual E .)
     TkOr            reduce using rule 42 (E -> E TkEqual E .)
     TkAnd           reduce using rule 42 (E -> E TkEqual E .)
-    TkLess          reduce using rule 42 (E -> E TkEqual E .)
-    TkLeq           reduce using rule 42 (E -> E TkEqual E .)
-    TkGeq           reduce using rule 42 (E -> E TkEqual E .)
-    TkGreater       reduce using rule 42 (E -> E TkEqual E .)
     TkEqual         reduce using rule 42 (E -> E TkEqual E .)
     TkNEqual        reduce using rule 42 (E -> E TkEqual E .)
     TkCBracket      reduce using rule 42 (E -> E TkEqual E .)
@@ -2954,18 +2949,23 @@ state 107
     TkOd            reduce using rule 42 (E -> E TkEqual E .)
     TkFi            reduce using rule 42 (E -> E TkEqual E .)
     TkGuard         reduce using rule 42 (E -> E TkEqual E .)
+    TkMult          shift and go to state 65
     TkPlus          shift and go to state 66
     TkMinus         shift and go to state 67
+    TkLess          shift and go to state 70
+    TkLeq           shift and go to state 71
+    TkGeq           shift and go to state 72
+    TkGreater       shift and go to state 73
 
+  ! TkMult          [ reduce using rule 42 (E -> E TkEqual E .) ]
   ! TkPlus          [ reduce using rule 42 (E -> E TkEqual E .) ]
   ! TkMinus         [ reduce using rule 42 (E -> E TkEqual E .) ]
-  ! TkMult          [ shift and go to state 65 ]
+  ! TkLess          [ reduce using rule 42 (E -> E TkEqual E .) ]
+  ! TkLeq           [ reduce using rule 42 (E -> E TkEqual E .) ]
+  ! TkGeq           [ reduce using rule 42 (E -> E TkEqual E .) ]
+  ! TkGreater       [ reduce using rule 42 (E -> E TkEqual E .) ]
   ! TkOr            [ shift and go to state 68 ]
   ! TkAnd           [ shift and go to state 69 ]
-  ! TkLess          [ shift and go to state 70 ]
-  ! TkLeq           [ shift and go to state 71 ]
-  ! TkGeq           [ shift and go to state 72 ]
-  ! TkGreater       [ shift and go to state 73 ]
   ! TkEqual         [ shift and go to state 74 ]
   ! TkNEqual        [ shift and go to state 75 ]
 
@@ -2990,13 +2990,8 @@ state 108
     TkComma         reduce using rule 43 (E -> E TkNEqual E .)
     TkTwoPoints     reduce using rule 43 (E -> E TkNEqual E .)
     TkClosePar      reduce using rule 43 (E -> E TkNEqual E .)
-    TkMult          reduce using rule 43 (E -> E TkNEqual E .)
     TkOr            reduce using rule 43 (E -> E TkNEqual E .)
     TkAnd           reduce using rule 43 (E -> E TkNEqual E .)
-    TkLess          reduce using rule 43 (E -> E TkNEqual E .)
-    TkLeq           reduce using rule 43 (E -> E TkNEqual E .)
-    TkGeq           reduce using rule 43 (E -> E TkNEqual E .)
-    TkGreater       reduce using rule 43 (E -> E TkNEqual E .)
     TkEqual         reduce using rule 43 (E -> E TkNEqual E .)
     TkNEqual        reduce using rule 43 (E -> E TkNEqual E .)
     TkCBracket      reduce using rule 43 (E -> E TkNEqual E .)
@@ -3006,18 +3001,23 @@ state 108
     TkOd            reduce using rule 43 (E -> E TkNEqual E .)
     TkFi            reduce using rule 43 (E -> E TkNEqual E .)
     TkGuard         reduce using rule 43 (E -> E TkNEqual E .)
+    TkMult          shift and go to state 65
     TkPlus          shift and go to state 66
     TkMinus         shift and go to state 67
+    TkLess          shift and go to state 70
+    TkLeq           shift and go to state 71
+    TkGeq           shift and go to state 72
+    TkGreater       shift and go to state 73
 
+  ! TkMult          [ reduce using rule 43 (E -> E TkNEqual E .) ]
   ! TkPlus          [ reduce using rule 43 (E -> E TkNEqual E .) ]
   ! TkMinus         [ reduce using rule 43 (E -> E TkNEqual E .) ]
-  ! TkMult          [ shift and go to state 65 ]
+  ! TkLess          [ reduce using rule 43 (E -> E TkNEqual E .) ]
+  ! TkLeq           [ reduce using rule 43 (E -> E TkNEqual E .) ]
+  ! TkGeq           [ reduce using rule 43 (E -> E TkNEqual E .) ]
+  ! TkGreater       [ reduce using rule 43 (E -> E TkNEqual E .) ]
   ! TkOr            [ shift and go to state 68 ]
   ! TkAnd           [ shift and go to state 69 ]
-  ! TkLess          [ shift and go to state 70 ]
-  ! TkLeq           [ shift and go to state 71 ]
-  ! TkGeq           [ shift and go to state 72 ]
-  ! TkGreater       [ shift and go to state 73 ]
   ! TkEqual         [ shift and go to state 74 ]
   ! TkNEqual        [ shift and go to state 75 ]
 

@@ -1,6 +1,7 @@
 import ply.yacc as yacc
 from lexer import tokens
 from Utils.AST import *
+from Utils.utils import *
 import sys
 import codecs
 
@@ -24,26 +25,23 @@ precedence = (
     ('left', 'TkOr'),
     ('left', 'TkAnd'),
     ('right', 'TkNot'),
-    ('nonassoc','TkLess', 'TkLeq', 'TkGeq', 'TkGreater'),
-    ('left', 'TkMult'),
-    ('nonassoc', 'UNARY'),
     ('nonassoc', 'TkEqual', 'TkNEqual'),
+    ('nonassoc','TkLess', 'TkLeq', 'TkGeq', 'TkGreater'),
     ('left', 'TkPlus', 'TkMinus'),
-    ('nonassoc', 'TkOpenPar', 'TkClosePar')
+    ('left', 'TkMult'),
+    ('nonassoc', 'UNARY')
 )
 
 def p_error(p):
-    print("error")
-    print(p)
+    print(f"Sintax error in row {p.lineno}, column" ,
+    f"{find_column(data, p)} unexpected token '{str(p.value)}'")
+    sys.exit(0)
 
 def p_program(p):
     '''
     BLOCK : TkOBlock DECLARE LIST_INSTRUCTIONS TkCBlock
     '''
     p[0] = Nodo("Block", p[2], p[3])
-    # p[0] = Nodo("Block", p[3])
-    # p[0] = Nodo("Block", p[2])
-    print(f'******** Todo bien **********')
 
 def p_subprogram(p):
     '''
@@ -209,16 +207,10 @@ def p_expression_par(p):
 
 def p_expression_op_unary(p):
     '''
-    E : TkNot E %prec UNARY
+    E : TkNot E
       | TkMinus E %prec UNARY
     '''
     p[0] = Nodo(trad_op.get(p[1]), p[2])
-
-# def p_unary_minus(p):
-#     '''
-#     UMINUS : TkMinus
-#     '''
-#     p[0] = p[1]
 
 def p_expression_base(p):
     '''
