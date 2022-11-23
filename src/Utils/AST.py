@@ -12,7 +12,6 @@ class Nodo():
       return self.name
 
 
-
 def print_arbol(nodo: Nodo, guion = ""):
     print(guion + str(nodo)) 
 
@@ -23,15 +22,3 @@ def print_arbol(nodo: Nodo, guion = ""):
     if nodo.rigthChild:  
         print_arbol(nodo.rigthChild, guion + "-")
    
-
-
-""" 
-Test print Arbol
-nieto = Nodo("Nieto")
-hijoIzq = Nodo("HijoIzq",nieto)
-hijoIzq2 = Nodo("HijoIzq",nieto)
-
-hijoDer = Nodo("HijoDer",hijoIzq2)
-Padre = Nodo("Padre",hijoIzq,hijoDer)
-
-printArbol(Padre) """
