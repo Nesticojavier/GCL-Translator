@@ -1,9 +1,9 @@
-import ply.yacc as yacc
 from lexer import tokens
-from Utils.AST import *
+import ply.yacc as yacc
 from Utils.utils import *
-import sys
+from Utils.AST import *
 import codecs
+import sys
 
 trad_op = {
     '+' : 'Plus',
@@ -319,23 +319,39 @@ def p_guard(p):
     '''
     GUARD : GUARD TkGuard E TkArrow SUBPROGRAM
     '''
-    p[0] = Nodo("Guard", p[1], Nodo('Then', p[3], p[5])) 
-    
+    p[0] = Nodo("Guard", p[1], Nodo('Then', p[3], p[5]))
+
+
+
+# Tomar el archivo 
 archivo = sys.argv[1]
-# abrir archivo
-handleFile = codecs.open(archivo)
-data = handleFile.read()
+
+# Intentar leer el archivo con el formato correcto
+try:
+
+    # abrir archivo
+    handleFile = codecs.open(archivo)
+
+    # comprobar extension file
+    if not archivo.endswith(".gcl"):
+        raise Exception("Error, la extension del archivo debe ser .gcl")
+        
+    data = handleFile.read()
+
+    # Impresion del AST
+    parser = yacc.yacc()
+    ast = parser.parse(data)
+    print_arbol(ast)
 
 
-parser = yacc.yacc('SLR')
-ast = parser.parse(data)
-
-print_arbol(ast)
-
-
-
-
-
+except FileNotFoundError as e:
+    print("Error, archivo [" + archivo + "] no encontrado")
+    # sys.exit(0)
+except Exception as e:
+    print(e)
+    # sys.exit(0)
+finally:
+    handleFile.close()
 
 
 ################### TEST ######################
