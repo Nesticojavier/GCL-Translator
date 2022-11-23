@@ -15,7 +15,7 @@ trad_op = {
     '>=' : 'Geq',
     '>' : 'Greater',
     '==' : 'Equal',
-    '!=' : 'Not Equal',
+    '!=' : 'NotEqual',
     '!' : 'Not',
     'in' : 'In'
 }
@@ -24,11 +24,12 @@ precedence = (
     ('left', 'TkOr'),
     ('left', 'TkAnd'),
     ('right', 'TkNot'),
-    ('left', 'TkEqual', 'TkNEqual'),
-    ('left','TkLess', 'TkLeq', 'TkGeq', 'TkGreater'), 
+    ('nonassoc','TkLess', 'TkLeq', 'TkGeq', 'TkGreater'),
+    ('left', 'TkMult'),
+    ('nonassoc', 'UNARY'),
+    ('nonassoc', 'TkEqual', 'TkNEqual'),
     ('left', 'TkPlus', 'TkMinus'),
-    ('right', 'TkMult'),
-    ('right', 'UNARY')
+    ('nonassoc', 'TkOpenPar', 'TkClosePar')
 )
 
 def p_error(p):
