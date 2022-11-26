@@ -1,10 +1,17 @@
-from lexer import tokens
+"""Implementacion de un analizador sintactico para el lenguaje GCL
+
+Copyright (C) 2022 - Nestor Gonzalez - José Pérez
+CI3725 - Traductores e Interpretadores
+"""
+
+from tokens import tokens
 import ply.yacc as yacc
 from Utils.utils import *
 from Utils.AST import *
 import codecs
 import sys
 
+# Diccionario para traducir operadores a su formato correcto de impresion
 trad_op = {
     '+' : 'Plus',
     '*' : 'Mult',
@@ -21,6 +28,7 @@ trad_op = {
     'in' : 'In'
 }
 
+# Definicion de las reglas de precedencia
 precedence = (
     ('left', 'TkOr'),
     ('left', 'TkAnd'),
@@ -32,17 +40,22 @@ precedence = (
     ('nonassoc', 'UNARY')
 )
 
+# ------ DETECCION DE ERRORES ---------
 def p_error(p):
     print(f"Sintax error in row {p.lineno}, column" ,
     f"{find_column(data, p)} unexpected token '{str(p.value)}'")
     sys.exit(0)
 
+
+# ------ ESTRUCTURA DEL PROGRAMA PRINCIPAL ---------
+# Simbolo inicial de la gramatica: BLOCK
 def p_program(p):
     '''
     BLOCK : TkOBlock DECLARE LIST_INSTRUCTIONS TkCBlock
     '''
     p[0] = Nodo("Block", p[2], p[3])
 
+# ------ SUBPROGRAMA ---------
 def p_subprogram(p):
     '''
     SUBPROGRAM : BLOCK
@@ -50,6 +63,7 @@ def p_subprogram(p):
     '''
     p[0] = p[1]
 
+# ------ BLOQUE DECLARE ---------
 def p_declare(p):
     '''
     DECLARE : TkDeclare LIST_DECLARE
@@ -60,12 +74,15 @@ def p_declare(p):
     else:
         p[0] = Nodo("Declare", p[2])
 
+# -- Lista de declaracones de variables 
+# Condicion para parar la recursion
 def p_list_declare_base(p):
     '''
     LIST_DECLARE : VARIABLE_DECLARATION
     '''
     p[0] = p[1]
 
+# -- Lista de declaracones de variables 
 def p_list_declare(p):
     '''
     LIST_DECLARE : LIST_DECLARE TkSemicolon VARIABLE_DECLARATION
@@ -73,18 +90,22 @@ def p_list_declare(p):
     p[0] = Nodo('Sequencing', p[1], p[3])
 
                 
+# -- Lista de variables declaradas en una linea 
+# Condicion para parar la recursion
 def p_list_variables_declare_base(p):
     '''
     VARIABLE_DECLARATION : TkId TkTwoPoints TYPE
     '''
     p[0] = Nodo(f"{p[1]} {p[2]} {p[3]}")
 
+# -- Lista de variables declaradas en una linea 
 def p_list_variables_declare(p):
     '''
     VARIABLE_DECLARATION : TkId TkComma VARIABLE_DECLARATION
     '''
     p[0] = Nodo(f"{p[1]}{p[2]} " + f"{p[3]}")
 
+# -- Tipo de datos para las variables declaradas 
 def p_type_varible_declare(p):
     '''
     TYPE : TkInt 
@@ -93,12 +114,14 @@ def p_type_varible_declare(p):
     '''
     p[0] = p[1]
     
+# -- Declaracion de arreglos 
 def p_array_declaration(p):
     '''
     ARRAY_DECLARATION : TkArray TkOBracket NUM TkSoForth NUM TkCBracket
     '''
     p[0] = f"array[Literal: {p[3]}..Literal: {p[5]}]"
 
+# -- Num puede ser negativo 
 def p_num_integer(p):
     '''
     NUM : TkNum
@@ -109,19 +132,21 @@ def p_num_integer(p):
     else:
         p[0] = p[1]
 
-################### BLOQUE DE INSTRUCCIONES #######################
+#----- BLOQUE DE INSTRUCCIONES -----
 def p_intruccions_list_base(p):
     '''
     LIST_INSTRUCTIONS : INSTRUCTION
     '''
     p[0] = p[1]
 
+#----- Secuencia de instrucciones
 def p_intruccions_list(p):
     '''
     LIST_INSTRUCTIONS : LIST_INSTRUCTIONS TkSemicolon INSTRUCTION
     '''
     p[0] = Nodo('Sequencing', p[1], p[3])
 
+#----- Tipos de instrucciones
 def p_instruccion(p):
     '''
     INSTRUCTION : ASIG
@@ -136,13 +161,14 @@ def p_instruccion(p):
     else:
         p[0] = Nodo('skip')
 
-# Produccion para detectar asignaciones
+#----- INSTRUCCION ASIGNACION -----
 def p_asig(p):
     '''
     ASIG : TkId TkAsig EXPRESSION
     '''
     p[0] = Nodo('Asig', Nodo(f"Ident: {p[1]}"), p[3])
 
+#-- Puede ser una expresion o la creacion de un arreglo
 def p_asig_expresion(p):
     '''
     EXPRESSION : E
@@ -150,6 +176,7 @@ def p_asig_expresion(p):
     '''
     p[0] = p[1]
 
+#-- Se puede crear un arreglo de forma manual o extendida
 def p_asig_array(p):
     '''
     ASIG_ARRAY : CREATE_ARRAY
@@ -157,18 +184,25 @@ def p_asig_array(p):
     '''
     p[0] = p[1]
 
+#-- Creacion de arreglos de forma manual
+# E, E, E, E, E, E, E, ...
 def p_create_array(p):
     '''
     CREATE_ARRAY : E TkComma E
     '''
     p[0] = Nodo('Comma', p[1], p[3])
 
+
+#-- Creacion de arreglos de forma manual
+# condicion de parada de la recursion
 def p_create_array_base(p):
     '''
     CREATE_ARRAY : CREATE_ARRAY TkComma E
     '''
     p[0] = Nodo('Comma', p[1], p[3])
 
+#-- Creacion de arreglos de forma extendia
+# condicion de parada de la recursion
 def p_write_array_base(p):
     '''
     WRITE_ARRAY : TkId TkOpenPar E TkTwoPoints E TkClosePar
@@ -176,6 +210,7 @@ def p_write_array_base(p):
     p[0] = Nodo('WriteArray',Nodo(f"Ident: {p[1]}") , Nodo('TwoPoints', p[3], p[5]))
     # p[0] = Nodo("Holas")
 
+#-- Creacion de arreglos de forma extendia
 def p_write_array(p):
     '''
     WRITE_ARRAY : WRITE_ARRAY TkOpenPar E TkTwoPoints E TkClosePar
@@ -183,6 +218,7 @@ def p_write_array(p):
     p[0] = Nodo('WriteArray', p[1], Nodo("TwoPoints", p[3], p[5]))
     # p[0] = Nodo("hola")
 
+#-- Identificar expresiones aritmeticas y booleanas
 def p_expression_op_binary(p):
     '''
     E : E TkMult E
@@ -199,12 +235,14 @@ def p_expression_op_binary(p):
     '''
     p[0] = Nodo(trad_op.get(p[2]), p[1], p[3])
 
+#-- Expresoion entre parentesis
 def p_expression_par(p):
     '''
     E : TkOpenPar E TkClosePar
     '''
     p[0] = p[2]
 
+#-- Operador unario aplicdo a una expresion
 def p_expression_op_unary(p):
     '''
     E : TkNot E
@@ -212,6 +250,8 @@ def p_expression_op_unary(p):
     '''
     p[0] = Nodo(trad_op.get(p[1]), p[2])
 
+#-- Tipos de expresiones TERMINALES
+# acceso al indice de un arreglo
 def p_expression_base(p):
     '''
     E : TkNum
@@ -228,26 +268,29 @@ def p_expression_base(p):
     else:
         p[0] = Nodo(f"Ident: {p[1]}")
         
-
-# Produccion para detectar un print en una secuenciacion
+#-------- DETECCION DE PRINT'S ------
 def p_print(p):
     '''
     PRINT : TkPrint TOPRINT  
     '''
     p[0] = Nodo("Print" ,p[2])
 
+#-- EXpresion a imprimir con multiples concatenaciones
+# COndicion de parada para la recursividad
 def p_to_print_base(p):
     '''
     TOPRINT : EXPRESSION_TO_PRINT   
     '''
     p[0] = p[1]
     
+#-- EXpresion a imprimir con multiples concatenaciones
 def p_to_print(p):
     '''
     TOPRINT : TOPRINT TkConcat EXPRESSION_TO_PRINT   
     '''
     p[0] = Nodo('Concat', p[1], p[3])
 
+#-- EXpresiones que son posibles de concatenar e imprimir
 def p_expression_print(p):
     '''
     EXPRESSION_TO_PRINT : TkId
@@ -266,18 +309,23 @@ def p_expression_print(p):
     else:
         p[0] = Nodo(f"Ident: {p[1]}")
 
+#-- Produccio auxiliar de ayuda para la contruccion del AST
 def p_string(p):
     '''
     STRING : TkString
     '''
     p[0] = Nodo(f"String: {p[1]}")
 
+#-- Acceso a un array index
 def p_array_index(p):
     '''
     READ_ARRAY : ARRAY TkOBracket E TkCBracket
     '''
     p[0] = Nodo("ReadArray", p[1], p[3])
 
+#-- Acceso a un array index con
+# TkId con el nombre del array |
+# arreglo escrito de forma estendida
 def p_array_index_id_or_read(p):
     '''
     ARRAY : TkId
@@ -288,40 +336,45 @@ def p_array_index_id_or_read(p):
     else:
         p[0] = Nodo(f"Ident: {p[1]}")
 
-# Produccion para detectar un for-loop
+#-------- DETECCION DE CICLOS FOR ------
 def p_for_loop(p):
     '''
     FOR_LOOP : TkFor TkId TkIn E TkTo E TkArrow SUBPROGRAM TkRof
     '''
     p[0] = Nodo('For', Nodo('In', Nodo(f"Ident: {p[2]}"), Nodo('To', p[4], p[6])), p[8])
 
-# Produccion para detectar un do-loop TODO: multiples guardias
+#-------- DETECCION DE CICLOS DO ------
+# Es posible que tenga multiples guardias
 def p_do_loop(p):
     '''
     DO_LOOP : TkDo GUARD TkOd
     '''
     p[0] = Nodo('Do', p[2])
 
-# Produccion para detectar If/Guard
+#-------- DETECCION DE SENTENCIAS IF / GUARD------
+# Es posible que tenga multiples guardias
 def p_if_conditional(p):
     '''
     CONDITIONAL : TkIf GUARD TkFi
     '''
     p[0] = Nodo('If', p[2])
 
+#-- Multiples guardias
+# Condicion de parada de la recursividad
 def p_guard_base(p):
     '''
     GUARD : E TkArrow SUBPROGRAM
     '''
     p[0] = Nodo('Then', p[1], p[3])
 
+#-- Multiples guardias
 def p_guard(p):
     '''
     GUARD : GUARD TkGuard E TkArrow SUBPROGRAM
     '''
     p[0] = Nodo("Guard", p[1], Nodo('Then', p[3], p[5]))
 
-
+#---- REPL ----#
 
 # Tomar el archivo 
 archivo = sys.argv[1]
@@ -343,7 +396,6 @@ try:
     ast = parser.parse(data)
     print_arbol(ast)
 
-
 except FileNotFoundError as e:
     print("Error, archivo [" + archivo + "] no encontrado")
     # sys.exit(0)
@@ -352,25 +404,3 @@ except Exception as e:
     # sys.exit(0)
 finally:
     handleFile.close()
-
-
-################### TEST ######################
-arch = sys.argv[2]
-f = open(f"../CasosDePrueba/MyOuts/{arch}", "w")
-
-def write_arbol(nodo: Nodo, guion = ""):
-    f.write(guion + str(nodo))
-    f.write("\n")
-
-    if nodo.leftChild :  
-        write_arbol(nodo.leftChild, guion + "-")
-        
-    
-    if nodo.rigthChild:  
-        write_arbol(nodo.rigthChild, guion + "-")
-
-write_arbol(ast)
-
-# f.truncate(f.tell()-1)
-
-f.close()

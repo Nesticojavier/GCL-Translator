@@ -110,48 +110,5 @@ def t_error(t):
     t.lexer.skip(1)
     return t
 
+# construccion del lexer
 analizador = lex.lex()
-# analizador.input(data)
-
-# def repl(data):
-#     """Funcion de lectura, evaluacion e impresion de los tokens.
-
-#         Imprime los tokens reconocidos.
-
-#         data -- string con el contenido del archivo a analizar
-
-#         return void
-#     """
-
-        
-#     # Arreglo para almacenar todos los tokens en caso de no habe
-#     # caracteres ilegales.
-#     tokens_storage = []
-
-#     # Construccion del analizador lexicografico a partir de los tokess
-#     analizador = lex.lex()
-#     analizador.input(data)
-
-#     # Variable que indica si se consiguió un error o no
-#     found_error = False
-
-#     # Algoritmo para guardar los tokens en caso de no haber errores
-#     for tok in analizador:
-#         if not tok : break
-
-#         if tok.type == 'error':
-#             found_error = True
-
-#         if found_error:
-#             continue
-
-#         tokens_storage += [tok]
-
-    # Algortimo para imprimir los tokens, en caso de no haber error
-    # if not found_error:
-    #     for tok in tokens_storage:
-    #         if tok.type == "TkId" or tok.type == "TkNum" or tok.type == "TkString":
-    #             print(tok.type+"("+str(tok.value)+")",
-    #                 tok.lineno, find_column(data, tok))
-    #         else:
-    #             print(tok.type, tok.lineno, find_column(data, tok))
