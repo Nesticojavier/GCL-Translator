@@ -11,6 +11,8 @@ from Utils.AST import *
 import codecs
 import sys
 
+symbols_tables = []
+table_tmp = {}
 # Diccionario para traducir operadores a su formato correcto de impresion
 trad_op = {
     '+' : 'Plus',
@@ -53,6 +55,8 @@ def p_program(p):
     '''
     BLOCK : TkOBlock DECLARE LIST_INSTRUCTIONS TkCBlock
     '''
+    # se desempila la tabla de simbolos del subprograma actual
+    symbols_tables.pop(0)
     p[0] = Nodo("Block", p[2], p[3])
 
 # ------ SUBPROGRAMA ---------
@@ -69,10 +73,15 @@ def p_declare(p):
     DECLARE : TkDeclare LIST_DECLARE
             | 
     '''
+
     if len(p) == 1:
         p[0] = None
     else:
-        p[0] = Nodo("Declare", p[2])
+        global symbols_tables
+        global table_tmp
+        symbols_tables.insert(0, table_tmp)
+        table_tmp = {}
+        p[0] = Nodo("Symbols Table", symbols_tables[0])
 
 # -- Lista de declaracones de variables 
 # Condicion para parar la recursion
@@ -87,7 +96,7 @@ def p_list_declare(p):
     '''
     LIST_DECLARE : LIST_DECLARE TkSemicolon VARIABLE_DECLARATION
     '''
-    p[0] = Nodo('Sequencing', p[1], p[3])
+    # p[0] = Nodo('Sequencing', p[1], p[3])
 
                 
 # -- Lista de variables declaradas en una linea 
@@ -96,14 +105,29 @@ def p_list_variables_declare_base(p):
     '''
     VARIABLE_DECLARATION : TkId TkTwoPoints TYPE
     '''
-    p[0] = Nodo(f"{p[1]} {p[2]} {p[3]}")
+    # p[0] = Nodo(f"{p[1]} {p[2]} {p[3]}")
+    global table_tmp
+    if p[1] in table_tmp:
+        print(f"Error, variable '{p[1]}' already declared")
+        sys.exit(0)
+        
+    else:
+        table_tmp[p[1]] = p[3]
+    p[0] = p[3]
 
 # -- Lista de variables declaradas en una linea 
 def p_list_variables_declare(p):
     '''
     VARIABLE_DECLARATION : TkId TkComma VARIABLE_DECLARATION
     '''
-    p[0] = Nodo(f"{p[1]}{p[2]} " + f"{p[3]}")
+    # p[0] = Nodo(f"{p[1]}{p[2]} " + f"{p[3]}")
+    global table_tmp
+    if p[1] in table_tmp:
+        print(f"Error, variable '{p[1]}' already declared")
+        sys.exit(0)
+    else:
+        table_tmp[p[1]] = p[3]
+    p[0] = (p[3])
 
 # -- Tipo de datos para las variables declaradas 
 def p_type_varible_declare(p):
@@ -119,7 +143,7 @@ def p_array_declaration(p):
     '''
     ARRAY_DECLARATION : TkArray TkOBracket NUM TkSoForth NUM TkCBracket
     '''
-    p[0] = f"array[Literal: {p[3]}..Literal: {p[5]}]"
+    p[0] = f"array[{p[3]}..{p[5]}]"
 
 # -- Num puede ser negativo 
 def p_num_integer(p):
@@ -166,7 +190,24 @@ def p_asig(p):
     '''
     ASIG : TkId TkAsig EXPRESSION
     '''
-    p[0] = Nodo('Asig', Nodo(f"Ident: {p[1]}"), p[3])
+    # Verificar que la variable de asignacion fue declarada
+    existe_variable = False
+    for t in symbols_tables:
+        if p[1] in t:
+
+            # verificar si la variable que existe es la 
+            # variable de iteracion de un ciclo for
+            if t[p[1]] == 'for':
+                print(f"Error, '{p[1]}' es variable de iteracion de un ciclo for")
+                sys.exit(0)
+
+            p[0] = Nodo('Asig', Nodo(f"Ident: {p[1]} | type: {t[p[1]]}"), p[3])
+            existe_variable = True
+            break
+
+    if not existe_variable:
+        print(f"Error, variable '{p[1]}' no declarada")
+        sys.exit(0)
 
 #-- Puede ser una expresion o la creacion de un arreglo
 def p_asig_expresion(p):
@@ -216,7 +257,6 @@ def p_write_array(p):
     WRITE_ARRAY : WRITE_ARRAY TkOpenPar E TkTwoPoints E TkClosePar
     '''
     p[0] = Nodo('WriteArray', p[1], Nodo("TwoPoints", p[3], p[5]))
-    # p[0] = Nodo("hola")
 
 #-- Identificar expresiones aritmeticas y booleanas
 def p_expression_op_binary(p):
@@ -233,7 +273,42 @@ def p_expression_op_binary(p):
       | E TkEqual E
       | E TkNEqual E
     '''
-    p[0] = Nodo(trad_op.get(p[2]), p[1], p[3])
+
+    if p[1].type == p[3].type:
+        
+        # operadores aritmeticos deben operar con integer
+        if p[2] == '+' or p[2] == '*' or p[2] == '-':
+            if p[1].type != 'int':
+                print("Error")
+                sys.exit(0)
+            else:
+                p[0] = NodoExpresiones(trad_op.get(p[2]), 'int',p[1], p[3])
+
+        # operadores de orden solo comparan integer
+        elif p[2] == '>' or p[2] == '>=' or p[2] == '<' or p[2] == '<=':
+            if p[1].type != 'int':
+                print("Error")
+                sys.exit(0)
+            else:
+                p[0] = NodoExpresiones(trad_op.get(p[2]), 'bool',p[1], p[3])
+
+        # operadores logicos 'and' y 'or' solo operan con booleanos
+        elif p[2] == '/\\' or p[2] == '\/':
+            if p[1].type != 'bool':
+                print("Error")
+                sys.exit(0)
+            else:
+                p[0] = NodoExpresiones(trad_op.get(p[2]), 'bool',p[1], p[3])
+        
+        # operadores restantes (==, !=) operan con cualquier expresion
+        else:
+            p[0] = NodoExpresiones(trad_op.get(p[2]), 'bool',p[1], p[3])
+
+    else:
+        print("Error, los tipos no coinciden "+
+        f"'{p[1]}' es de tipo '{p[1].type}' y "+
+        f"'{p[3]}' es de tipo '{p[3].type}' ** {p.lexer.lineno} p.lexer.lexdata" )
+        sys.exit(0)
 
 #-- Expresoion entre parentesis
 def p_expression_par(p):
@@ -248,7 +323,11 @@ def p_expression_op_unary(p):
     E : TkNot E
       | TkMinus E %prec UNARY
     '''
-    p[0] = Nodo(trad_op.get(p[1]), p[2])
+    if p[1] == '-':
+        p[0] = NodoExpresiones(trad_op.get(p[1]),'int', p[2])
+    elif p[1] == '!':
+        p[0] = NodoExpresiones(trad_op.get(p[1]),'bool', p[2])
+
 
 #-- Tipos de expresiones TERMINALES
 # acceso al indice de un arreglo
@@ -260,13 +339,31 @@ def p_expression_base(p):
       | TkFalse
       | READ_ARRAY
     '''
-    if isinstance(p[1], int) or p[1] == 'true' or p[1] == 'false':
-        p[0] = Nodo(f"Literal: {p[1]}")
-    
+    # si p[1] es un integer
+    if isinstance(p[1], int):
+        p[0] = NodoExpresiones(f"Literal: {p[1]}", "int")
+
+    # si p[1] es un boleano
+    elif p[1] == 'true' or p[1] == 'false':
+        p[0] = NodoExpresiones(f"Literal: {p[1]}", "bool")
+
+    # si p[1] es un readArray
     elif isinstance(p[1], Nodo):
         p[0] = p[1]
+
+    # si p[1] es un id
     else:
-        p[0] = Nodo(f"Ident: {p[1]}")
+        # Verificar que la variable de asignacion fue declarada
+        existe_variable = False
+        for t in symbols_tables:
+            if p[1] in t:
+                p[0] = NodoExpresiones(f"Ident: {p[1]}", t[p[1]])
+                existe_variable = True
+                break
+
+        if not existe_variable:
+            print(f"Error, variable '{p[1]}' no declarada")
+            sys.exit(0)
         
 #-------- DETECCION DE PRINT'S ------
 def p_print(p):
@@ -303,11 +400,14 @@ def p_expression_print(p):
     if isinstance(p[1], Nodo):
         p[0] = p[1]
 
-    elif isinstance(p[1], int) or p[1] == 'true' or p[1] == 'false':
-        p[0] = Nodo(f"Literal: {p[1]}")
+    elif isinstance(p[1], int):
+        p[0] = NodoExpresiones(f"Literal: {p[1]}", 'int')
+   
+    elif p[1] == 'true' or p[1] == 'false':
+        p[0] = NodoExpresiones(f"Literal: {p[1]}", 'bool')
 
     else:
-        p[0] = Nodo(f"Ident: {p[1]}")
+        p[0] = NodoExpresiones(f"Ident: {p[1]}",symbols_tables[0][p[1]])
 
 #-- Produccio auxiliar de ayuda para la contruccion del AST
 def p_string(p):
@@ -321,7 +421,15 @@ def p_array_index(p):
     '''
     READ_ARRAY : ARRAY TkOBracket E TkCBracket
     '''
-    p[0] = Nodo("ReadArray", p[1], p[3])
+    # siempre se accede a la posicion de un arreglo
+    # con un numeor entero. Entonces, p[3] tiene
+    # que ser un numero entero.
+    
+    if p[3].type != 'int':
+        print("Error index, integer es el esperado")
+        sys.exit(0)
+
+    p[0] = NodoExpresiones("ReadArray","int", p[1], p[3])
 
 #-- Acceso a un array index con
 # TkId con el nombre del array |
@@ -334,14 +442,28 @@ def p_array_index_id_or_read(p):
     if isinstance(p[1], Nodo):
         p[0] = p[1]
     else:
-        p[0] = Nodo(f"Ident: {p[1]}")
+        p[0] = NodoExpresiones(f"Ident: {p[1]}", symbols_tables[0][p[1]])
 
 #-------- DETECCION DE CICLOS FOR ------
 def p_for_loop(p):
     '''
-    FOR_LOOP : TkFor TkId TkIn E TkTo E TkArrow SUBPROGRAM TkRof
+    FOR_LOOP : TkFor IT_VAR TkIn E TkTo E TkArrow SUBPROGRAM TkRof
     '''
-    p[0] = Nodo('For', Nodo('In', Nodo(f"Ident: {p[2]}"), Nodo('To', p[4], p[6])), p[8])
+    # desempilar tabla de simbolos del ciclo for
+    global symbols_tables
+    symbols_tables.pop(0)
+
+    p[0] = Nodo('For', Nodo('In', p[2], Nodo('To', p[4], p[6])), p[8])
+
+def p_iteration_var(p):
+    '''
+    IT_VAR : TkId
+    '''
+    global symbols_tables
+
+    # empilar tabla de simbolos que solo tiene la variable de iteracion del for
+    symbols_tables.insert(0, {p[1] : 'for'})
+    p[0] = Nodo(f"Ident: {p[1]}")
 
 #-------- DETECCION DE CICLOS DO ------
 # Es posible que tenga multiples guardias
@@ -404,3 +526,7 @@ except Exception as e:
     # sys.exit(0)
 finally:
     handleFile.close()
+
+
+print(symbols_tables)
+print(len(symbols_tables))
