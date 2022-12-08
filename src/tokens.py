@@ -6,6 +6,8 @@ CI3725 - Traductores e Interpretadores
 
 import ply.lex as lex
 from Utils.utils import *
+from gcl import data
+
 # from main import data
 
 # Diccionarion con las palabras reservadas del lenguaje
@@ -110,5 +112,4 @@ def t_error(t):
     t.lexer.skip(1)
     return t
 
-# construccion del lexer
 analizador = lex.lex()

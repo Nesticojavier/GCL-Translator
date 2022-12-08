@@ -4,12 +4,14 @@ Copyright (C) 2022 - Nestor Gonzalez - José Pérez
 CI3725 - Traductores e Interpretadores
 """
 
-from tokens import tokens
+from tokens import *
 import ply.yacc as yacc
 from Utils.utils import *
 from Utils.AST import *
 import codecs
 import sys
+
+
 
 symbols_tables = []
 table_tmp = {}
@@ -62,8 +64,7 @@ def p_program(p):
 # ------ SUBPROGRAMA ---------
 def p_subprogram(p):
     '''
-    SUBPROGRAM : BLOCK
-               | LIST_INSTRUCTIONS
+    SUBPROGRAM : LIST_INSTRUCTIONS
     '''
     p[0] = p[1]
 
@@ -71,17 +72,24 @@ def p_subprogram(p):
 def p_declare(p):
     '''
     DECLARE : TkDeclare LIST_DECLARE
-            | 
+            | NO_DECLARE
     '''
 
-    if len(p) == 1:
-        p[0] = None
-    else:
-        global symbols_tables
-        global table_tmp
-        symbols_tables.insert(0, table_tmp)
-        table_tmp = {}
-        p[0] = Nodo("Symbols Table", symbols_tables[0])
+    # if len(p) == 1:
+    #     p[0] = None
+    # else:
+    global symbols_tables
+    global table_tmp
+    symbols_tables.insert(0, table_tmp)
+    table_tmp = {}
+    p[0] = Nodo("Symbols Table", symbols_tables[0])
+
+def p_no_declare(p):
+    '''
+    NO_DECLARE : 
+    '''
+    p[0] = None
+
 
 # -- Lista de declaracones de variables 
 # Condicion para parar la recursion
@@ -179,6 +187,7 @@ def p_instruccion(p):
                 | DO_LOOP
                 | CONDITIONAL
                 | TkSkip
+                | BLOCK
     '''
     if p[1] != 'skip':
         p[0] =  p[1]
@@ -201,6 +210,12 @@ def p_asig(p):
                 print(f"Error, '{p[1]}' es variable de iteracion de un ciclo for")
                 sys.exit(0)
 
+            # verificar que la variable de asignacion posee
+            # el mismo tipo que lo asignado
+            if t[p[1]] != p[3].type:
+                print("Error, se esperaba otro tipo")
+                sys.exit(0)
+
             p[0] = Nodo('Asig', Nodo(f"Ident: {p[1]} | type: {t[p[1]]}"), p[3])
             existe_variable = True
             break
@@ -218,6 +233,8 @@ def p_asig_expresion(p):
     p[0] = p[1]
 
 #-- Se puede crear un arreglo de forma manual o extendida
+# CREATE_ARRAY --> E,E,E,E, ...
+# WRITE_ARRAY  --> array(b:1)(b:2)
 def p_asig_array(p):
     '''
     ASIG_ARRAY : CREATE_ARRAY
@@ -227,20 +244,33 @@ def p_asig_array(p):
 
 #-- Creacion de arreglos de forma manual
 # E, E, E, E, E, E, E, ...
-def p_create_array(p):
-    '''
-    CREATE_ARRAY : E TkComma E
-    '''
-    p[0] = Nodo('Comma', p[1], p[3])
-
-
-#-- Creacion de arreglos de forma manual
 # condicion de parada de la recursion
 def p_create_array_base(p):
     '''
+    CREATE_ARRAY : E TkComma E
+    '''
+    type_array = symbols_tables[0][p[-2]]
+    if type_array[0] == 'a':
+        len_array = get_len_array_declared(type_array)
+        p[0] = NodoExpresiones(f'Comma | type: array with length={len_array}', type_array,p[1], p[3])
+    # directo al error
+    else:
+        p[0] = NodoExpresiones('Comma ', 'array',p[1], p[3])
+
+
+
+#-- Creacion de arreglos de forma manual
+def p_create_array(p):
+    '''
     CREATE_ARRAY : CREATE_ARRAY TkComma E
     '''
-    p[0] = Nodo('Comma', p[1], p[3])
+    type_array = symbols_tables[0][p[-2]]
+    if type_array[0] == 'a':
+        len_array = get_len_array_declared(type_array)
+        p[0] = NodoExpresiones(f'Comma | type: array with length={len_array}', type_array,p[1], p[3])
+    # directo al error
+    else:
+        p[0] = NodoExpresiones('Comma ', 'array',p[1], p[3])
 
 #-- Creacion de arreglos de forma extendia
 # condicion de parada de la recursion
@@ -248,7 +278,7 @@ def p_write_array_base(p):
     '''
     WRITE_ARRAY : TkId TkOpenPar E TkTwoPoints E TkClosePar
     '''
-    p[0] = Nodo('WriteArray',Nodo(f"Ident: {p[1]}") , Nodo('TwoPoints', p[3], p[5]))
+    p[0] = Nodo('WriteArray',Nodo(f"Ident: {p[1]} | type: {symbols_tables[0][p[1]]}") , Nodo('TwoPoints', p[3], p[5]))
     # p[0] = Nodo("Holas")
 
 #-- Creacion de arreglos de forma extendia
@@ -390,31 +420,33 @@ def p_to_print(p):
 #-- EXpresiones que son posibles de concatenar e imprimir
 def p_expression_print(p):
     '''
-    EXPRESSION_TO_PRINT : TkId
+    EXPRESSION_TO_PRINT : E
                | STRING
-               | TkNum
-               | TkTrue
-               | TkFalse
                | READ_ARRAY
     '''
-    if isinstance(p[1], Nodo):
-        p[0] = p[1]
+    # si p[1] es un string o un readArray index o expression
+    # if isinstance(p[1], Nodo):
+    p[0] = p[1]
 
-    elif isinstance(p[1], int):
-        p[0] = NodoExpresiones(f"Literal: {p[1]}", 'int')
-   
-    elif p[1] == 'true' or p[1] == 'false':
-        p[0] = NodoExpresiones(f"Literal: {p[1]}", 'bool')
+    # si p[1] es un integer
+    # elif isinstance(p[1], int):
+    #     p[0] = NodoExpresiones(f"Literal: {p[1]}", 'int')
+    
+    # # si p[1] es un boolean
+    # elif p[1] == 'true' or p[1] == 'false':
+    #     p[0] = NodoExpresiones(f"Literal: {p[1]}", 'bool')
 
-    else:
-        p[0] = NodoExpresiones(f"Ident: {p[1]}",symbols_tables[0][p[1]])
+    # # si p[1] es un ID
+    # else:
+    #     # verificar si dicho id pertence a la tabla de simbolos
+    #     p[0] = NodoExpresiones(f"Ident: {p[1]}",symbols_tables[0][p[1]])
 
 #-- Produccio auxiliar de ayuda para la contruccion del AST
 def p_string(p):
     '''
     STRING : TkString
     '''
-    p[0] = Nodo(f"String: {p[1]}")
+    p[0] = Nodo(f"String: {p[1]} | type: string")
 
 #-- Acceso a un array index
 def p_array_index(p):
@@ -463,7 +495,7 @@ def p_iteration_var(p):
 
     # empilar tabla de simbolos que solo tiene la variable de iteracion del for
     symbols_tables.insert(0, {p[1] : 'for'})
-    p[0] = Nodo(f"Ident: {p[1]}")
+    p[0] = Nodo(f"Ident: {p[1]} | type: int")
 
 #-------- DETECCION DE CICLOS DO ------
 # Es posible que tenga multiples guardias
@@ -513,6 +545,22 @@ try:
         
     data = handleFile.read()
 
+    
+    # construir lexer y analizar errores lexicograficos
+    # analizador = lex.lex()
+    analizador.input(data)
+    found_error = False
+
+    for tok in analizador:
+        if not tok : break
+
+        if tok.type == 'error':
+            found_error = True
+
+    if found_error:
+        sys.exit(0)
+
+
     # Impresion del AST
     parser = yacc.yacc()
     ast = parser.parse(data)
@@ -526,7 +574,3 @@ except Exception as e:
     # sys.exit(0)
 finally:
     handleFile.close()
-
-
-print(symbols_tables)
-print(len(symbols_tables))
