@@ -4,17 +4,20 @@ Copyright (C) 2022 - Nestor Gonzalez - José Pérez
 CI3725 - Traductores e Interpretadores
 """
 
-from tokens import *
+from tokens import tokens, analizador_lexico
 import ply.yacc as yacc
 from Utils.utils import *
 from Utils.AST import *
 import codecs
 import sys
 
-
-
+# Pila de tabla de simbolos global
 symbols_tables = []
+
+# tabla de tendrá los datos (temporalmente) de la ultima tabla 
+# empilada
 table_tmp = {}
+
 # Diccionario para traducir operadores a su formato correcto de impresion
 trad_op = {
     '+' : 'Plus',
@@ -337,7 +340,7 @@ def p_expression_op_binary(p):
     else:
         print("Error, los tipos no coinciden "+
         f"'{p[1]}' es de tipo '{p[1].type}' y "+
-        f"'{p[3]}' es de tipo '{p[3].type}' ** {p.lexer.lineno} p.lexer.lexdata" )
+        f"'{p[3]}' es de tipo '{p[3].type}' ** {p.lexer.lineno} 88 {p.lineno(2)} 88 p.lexer.lexdata" )
         sys.exit(0)
 
 #-- Expresoion entre parentesis
@@ -539,38 +542,35 @@ try:
     # abrir archivo
     handleFile = codecs.open(archivo)
 
-    # comprobar extension file
-    if not archivo.endswith(".gcl"):
-        raise Exception("Error, la extension del archivo debe ser .gcl")
+    try:   
+        # comprobar extension file
+        if not archivo.endswith(".gcl"):
+            raise Exception("Error, la extension del archivo debe ser .gcl")
+
+        data = handleFile.read()
         
-    data = handleFile.read()
+        # construir lexer y analizar errores lexicograficos
+        analizador_lexico.input(data)
 
-    
-    # construir lexer y analizar errores lexicograficos
-    # analizador = lex.lex()
-    analizador.input(data)
-    found_error = False
+        # intentar hallar errores lexicos
+        found_lexical_error = False
+        for tok in analizador_lexico:
+            if not tok : break
 
-    for tok in analizador:
-        if not tok : break
+            if tok.type == 'error':
+                found_lexical_error = True
 
-        if tok.type == 'error':
-            found_error = True
+        # Si no se hay ningun error lexico se ejecuta el analisis sintactico
+        if not found_lexical_error:
+            parser = yacc.yacc()
+            ast = parser.parse(data)
+            print_arbol(ast)
 
-    if found_error:
-        sys.exit(0)
-
-
-    # Impresion del AST
-    parser = yacc.yacc()
-    ast = parser.parse(data)
-    print_arbol(ast)
+    finally:
+        handleFile.close()
 
 except FileNotFoundError as e:
     print("Error, archivo [" + archivo + "] no encontrado")
-    # sys.exit(0)
 except Exception as e:
     print(e)
-    # sys.exit(0)
-finally:
-    handleFile.close()
+

@@ -6,7 +6,6 @@ CI3725 - Traductores e Interpretadores
 
 import ply.lex as lex
 from Utils.utils import *
-from gcl import data
 
 # from main import data
 
@@ -108,8 +107,8 @@ t_ignore  = ' \t'
 # Manejo de caracteres ilegales
 def t_error(t):
     print("Error: Unexpected character \"{}\" in row {}, column {}"
-    .format(t.value[0], t.lineno, find_column(data, t)))
+    .format(t.value[0], t.lineno, find_column(t.lexer.lexdata, t)))
     t.lexer.skip(1)
     return t
 
-analizador = lex.lex()
+analizador_lexico = lex.lex()
