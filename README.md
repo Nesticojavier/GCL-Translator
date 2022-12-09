@@ -7,7 +7,7 @@ a procedimientos y funciones, tipos de datos compuestos y números punto flotant
 simplificar su dise ̃no y hacer factible la elaboración de un interpretador a lo largo de un trimestre.
 
 ## Etapa 1: Analisis lexicográfico
-```
+
 Fuentess:
 
 - [PLY (Python Lex-Yacc) - Documentación](https://www.dabeaz.com/ply/ply.html)
