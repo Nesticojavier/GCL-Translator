@@ -445,22 +445,7 @@ def p_expression_print(p):
                | STRING
                | READ_ARRAY
     '''
-    # si p[1] es un string o un readArray index o expression
-    # if isinstance(p[1], Nodo):
     p[0] = p[1]
-
-    # si p[1] es un integer
-    # elif isinstance(p[1], int):
-    #     p[0] = NodoExpresiones(f"Literal: {p[1]}", 'int')
-    
-    # # si p[1] es un boolean
-    # elif p[1] == 'true' or p[1] == 'false':
-    #     p[0] = NodoExpresiones(f"Literal: {p[1]}", 'bool')
-
-    # # si p[1] es un ID
-    # else:
-    #     # verificar si dicho id pertence a la tabla de simbolos
-    #     p[0] = NodoExpresiones(f"Ident: {p[1]}",symbols_tables[0][p[1]])
 
 #-- Produccio auxiliar de ayuda para la contruccion del AST
 def p_string(p):

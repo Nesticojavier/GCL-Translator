@@ -1,4 +1,8 @@
-#---- REPL ----#
+"""Programa principal para el analizador del lenguaje GCL
+
+Copyright (C) 2022 - Nestor Gonzalez - José Pérez
+CI3725 - Traductores e Interpretadores
+"""
 import sys
 from tokens import analizador_lexico
 import codecs
