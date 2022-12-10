@@ -19,6 +19,19 @@ def find_column(input, token):
     line_start = input.rfind('\n', 0, token.lexpos) + 1
     return (token.lexpos - line_start) + 1
 
+def find_column2(input, token_pos):
+    '''
+        Funcion auxiliar usada para encontrar la posicion de la columna del
+        token
+
+        input -- str con el contenido del archivo
+        token_pos -- el token lex pos de cierto token(int)
+
+        return integer con el numero de columna donde se encuentra el token
+    '''
+    line_start = input.rfind('\n', 0, token_pos) + 1
+    return (token_pos - line_start) + 1
+
 def get_len_array_declared(array: str) -> int:
     '''
         Funcion usada para calcular el tamanyo de un array en su forma de

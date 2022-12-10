@@ -34,7 +34,6 @@ class NodoExpresiones(Nodo):
     def __str__(self) -> str:
       return f"{self.name} | type: {self.type}"
 
-
 def print_arbol(nodo: Nodo, tab = "", probate = ""):
     '''
     Funcion recursiva usada para imprimir el AST
@@ -50,7 +49,7 @@ def print_arbol(nodo: Nodo, tab = "", probate = ""):
     if nodo.name == 'Symbols Table':
         tabla = nodo.leftChild
         for i in tabla:
-            print(f"{tab}-variable: {i} | type: {tabla[i]}")
+            print(f"{tab}-variable: {i} | type: {tabla[i][0]}")
         return
 
     # if nodo.leftChild and nodo.name != 'Declare':  

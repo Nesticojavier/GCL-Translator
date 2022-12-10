@@ -107,8 +107,9 @@ t_ignore  = ' \t'
 # Manejo de caracteres ilegales
 def t_error(t):
     print("Error: Unexpected character \"{}\" in row {}, column {}"
-    .format(t.value[0], t.lineno, find_column(t.lexer.lexdata, t)))
+    .format(t.value[0], t.lineno, find_column2(t.lexer.lexdata, t.lexpos)))
     t.lexer.skip(1)
     return t
 
+# construccion del lexer
 analizador_lexico = lex.lex()
